@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="crm32:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/crm32_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="crm32/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="crm32" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

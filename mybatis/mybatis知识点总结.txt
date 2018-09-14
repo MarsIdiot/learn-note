@@ -1,0 +1,271 @@
+******mybatis简单介绍******
+一、MyBatis简介
+	MyBatis是一个优秀的持久层框架，它对jdbc的操作数据库的过程进行封装，
+	使开发者只需要关注 SQL 本身，而不需要花费精力去处理例如注册驱动、
+	创建connection、创建statement、手动设置参数、结果集检索等jdbc繁杂
+	的过程代码。
+	
+	Mybatis通过xml或注解的方式来处理数据库
+
+二、环境搭建
+	1.jar包
+		mybatis核心包、依赖包、数据驱动包
+	2.配置文件
+		log4j.properties
+		SqlMapConfig.xml(引入N个user.xml文件)
+			<mapper resource="user">
+	3.书写user.xml
+		<mapper namespace="user">
+	4.创建pojo——User.java，与user.xml对应
+	5.测试
+		a）加载SqlMapConfig.xml
+			InputStream inputStream = getResourceAsStream("SqlMapConfig.xml");
+		b)创建SqlSessionFactory对象并读取SqlMapConfig.xml
+			SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
+			SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBuilder.build(inputStream);
+		c)获取SqlSession对象
+			SqlSession sqlsession = sqlSessionFactory.openSession();
+		d)执行sql语句
+			User user = sqlSession.selectOne("user.findUserById", 10);
+		e)事物管理
+		注意：增删改都需要此步骤，查询不需要
+			sqlSession.commit();
+			sqlSession.close();
+
+三、parameterType和resultType
+	parameterType：指定输入参数类型，mybatis通过ognl从输入对象中获取参数值拼接在sql中。
+	
+	resultType：指定输出结果类型，mybatis将sql查询结果的一行记录数据映射为resultType指定类型的对象。如果有多条数据，则分别进行映射，并把对象放到容器List
+	
+四、#{}与${}区别
+	#{}  占位符
+		username like '%'#{}'%'
+	${}  字符串拼接
+		username like '%#{}%'
+		
+五、 Mybatis解决jdbc编程的问题
+	1、	数据库连接创建、释放频繁造成系统资源浪费从而影响系统性能，如果使用数据库连接池可解决此问题。
+	解决：在SqlMapConfig.xml中配置数据连接池，使用连接池管理数据库链接。
+	
+	2、	Sql语句写在代码中造成代码不易维护，实际应用sql变化的可能较大，sql变动需要改变java代码。
+	解决：将Sql语句配置在XXXXmapper.xml文件中与java代码分离。
+	
+	3、	向sql语句传参数麻烦，因为sql语句的where条件不一定，可能多也可能少，占位符需要和参数一一对应。
+	解决：Mybatis自动将java对象映射至sql语句，通过statement中的parameterType定义输入参数的类型。
+	
+	4、	对结果集解析麻烦，sql变化导致解析代码变化，且解析前需要遍历，如果能将数据库记录封装成pojo对象解析比较方便。
+	解决：Mybatis自动将sql执行结果映射至java对象，通过statement中的resultType定义输出结果的类型。
+
+六、Mapper动态代理开发
+	遵循四个原则
+		接口 方法名  == User.xml 中 id 名
+		
+		返回值类型  与  Mapper.xml文件中返回值类型要一致
+		
+		方法的入参类型 与Mapper.xml中入参的类型要一致
+		
+		命名空间 绑定此接口
+		
+	示例：
+		Mapper接口
+			public User findUserById(Integer id);
+		
+		User.xml：
+		<mapper namespace="com.itheima.mybatis.mapper.UserMapper">//命名空间绑定
+			<select id="findUserById" parameterType="Integer" resultType="com.itheima.mybatis.pojo.User">
+				select *from
+				user where id=#{value }
+			</select>
+		</mapper>
+		
+******mybatis深入介绍******
+七、使用resultMap进行手动映射
+	使用场合：
+		当表字段与pojo属性字段不一致时
+		如果一致，不用写
+		
+	示例：
+		<!-- resultMap最终还是要将结果映射到pojo上，type就是指定映射到哪一个pojo -->
+		<!-- id：设置ResultMap的id -->
+		<resultMap type="order" id="orderResultMap">
+			<!-- 定义主键 ,非常重要。如果是多个字段,则定义多个id -->
+			<!-- property：主键在pojo中的属性名 -->
+			<!-- column：主键在数据库中的列名 -->
+			<id property="id" column="id" />
+
+			<!-- 定义普通属性 -->
+			<result property="userId" column="user_id" />
+			
+		</resultMap>
+
+		<!-- 查询所有的订单数据 -->
+		<select id="queryOrderAll" resultMap="orderResultMap">
+			SELECT id, user_id,
+			number,
+			createtime, note FROM `order`
+		</select>
+
+八、动态sql
+	1、if where标签
+	示例说明：根据用户名和性别进行查询
+	
+	示例书写：
+		select
+		*from user
+		<!--where标签可以自动添加where，同时处理sql语句中第一个and关键字-->
+		<where>
+			<if test="sex!=null and  sex!=''">
+			   sex = #{sex}
+			</if>
+			<if test="username!=null and  username!=''">
+				<!--模糊查询-->
+				and  username  like '%${username}%'
+			</if>
+		</where>
+		
+	示例要点：使用where去除第一个and关键字   注意and的位置(字段前)
+	
+	2、foreach标签
+	向sql传递数组或List，mybatis使用foreach解析
+	示例说明：
+		根据多个id查询用户信息
+		查询sql：SELECT * FROM user WHERE id IN (1,10,24)
+		
+	示例书写：
+			public List<User> selectUserByIds(QueryVo vo / Integer[] ids / List<Integer> idsList)
+			
+			parameterType="QueryVo"//此处只能传对象 都这样写
+			
+			select
+			*from user
+			where id in
+			  <foreach collection="ids(传list为idsList)/array/list" item="id"  separator=","  open="(" close=")">
+				  #{id}
+			  </foreach>
+			  
+	示例要点：a)首先，在传递collection值时，List和Array都需要被封装成QueryVo的属性;
+				其次，接口List<User> selectUserByIds()传参时，如果不写QueryVo vo，collection接收时只能写list或array
+			  b)可以把id in放在open属性中  open="id in("
+
+九、关联查询
+	核心理解：
+		a)谁为中心谁就是一
+			即关联对象加在它的属性上，映射就写在它的映射文件里
+		b）书写resultMap映射时，需要的字段都必须要求映射
+	1、一对一关联
+		使用resluttype(不推荐)
+		使用resultMap
+			association ：嵌套配置一对一属性
+		
+		示例说明：
+			需求：查询所有订单信息，关联查询下单用户信息
+		示例书写：
+			a）改造Orders  加入private  User  user
+			b）手动映射resultMap  需要什么字段就映射什么字段
+				<!-- type ：返回值的全限定类名，或类型别名 -->
+				<resultMap type="order" id="orderUserResultMap">
+					<id property="id" column="id" />
+					<result property="userId" column="user_id" />
+					<result property="number" column="number" />
+					<result property="createtime" column="createtime" />
+					<result property="note" column="note" />
+
+					<!-- association ：配置一对一属性 -->
+					<!-- property:order里面的User属性名 -->
+					<!-- javaType:属性类型 -->
+					<association property="user" javaType="user">
+						<!-- id:声明主键，表示user_id是关联查询对象的唯一标识-->
+						<id property="id" column="user_id" />
+						<result property="username" column="username" />
+						<result property="address" column="address" />
+					</association>
+					
+				</resultMap>
+			c)书写查询语句
+				<!-- 一对一关联，查询订单，订单内部包含用户属性 -->
+				<select id="queryOrderUserResultMap" resultMap="orderUserResultMap">
+					SELECT
+					o.id,
+					o.user_id,
+					o.number,
+					o.createtime,
+					o.note,
+					u.username,
+					u.address
+					FROM
+					`order` o
+					LEFT JOIN `user` u ON o.user_id = u.id
+				</select>
+
+		示例要点：
+				  a)改造Orders  加入User  user 时，注意加入getter和setter
+				  b)书写resultMap映射时，需要的字段都必须要求映射
+		
+	2、一对多关联
+		使用resluttype(不推荐)
+		使用resultMap
+			collection ：嵌套配置一对多属性
+		
+		示例说明：
+			需求：查询所有用户信息及用户关联的订单信息
+		示例书写：
+			a）改造User  加入List<Order> orders
+			b）手动映射resultMap  需要什么字段就映射什么字段
+				<!-- type ：返回值的全限定类名，或类型别名 -->
+				<resultMap type="user" id="userOrderResultMap">
+					<id property="id" column="id" />
+					<result property="username" column="username" />
+					<result property="birthday" column="birthday" />
+					<result property="sex" column="sex" />
+					<result property="address" column="address" />
+
+					<!-- 配置一对多的关系 -->
+					<collection property="orders" javaType="list" ofType="order">
+						<!-- 配置主键，是关联Order的唯一标识 -->
+						<id property="id" column="oid" />
+						<result property="number" column="number" />
+						<result property="createtime" column="createtime" />
+						<result property="note" column="note" />
+					</collection>
+				</resultMap>
+
+			c)书写查询语句
+				<!-- 一对多关联，查询订单同时查询该用户下的订单 -->
+				<select id="queryUserOrder" resultMap="userOrderResultMap">
+					SELECT
+					u.id,
+					u.username,
+					u.birthday,
+					u.sex,
+					u.address,
+					o.id oid,
+					o.number,
+					o.createtime,
+					o.note
+					FROM
+					`user` u
+					LEFT JOIN `order` o ON u.id = o.user_id
+				</select>
+				
+		示例要点：
+				  a)改造User  加入List<Order> orders，注意加入getter和setter,利用List存多个订单
+				  b)注意collection标签中其对象类型：javaType="list" ofType="order"
+					 在association为：javaType="user"
+					
+十、Mybatis整合spring
+	整合思路
+	1、SqlSessionFactory对象应该放到spring容器中作为单例存在。
+	2、传统dao的开发方式中，应该从spring容器中获得sqlsession对象。
+	3、Mapper代理形式中，应该从spring容器中直接获得mapper的代理对象。
+	4、数据库的连接以及数据库连接池事务管理都交给spring容器来完成。
+
+
+
+
+
+
+
+
+
+
+	

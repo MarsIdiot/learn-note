@@ -1,0 +1,77 @@
+******关于IO的简单介绍******
+一、流的分类
+	按操作数据：
+		字节流(inputStream\outputStream)
+		字符流(Reader\Writer)
+		
+	按流向：
+		输入流、输出流
+		
+
+二、输入输出流
+	以内存为中心
+	输入流
+		硬盘——>内存  读
+	
+	输出流
+		内存——>硬盘  取
+
+三、字符流
+	继承关系:
+		IO体系中，子类名称后缀是父类名称，前缀是子类功能名称
+		Reader
+			InputStreamReader    BufferedReader
+				FileReader
+		Writer
+			OutputSreamWriter    BufferedWriter
+				FileWriter
+	作用:
+		为了更便于操作文字数据。
+	结论:
+		只要是处理纯文本数据，就要优先考虑使用字符流，除此之外都是用字节流。
+		
+	Reader的方法：
+		int read()
+		int read(char[])
+		close()
+	Writer的方法：
+		void writer(char)
+		void writer(char[])
+		void writer(String)
+		void flush()
+		void close()
+	
+	FileReader的方法：
+		该类没有自己特有的方法，只有自己的构造方法
+		FileReader fr = FileReader(String  name)
+			如果文件不存在会发生FileNotFindException
+		
+	FileWriter的方法：
+		该类没有自己特有的方法，只有自己的构造方法
+		FileWriter(String filename)
+			若该文件存在，内容将会被覆盖
+			若不存在，则会在指定位置创建
+		FileWriter(String filename,boolean true)
+			boolean为true时，会在文件末尾续写
+			
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		

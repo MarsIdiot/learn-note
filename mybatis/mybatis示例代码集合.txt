@@ -1,0 +1,13 @@
+******mybatis示例代码集合******
+一、sql语句的抽取
+	<sql id="Base_Column_List" >
+		role_id, role_name,`describe`
+	</sql>
+
+	<!--查询所有角色对象列表-->
+	<select id="selectAllRole" resultMap="BaseResultMap" parameterType="java.lang.String" >
+		select
+		<include refid="Base_Column_List" />
+		from role
+	</select>
+	

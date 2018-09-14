@@ -1,0 +1,47 @@
+1.将伪数组转换为真数组
+	[].slice.call(lis)
+	Array.propetype.slice.call(lis)
+	通过document得到的都是伪数组
+2.节点类型
+	node.nodeType
+	===1即为元素几点
+	其他：元素element,属性Attr,文本text
+3.给对象添加/修改属性
+	Object.defineProperty(obj,property)
+	展开：
+		defineProperty(obj,{
+			常规属性:枚举、重新定义、value可否修改、初始值
+			gte(){
+
+			},
+			set(){
+
+			}
+		})
+4.得到对象的属性名[]
+	Object.keys(obj)
+5.文档碎片
+	fragment
+6.是否是对象自身的属性
+	obj.hasOwnProperty(prop)
+
+
+1.数据代理
+	通过一个对象来代理另外一个对象的属性
+	vm.data.name--->vm.name
+	利用：对象属性定义函数defineProperty
+	流程：给vm添加name属性--->利用函数中geteer(获取data的name)/setter(		  将新的name值赋予给data)
+2.模板解析
+	就是将文档中涉及Vue的元素(指令、表达式等)给解析成html文档
+	流程：a)取出el对应的所有子节点，添加到fragment容器中
+		  b)更新fragment
+		  	目的：将指令等识别出来并赋予对应的数据
+		  		--->循环fragment,得到节点的中的一般指令/事件指令/{{}}
+		  		--->判断其类型，选择对应的updator(指令，指令值)，去获取数据/事件
+		  c)将更新后的fragment存到到文档节点中 此时页面马上更新
+3.数据劫持
+	通过数据绑定实现的技术
+	数据绑定：data一旦更新，对应界面的节点及其字节点都要更新
+	基本思想：利用defineProperty()来监视data中的所有属性，一但改变就去更新界面
+
+

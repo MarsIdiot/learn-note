@@ -1,0 +1,114 @@
+vue知识点整体回顾总结
+	一、基础语法
+		基础认知(是什么，安装，环境搭建)
+		各文件层次结构(main.js--->App.vue--->子组件)
+		1.一般指令
+			{{}}
+			v-bind:prop/:prop
+			v-model
+			v-text
+			v-html
+			v-if
+			v-else
+			v-show
+			v-for
+		2.事件指令
+			v-on:prop/@prop
+				@click
+				@keyp.center
+				事件修饰符：.prevent,.stop
+		3.class与style绑定
+		4.表单输入绑定
+			text/textarea  	v-model="content"
+			checkbox		v-model="likes"
+			radio			v-model="sex"
+			select			v-model="cityID"
+		5.vm
+			data
+			computed
+			methods
+			mounted 异步/定时器
+	二、组件化编码
+		使开发更加有条理，提高团队效率
+		流程：拆分页面--->静态组件--->动态组件--->css拆分--->初始化数据显示--->动态交互
+		组件的使用：引入组件--->映射成标签components--->使用标签组件
+		组件通信(常用)：props pubsub vuex
+
+	三、ajax
+		记得在需要使用的组件中引入对应的资源
+		vue-resource
+			this.$http.get(utl).then((response)=>{
+				success
+				response.data
+			},(response)=>{	
+				fail
+				response.statusText
+			}
+			)
+		axios
+			axios.get(url).then(response=>{
+				success
+				response.data
+			}).catch(error=>{
+				fail
+				error.message
+			})
+	四、UI组件
+		ele
+
+	五、路由router
+		管理请求
+		目的：分发请求，管理框架组件
+		使用流程：创建路由--->注册路由main.js--->使用路由<router-link to=""> <router-view>
+
+	六、Vuex数据共享管理
+		其实就是将数据放在一个公共的地方，需要的组件可以直接操作数据
+		1.store组成结构：
+			state
+			mutation
+			actions
+			getter
+			new Vuex.Store({
+				state,
+				mutations,
+				actions,
+				getters,
+			})
+		2.使用流程：
+			创建Vuex.Store(store/index.js)--->注册store(main.js)--->组件.vue调用--->actions--->
+			mutations
+
+		3.补充：
+			mutations{//只能写同步代码，不能写异步
+				mutation(state,{参数}){
+
+				}
+			}
+
+			actions{//可写异步代码，ajax,定时器
+				action({commit,state},参数){
+					commit('mutation',{参数})
+				}
+			}
+
+			getters(){
+				getter(state){
+
+				}
+			}
+
+		4.组件中使用方法：
+			引入：import {mapGetters,mapActions} from 'vuex'
+			this.$store.dispatcher('action')--->简写 ...mapActions(['action','action2',...])
+			this.store.getters('getter')--->简写  ...mapGetters(['getter',...])
+
+			注意：简写可以直接省略方法名/书写
+				如：
+					methods:mapActions(['actions'])
+					computed:mapGetters(['getter'])
+
+	七、源码分析
+		基础准备
+		数据代理
+		组件编译
+		数据劫持/数据更新

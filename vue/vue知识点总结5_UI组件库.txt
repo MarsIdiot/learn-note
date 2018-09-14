@@ -1,0 +1,38 @@
+******vue简单介绍******
+**Vue-UI组件库篇**
+使用mint-ui
+	1) 主页: http://mint-ui.github.io/#!/zh-cn
+	2) 下载:
+		npm install --save mint-ui
+	3) 实现按需打包
+		1. 下载
+		npm install --save-dev babel-plugin-component
+		2. 修改babel 配置
+		"plugins": ["transform-runtime",["component", [
+		{
+		"libraryName": "mint-ui",
+		"style": true
+		}
+		]]]
+	4) mint-ui 组件分类
+		a. 标签组件
+		b. 非标签组件
+	5) 使用mint-ui 的组件
+		1.在main.js中， 注册全局组件
+			import {Button} from 'mint-ui'
+			// 注册全局组件
+			Vue.component(Button.name, Button)//mt-button
+		2.使用
+			<section class="profile_my_order border-1px" v-if="userInfo._id">
+				<mt-button class="logout" type="danger" @click="logout">退出登陆</mt-button>
+			</section>
+			<script>
+			import { MessageBox} from 'mint-ui';
+				methods: {
+					logout () {
+						MessageBox.confirm('确定退出登陆吗?').then(action => {
+						this.$store.dispatch('logout')
+						});
+					}
+				},
+			<script>

@@ -1,0 +1,96 @@
+*****javascript简单介绍*****
+ECMAScript
+	1.语法
+	2.变量：只能使用var定义，如果在函数的内容使用var定义，那么它是一个局部变量，如果没有使用var它是一个全局的。弱类型！
+	3.数据类型：原始数据类型(undefined/null/string/number/boolean)
+	4.语句：
+	5.运算符：==与===的区别(其他与java一致)
+		==是判断值是否相等,===是判断值及类型是否完全相等
+	6.函数：两种写法(有命名称，匿名的)
+
+BOM对象
+	BrowserObjectModel浏览器对象模型，包含整个浏览器相关内容
+	window:alert(),prompt(),confirm(),setInterval(),clearInterval(),setTimeout(),clearTimeout()
+	history:go(参数)，back(),forward()
+	location: href属性
+		location.href="页面或action";
+	
+DOM对象
+	document
+	文档对象模型，包含整个htmL文档
+
+事件：
+	onsubmit()此事件写在form标签中，必须有返回值。
+	onload()：页面加载事件，此事件只能写一次并且放到body标签中
+	
+	其它事件放到需要操作的元素位置。
+	其它事件：
+	onfocus/onblur:聚焦离焦事件，用于表单校验合适
+	onclick/ondblclick：鼠标单击与双击事件
+	onkeydown/onkeypress(某个键被按下):搜索引擎（输入时的提示）
+	onmouseover/onmouseout/onmousemove:购物网站商品详情
+	onsubmit:表单提交
+	onchange:用户改变（二级联动）
+	
+	
+
+获取元素：
+	document.getElementById("id")
+	document.getElementByName("name")（遍历）
+获取元素里面的值:
+	document.getElementById("id").value
+	
+向页面输出
+	弹窗：alert();……
+	向浏览器中写入内容：document.write(内容)；
+	向页面指定位置写入内容,innerHTML(属性)  
+	
+
+
+*****javascript进一步介绍*****
+DOM对象:
+	document对象：
+		以下两个方法很重要，但是在手册中查不到！
+		创建文本节点：document.createTextNode()
+		创建元素节点：document.createElement()
+	
+	element对象：
+		element.appendChild()   向元素添加新的子节点，作为最后一个子节点。
+		element.firstChild      返回元素的首个子节点。
+		element.getAttribute()  返回元素节点的指定属性值。
+		element.innerHTML	    设置或返回元素的内容。
+		element.insertBefore()	在指定的已有的子节点之前插入新节点。
+		element.lastChild	    返回元素的最后一个子元素。
+		element.setAttribute()  把指定属性设置或更改为指定值。
+		element.removeChild()	从元素中移除子节点。
+		element.replaceChild()	替换元素中的子节点。
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+spring
+struts
+mybaits
+
+
+
+ssh
+
+
+1.书写页面（条件查询——id）

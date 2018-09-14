@@ -1,0 +1,74 @@
+*****JQuery简单示例*****
+一、隔行换色 
+	方式一：
+		获取tbody下面的偶数行并设置背景颜色
+			$("tbody tr:even").css("background-color","yellow");
+		获取tbody下面的奇数行并设置背景颜色
+			$("tbody tr:odd").css("background-color","green");
+			
+	方式二：加载css的实现类
+		获取tbody下面的偶数行并设置背景颜色
+		$("tbody tr:even").addClass("even");
+		$("tbody tr:even").removeClass("even");
+		获取tbody下面的奇数行并设置背景颜色
+		$("tbody tr:odd").addClass("odd");
+二、复选框全选与全部选
+	直接将复选框的属性传入  this.checked
+	
+	页面：
+	<table border="1" width="500" height="50" align="center" id="tbl" >
+			<thead>
+				<tr>
+					<th><input type="checkbox" id="select"></th>
+					<th>编号</th>
+					<th>姓名</th>
+					<th>年龄</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr >
+					<td><input type="checkbox" class="selectOne"/></td>
+					<td>1</td>
+					<td>张三</td>
+					<td>22</td>
+				</tr>
+				<tr >
+					<td><input type="checkbox" class="selectOne"/></td>
+					<td>2</td>
+					<td>李四</td>
+					<td>25</td>
+				</tr>	
+			</tbody>
+		</table>
+	
+	脚本：
+		$(function(){
+			$("#select").click(function(){
+				//获取下面所有的 复选框并将其选中状态设置跟编码的前端 复选框保持一致。
+				//attr方法与JQ的版本有关，在1.8.3及以下有效。
+				//$("tbody input").attr("checked",this.checked);
+				$("tbody input").prop("checked",this.checked);
+			});
+		});
+		
+三、标签的添加
+	<script>
+		$(function(){
+			/*1.选中单击去右边*/
+			$("#selectOneToRight").click(function(){
+				$("#left option:selected").appendTo($("#right"));
+			});
+			
+			/*2.单击全部去右边*/
+			$("#selectAllToRight").click(function(){
+				$("#left option").appendTo($("#right"));
+			});
+			
+			/*3.选中双击去右边*/
+			$("#left option").dblclick(function(){
+				$("#left option:selected").appendTo($("#right"));
+			});
+		});
+	</script>
+
+		

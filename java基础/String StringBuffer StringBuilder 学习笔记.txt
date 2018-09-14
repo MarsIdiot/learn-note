@@ -1,0 +1,73 @@
+****String StringBuffer StringBuilder 学习笔记****
+
+一、对String的基本理解
+	基本概念理解：
+		字符串数据都是一个对象
+		字符串数据一旦初始化就不可以被改变了
+		字符串对象都存储于常量池中，字符串常量池。
+   
+	示例说明：
+		String str1 = "abc";
+		String str2 = "abc";
+		String str3 = new String("abc");
+		问题说明：
+		1.为什么str1==str2结果为true呢？
+			先会在内存里创建str1以及其指向的内容"abc",当再次创建str2时，会在常量池里找是否有"abc"，
+		有就不会再开辟内存空间，str2直接指向已有的"abc",也就是str2和str1指向了同一个对象。
+		2为什么str1==str3结果为false呢？
+			==比较的地址值，而new是重新开辟的。
+		3.为什么str1.equals(str3)结果为true呢？
+			String类复写了Object类的equals方法，比较的是字符串中的内容是否相同。
+二、String重要API
+	equals(Object obj)字符串类重写了Object的方法,用于比较字符串的值是否相等。
+	isEmpty()判断字符串是否为空。
+	int length()获取字符串的长度。
+	int indexOf(String str)返回指定子字符串在此字符串中第一次出现处的索引。
+	String substring(int beginIndex)返回一个新的字符串，它是此字符串的一个子字符串。
+	String toUpperCase() 所有字符都转换为大写 。
+	String toLowerCase() 所有字符都转换为小写。
+	String replace(String oldString, String newString)返回一个新的字符串，它是通过用 newString 	替换此字符串中出现的所有 oldString 得到的。
+	trim() 去除字符串的前后空格。
+	int compareTo(String anotherString) 按字典顺序比较两个字符串。
+
+三、StringBuffer&StringBuilder
+	1.字符串String是定长的，StringBuffer是变长的.
+		注意：使用final关键字修饰一个变量时，是指引用变量不能变，引用变量所指向的对象中的内容还是可以改变的
+	2.常用API
+		1)增: StringBuilder append(String str);在当前字符串末尾追加给定字符串。
+		2)删: StringBuilder delete(int start,int end);
+		删除当前字符串中给定范围内的字符串。
+			  StringBuilder deleteCharAt(index);删除当前字符串中给定下标的字符。
+		3)改: StringBuilder replace(int start,int end,String str);
+		将当前字符串中给定范围内的字符串替换为给定的字符串。
+		4)插: StringBuilder insert(int index,String str);
+			  将给定的字符串内容插入到指定位置处。
+		5)倒置: StringBuilder reverse();将当前字符串内容反转
+
+	
+	3.StringBuffer,StringBuilder区别
+		StringBuffer 线程安全的,效率低(同步)
+		StringBuilder 线程不安全的,效率高(不同步)
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

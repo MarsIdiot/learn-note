@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/JQuery/JQuery知识点总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/JQuery/JQuery示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/JavaScript/JavaScript示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/JavaScript/JavaSript知识点总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/SQL数据库/sql总结体会.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/java基础/IO/IO基础知识总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/java基础/IO/IO基础知识示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/java基础/String StringBuffer StringBuilder 学习笔记.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/mybatis/mybatis知识点总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/mybatis/mybatis示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/spring/Spring知识点总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/spring/Spring示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/springmvc/springmvc与mybatis整合示例配置文件集合/整合包及整合思路梳理.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/springmvc/springmvc与mybatis整合示例配置文件集合/注意事项.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/springmvc/springmvc知识点总结.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/springmvc/springmvc示例代码集合.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ucarinc_test/ssm.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/ucarinc_test/问题记录.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/vue/ajax异步数据(前后端交互流程).txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结1_核心01.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结2_核心02.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结4_ajax.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结5_UI组件库.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结6_router路由.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vue/vue知识点总结7_Vuex.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vue/vue运行启动.txt" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

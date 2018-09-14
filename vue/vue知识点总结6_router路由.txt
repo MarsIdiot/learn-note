@@ -1,0 +1,75 @@
+******vue简单介绍******
+**Vue-路由篇router**
+    vue用来实现SPA的插件
+	安装：npm install -g vue-router
+    一、使用vue-router
+        1 创建路由器: router/index.js
+		import  VueRouter from 'vue-router'
+		//使用路由器
+		Vue.use(VueRouter)
+		//导入路由对应得组件
+		import  About from '../views/About.vue'
+		
+        export default  new VueRouter({
+            routes: [
+              { // 一般路由
+                path: '/about',
+                component: About
+              },
+              { // 自动跳转路由
+                path: '/', 
+                redirect: '/about'
+              }
+            ]
+          })
+        2. 注册路由器: main.js
+			//引入index.js
+           import router from './router'
+           	new Vue({//配置对象的属性名都是一些确定的名称，不能随便修改
+           		router // 注册路由器
+           	})
+        3. 使用路由组件标签:
+           	<router-link to="/xxx">Go to XXX</router-link>
+           	<router-view></router-view>
+    二、编写路由的3步
+        1. 定义路由组件    
+        2. 映射路由
+        3. 编写路由2个标签
+    三、嵌套路由
+        children: [
+            {
+              path: '/home/news',
+              component: news
+            },
+            {
+              path: 'news',//简化写法
+              component: news
+            }
+         ]
+    三、向路由组件传递数据
+		//路由链接传递
+        params: <router-link to="/home/news/abc/123">
+		//路由组件标签传递
+        props: <router-view msg='abc'>
+		
+		params示例说明：Message.vue向MessageDetail.vue传id
+			a)路由配置——路由组件编写
+				使用占位符:id
+				children:[
+					{
+					  path:'/home/message/messageDetail/:id',
+					  component:MessageDetail
+					}
+				]
+			b)在Mesagae.vue中使用路由链接传递
+				<router-link :to="`/home/message/messageDetail/${message.id}`">{{message.title}}</router-link>
+			c)在向MessageDetail.vue中获取
+				{{$route.params.id}}
+    四、缓存路由组件
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+    五、路由的编程式导航
+    	this.$router.push(path): 相当于点击路由链接(可以返回到当前路由界面)
+    	this.$router.replace(path): 用新路由替换当前路由(不可以返回到当前路由界面)
+    	this.$router.back(): 请求(返回)上一个记录路由

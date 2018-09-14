@@ -1,0 +1,158 @@
+******vue简单介绍******
+**Vue组件化编码篇**
+一、vue脚手架
+    用来创建vue项目的工具包
+    创建项目:
+        npm install -g vue-cli
+        vue init webpack VueDemo
+    开发环境运行:
+        cd VueDemo
+        npm install(安装依赖)
+        npm run dev
+    生产环境打包发布
+        npm run build
+        npm install -g serve
+        serve dist
+        http://localhost:5000
+
+二、eslint
+    用来做项目编码规范检查的工具
+    基本原理: 定义了很多规则, 检查项目的代码一旦发现违背了某个规则就输出相应的提示信息
+    有相应的配置, 可定制检查
+		
+三、组件化编程说明
+    1.vue文件包含3个部分
+        <template>
+          <div></div>
+        </template>
+        <script>
+            export default {
+			  props: []/{}//声明接收属性：该属性会成为组件对象的属性
+              data(){return{}},
+			  computed: {}
+              methods: {},
+			  
+			  watch: {}
+			  filters: {}
+			  directives: {}
+			  components: {}
+            }
+        </script>
+        <style>
+        </style>
+	2.组件使用
+		基本使用
+			1) 引入组件
+			2) 映射成标签
+			3) 使用组件标签
+		<template>
+			<!--3.使用组件标签-->
+			<HelloWorld></HelloWorld>
+			<hello-world></hello-world>
+		</template>
+		<script>
+			//1.引入组件
+			import HelloWorld from './components/HelloWorld'
+			export default {
+				//2.映射成标签
+				components: {
+					HelloWorld
+				}
+			}
+		</script>
+    3.组件化编码的基本流程
+    	1). 拆分界面, 抽取组件
+    	2). 编写静态组件
+    	3). 编写动态组件
+			css同对应的标签一起（拆分css）
+        	a)初始化数据
+			b)动态显示初始化界面
+        	c)实现与用户交互功能
+四、组件间通信
+	1.组件间通信基本原则
+		1) 不要在子组件中直接修改父组件的状态数据(跨组件更新数据)
+		2) 数据在哪, 更新数据的行为(函数)就应该定义在哪()
+    2.组件通信的5种方式
+    	props
+    	vue的自定义事件
+    	pubsub第三方库
+    	slot
+    	vuex
+    3.props:
+        父子组件间通信的基本方式
+        属性值的2大类型: 
+            一般: 父组件-->子组件
+            函数: 子组件-->父组件
+		隔层组件间传递: 必须逐层传递(麻烦)
+		兄弟组件间: 必须借助父组件(麻烦)
+	4.vue自定义事件
+	    子组件与父组件的通信方式
+	    用来取代function props
+	    不适合隔层组件和兄弟组件间的通信
+	5.pubsub第三方库(消息订阅与发布)
+	    适合于任何关系的组件间通信
+	6.slot
+	    通信是带数据的标签
+	    注意: 标签是在父组件中解析
+	7.vuex
+	    多组件共享状态(数据的管理)
+	    组件间的关系也没有限制
+	    功能比pubsub强大, 更适用于vue项目
+	
+	props示例说明：
+		1.List.vue获取App.vue的数组comments/方法deleteComment
+			a).在App.vue传递：
+				<List :comments="comments" :deleteComment="deleteComment" />//为了方便,注意名称需相同
+			b).在List.vue接收:
+				props:{
+				  comments:{//接受的对象作为该组件的属性，可以直接使用
+					type:Object,
+					required:true
+				  },
+				  deleteComment:{
+					type:Function,
+					required:true
+				  }
+				}
+				
+				此处props可以简写：	
+					方式一：props:['comments','deleteComment']
+					方式二：props:{
+								comments:Object,
+								deleteComment:Function
+							}
+
+五、深度监视——localStorage与watch
+	1.将数据实时更新存储到文件  随时可调用
+	2.示例说明：对数组todos进行深度监视
+		a).从localStorage读取数组todos
+			data(){
+			  return{
+				//window.localStorage.getItem("todo_key")获取的是字符串，需要将其转换为JSON格式
+				todos:JSON.parse(window.localStorage.getItem("todo_key")||'[]')
+			  }
+		   }
+		b).监视——将数据实时更新到localStorage
+			watch:{//监视
+			  todos:{
+				deep:true,
+				handler:function (value) {//此处vlaue为数组格式，存储时需转换为json
+					window.localStorage.setItem('todo_key',JSON.stringify(value))
+				}
+			  }
+			}
+	3.需要注意的是：
+		a)window.localStorage.getItem("todo_key")获取的是字符串，需要将其转换为JSON格式，才能符合Vue格式要求
+			JSON.parse(字符串)
+		b)存取皆为JSON格式
+		c)将数组转换为json格式：JSON.stringify(value)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

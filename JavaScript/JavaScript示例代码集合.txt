@@ -1,0 +1,212 @@
+*****javascript简单介绍*****
+一、页面加载完成执行
+	<script>
+		window.onload=function(){
+			alert("hello");
+		}
+	</script>
+	注意：若script标签写有type="text/javaScript",可能不能执行
+	
+二、向页面指定位置写入内容,innerHTML(属性)  可嵌入html标签
+	<script>
+		window.onload=function(){
+			document.getElementById("username").innerHTML="<font color='red'>用户名必填</font>";
+		}
+	</script>
+
+三、为事件绑定函数
+	表单：
+	<form name="form" onsubmit="checkForm()">
+		用户名：<input type="text" name="username"/><br/>
+		密码:<input type="text" name="password"/><br/>
+			<input type="submit" value="提交" />
+    </form>
+	
+	脚本：
+	<script>
+		function checkForm() {
+			alert("aa");
+		}
+	</script>
+	
+	
+四、js中判断值是否为空
+	if(uValue=""){
+		alert("用户名为空");
+	}
+
+五、js两个值判断是否相等
+	if(rpValue!=pValue){
+		alert("两次密码输入不一致");
+	}
+六、校验邮箱(正则表达式)    test()函数
+	var eValue = document.getElementById("eamil").value;
+	if(!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(eValue)){
+		alert("邮箱格式不正确!");
+		return false;
+	}
+	
+七、javascript引入方式  
+	利用script标签的src属性
+	<script type="text/javascript" src="1.js" ></script>
+	
+	
+*****javascript进一步介绍*****
+八、表格隔行换色(获取表格所有行元素)
+	表格：
+	<table border="1" width="500" height="50" align="center" id="tbl">
+		<thead>
+			<tr>
+				<th>编号</th>
+				<th>姓名</th>
+				<th>年龄</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr >
+				<td>1</td>
+				<td>张三</td>
+				<td>22</td>
+			</tr>
+			<tr >
+				<td>2</td>
+				<td>李四</td>
+				<td>25</td>
+			</tr>
+		</tbody>
+	</table>
+
+	脚本：
+	<script>
+		window.onload = function(){
+			//1.获取表格
+			var tblEle = document.getElementById("tbl");
+			//2.获取表格中tbody里面的行数(长度)
+			var len = tblEle.tBodies[0].rows.length;
+			//alert(len);
+			//3.对tbody里面的行进行遍历
+			for(var i=0;i<len;i++){
+				if(i%2==0){
+					//4.对偶数行设置背景颜色
+					tblEle.tBodies[0].rows[i].style.backgroundColor="pink";
+				}else{
+					//5.对奇数行设置背景颜色
+					tblEle.tBodies[0].rows[i].style.backgroundColor="gold";
+				}
+			}
+		}
+	</script>
+
+九、表格高亮显示
+	表格：
+	<tbody>
+		<tr onmouseover="changeColor('tr1','over')" id="tr1" onmouseout="changeColor('tr1','out')">
+			<td>1</td>
+			<td>张三</td>
+			<td>22</td>
+		</tr>
+		<tr onmouseover="changeColor('tr2','over')" id="tr2" onmouseout="changeColor('tr2','out')">
+			<td>2</td>
+			<td>李四</td>
+			<td>25</td>
+		</tr>
+	</tbody>
+	
+	脚本：
+	<script>
+		function changeColor(id,flag){
+			if(flag=="over"){
+				document.getElementById(id).style.backgroundColor="red";
+			}else if(flag=="out"){
+				document.getElementById(id).style.backgroundColor="white";
+			}
+		}
+	</script>
+
+十一、获取所有的复选框(获取所有复选框元素)
+	表格：
+		复选框的name都设定为"checkOne"
+		<tr >
+			<td><input type="checkbox" name="checkOne"/></td>
+			<td>1</td>
+			<td>张三</td>
+			<td>22</td>
+		</tr>
+		<tr >
+			<td><input type="checkbox" name="checkOne"/></td>
+			<td>2</td>
+			<td>李四</td>
+			<td>25</td>
+		</tr>
+	
+	脚本：
+		if(checkAllEle.checked==true){
+			var checkOnes = document.getElementsByName("checkOne");
+			//4.对获取的所有复选框进行遍历
+			for(var i=0;i<checkOnes.length;i++){
+				//5.拿到每一个复选框，并将其状态置为选中
+				checkOnes[i].checked=true;
+			}
+		}
+十二、动态添加城市（如何创建节点并添加）
+	页面:
+		<body>
+			<input type="button" value="添加新城市" id="btn"/>
+			<ul id="ul1">
+				<li>北京</li>
+				<li>上海</li>
+				<li>广州</li>
+			</ul>
+		</body>
+	脚本：
+		<script>
+			window.onload = function(){
+				document.getElementById("btn").onclick = function(){
+					//1.获取ul元素节点
+					var ulEle = document.getElementById("ul1");
+					//2.创建城市文本节点
+					var textNode = document.createTextNode("深圳");//深圳
+					//3.创建li元素节点
+					var liEle = document.createElement("li");//<li></li>
+					//4.将城市文本节点添加到li元素节点中去
+					liEle.appendChild(textNode);//<li>深圳</li>
+					//5.将li添加到ul中去
+					ulEle.appendChild(liEle);
+				}
+			}
+		</script>
+
+
+
+
+
+
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

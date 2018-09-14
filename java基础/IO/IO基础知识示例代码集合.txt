@@ -1,0 +1,92 @@
+******关于IO的简单实例******
+一、将文本数据存储到一个文件中
+	import java.io.FileWriter;
+	import java.io.IOException;
+	public class Demo{
+		public  static void main(Stirng[] args)throws IOException{
+			FileWriter fw=new FileWriter("E:\\1.txt");
+			fw.writer("abcd");
+			fw.flush();//数据刷到目的地，流还可以用
+			fw.writer("mm");
+			fw.close();//数据也刷到目的地，但是流不能再被使用
+		}
+	}
+	结果：文件中写入：abcdmm     
+	意外收获：异常包也得导入
+	
+二、完整的异常处理方式。
+	import java.io.FileWriter;
+	import java.io.IOException;
+	public class Demo2 {
+		public static void main(String[] args) {
+			FileWriter fw = null;//定义为全局，关闭的时候也要使用
+			try {
+				fw = new FileWriter("E:\\1.txt");
+				fw.write("abcd");
+				fw.flush();
+				fw.write("mn");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (fw != null) {//防止空指针异常----->运行时异常要做健壮性判断
+					try {
+						fw.close();
+					} catch (IOException e) {
+						throw new RuntimeException("关闭异常");
+					}
+				}
+			}
+		}
+	}
+	小细节：当指定绝对路径时，定义目录分隔符有两种方式：
+		1，反斜线，但是一定要写两个。new FileWriter("c:\\1.txt");
+		2，斜线，一个即可。new FileWriter("c:/1.txt");
+
+三、读取文件并输出字符
+	
+			FileReader fr = new FileReader("e:\\1.txt");
+			char[] ch = new char[1024];//长度通常是1024的整数倍
+			int len = 0;
+			while ((len = fr.read(ch)) != -1) {
+				System.out.print(new String(ch, 0, len));
+			}
+
+四、将e盘的文件复制到i盘中(读——>数组——>写)
+	public class CopyFileTest {
+		public static void main(String[] args) {
+			File startfile = new File("e:\\a.txt");
+			File endfile = new File("i:\\hello.txt");
+			copyFile(startfile, endfile);
+		}
+		public static void copyFile(File startfile,File endfile){
+			FileReader fr = null;
+			FileWriter fw = null;
+			
+			//1,创建一个字符读取流读取与源数据相关联。
+			fr = new FileReader(startfile);
+			//2,创建一个存储数据的目的地。
+			fw = new FileWriter(endfile);
+			//3,创建一个字符数组将读取流对象和写入流对象相连接。
+			char[] buf = new char[1024];
+			//4,每次读取的长度不一样，所以定义一个变量.
+			int len = 0;
+			//5,用循环读取文件中的数据
+			while((len = fr.read(buf))!=-1){//判断是否读取完没
+				fw.write(buf,0,len);		//为了只写入有效的数据
+			}
+		}
+	}
+	声明：为了减少代码的书写，以后出现的异常全使用抛出！
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		

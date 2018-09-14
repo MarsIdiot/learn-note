@@ -1,0 +1,32 @@
+******vue�򵥽���******
+**Vue-ajaxƪ**
+һ��ajax
+    a)��ؿ�:
+        vue-resource: vue���, ������vue1.x
+        axios: ��������, ������vue2.x
+    b)vue-resourceʹ��
+        // 1.1����ģ��   ��main.js
+        import VueResource from 'vue-resource'
+        // 1.2ʹ�ò��
+        Vue.use(VueResource) ��main.js
+        
+        // 2.ͨ��vue/���������ajax����
+        this.$http.get('/someUrl').then((response) => {
+          // success callback
+          console.log(response.data) //���ؽ������
+        }, (response) => {
+          // error callback
+          console.log(response.statusText) //������Ϣ
+        })
+    c)axiosʹ��
+        // ����ģ��
+        import axios from 'axios'
+        Vue.use(axios)
+        // ����ajax����
+        axios.get(url)
+          .then(response => {
+            console.log(response.data) // �õ����ؽ������
+          })
+          .catch(error => {
+        	console.log(error.message)
+          })

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.crm.mapper.CustomerMapper">
+
+    <!--Integer selectPageTotalByQueryVo(QueryVo vo);
+    private String custName;
+    private String custSource;
+    private String custIndustry;
+    private String custLevel;-->
+    <select id="selectPageTotalByQueryVo" parameterType="QueryVo"  resultType="Integer">
+        select count(1) from customer
+        <where>
+        <if test="custName != null and custName != ''">
+            cust_name like "%"#{custName}"%"
+        </if>
+        <if test="custSource != null and custSource != ''">
+            and cust_source = #{custSource}
+        </if>
+        <if test="custIndustry != null and custIndustry != ''">
+            and cust_industry = #{custIndustry}
+        </if>
+        <if test="custLevel != null and custLevel != ''">
+            and cust_level = #{custLevel}
+        </if>
+        </where>
+    </select>
+
+    <!--Page<Customer> selectPageCustomerByQueryVo(QueryVo vo);-->
+    <select id="selectPageCustomerByQueryVo" parameterType="QueryVo"
+            resultType="cn.itcast.crm.pojo.Customer">
+        select * from customer
+        <where>
+            <if test="custName != null and custName != ''">
+                cust_name like "%"#{custName}"%"
+            </if>
+            <if test="custSource != null and custSource != ''">
+                and cust_source = #{custSource}
+            </if>
+            <if test="custIndustry != null and custIndustry != ''">
+                and cust_industry = #{custIndustry}
+            </if>
+            <if test="custLevel != null and custLevel != ''">
+                and cust_level = #{custLevel}
+            </if>
+        </where>
+        limit #{startRows},#{size}
+    </select>
+
+    <!--/*
+    根据用户id查询用户
+    */
+    Customer selectCustomerById(Integer id);-->
+    <select id="selectCustomerById"  parameterType="Integer" resultType="Customer">
+        select * from customer
+        where cust_id=#{id}
+    </select>
+
+    <!--/*-->
+    <!--update  更新用户列表-->
+    <!-- private Long cust_id;
+    private String cust_name;
+    private Long cust_user_id;
+    private Long cust_create_id;
+    private String cust_source;
+    private String cust_industry;
+    private String cust_level;
+    private String cust_linkman;
+    private String cust_phone;
+    private String cust_mobile;
+    private String cust_zipcode;
+    private String cust_address;-->
+    <!--void updateCustomerByCustomer(Customer customer);-->
+    <update id="updateCustomerByCustomer" parameterType="Customer" >
+        update  customer
+        <set>
+            <if test="cust_name != null and cust_name != ''">
+                cust_name=#{cust_name},
+            </if>
+            <if test="cust_linkman!= null and cust_linkman !=''">
+                cust_linkman=#{cust_linkman},
+            </if>
+        </set>
+        where  cust_id=#{cust_id}
+    </update>
+
+    <!--/**
+    delete 根据id删除用户
+    */
+    void deleteCustomerById(Integer id);-->
+    <delete id="deleteCustomerById" parameterType="Integer" >
+        delete from customer
+        where cust_id=#{id}
+    </delete>
+</mapper>

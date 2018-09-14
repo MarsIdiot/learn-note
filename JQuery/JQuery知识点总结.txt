@@ -1,0 +1,77 @@
+*****JQuery简单介绍*****
+一、引入JQuery相关文件
+	<script src="../../js/jquery-1.8.3.js"></script>
+
+二、jquery代码位置
+	所有的jquery代码写在页面加载函数
+	<script>
+		$(function(){
+			Jquery代码
+		});
+	</script>
+	
+三、获取DOM对象并绑定事件
+	页面：
+		<input type="button" name="btn" id="btn"/>
+	
+	脚本：
+		$("#btn").click(function(){//通过id获取
+				
+		});
+		注意：函数放在click()里面
+		
+四、向指定元素写入文本
+	JQ：
+		$("#span1").html("萌萌哒");
+	JS：
+		document.getElementById("span1").innerHTML="萌萌哒";
+		
+
+五、JQ对象——>DOM对象
+	方式一
+		$("#span1").get(0).innerHTML="我嘿帅";
+	方式二
+		$("#span1")[0].innerHTML="我嘿帅";
+
+五、DOM对象——>JQ对象	
+	var spanEle = document.getElementById("span1");
+	$(spanEle).html("思密达");	
+		
+六、选择器
+	查手册，易懂
+	
+七、为标签添加属性或样式
+	方式一：使用css("","")
+				获取tbody下面的偶数行并设置背景颜色
+				$("tbody tr:even").css("background-color","yellow");
+	方式一：addClass("")
+				获取tbody下面的偶数行并设置背景颜色
+				$("tbody tr:even").addClass("even");
+	
+八、遍历
+	$("input[name='hobby']").each(function(){
+			this.checked = isChecked;
+		});
+九、文档处理操作
+		追加内容
+			apend:  A.append(B)  将B追加到A的内容的末尾处
+			appendTo: A.appendTo(B)  将A加到B内容的末尾处
+
+十、获取对象的值
+	var val = this.value;
+	
+十一、清除第下拉列表的内容
+		$("#city").empty();
+
+
+	
+		
+		
+
+
+		
+		
+		
+		
+		
+		

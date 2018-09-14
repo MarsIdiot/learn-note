@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://www.cnblogs.com/Wayou/p/es6_new_features.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="origin">
+<title>ES6新特性概览 - 刘哇勇 - 博客园</title>
+<meta property="og:description" content="本文基于lukehoban/es6features ，同时参考了大量博客资料，具体见文末引用。ES6（ECMAScript 6）是即将到来的新版本JavaScript语言的标准，代号harmony(和">
+<link type="text/css" rel="stylesheet" href="./ES6新特性概览 - 刘哇勇 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./ES6新特性概览 - 刘哇勇 - 博客园_files/bundle-ThinkInside.css">
+<link type="text/css" rel="stylesheet" href="./ES6新特性概览 - 刘哇勇 - 博客园_files/123544.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./ES6新特性概览 - 刘哇勇 - 博客园_files/bundle-ThinkInside-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/Wayou/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/Wayou/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/Wayou/wlwmanifest.xml">
+<script async="" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/analytics.js.下载"></script><script src="./ES6新特性概览 - 刘哇勇 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+<script type="text/javascript">var currentBlogApp = 'Wayou', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./ES6新特性概览 - 刘哇勇 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+</head>
+<body class="  pace-done"><div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+  <div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div></div>
+<a name="top"></a>
+<!--PageBeginHtml Block Begin-->
+<link rel="stylesheet" type="text/css" href="./ES6新特性概览 - 刘哇勇 - 博客园_files/pace.css">
+<link href="./ES6新特性概览 - 刘哇勇 - 博客园_files/not.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/pace.min.js.下载"></script>
+<script type="text/javascript" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/not.js.下载"></script>
+
+<script type="text/javascript">
+window.onload = function() {
+
+    $("#MyLinks1_MyHomeLink").attr("href", "http://www.cnblogs.com/wayou/p/");
+    $("#cnblogs_post_body em").parent("p").addClass("emphasis_block");
+    $("#cnblogs_post_body a").attr("target", "_blank");
+    $('<a class="fastCom" id="fastCom"  title="快速评论" href="#comment_form_container"></a>').appendTo("#cnblogs_post_body");
+    $(window).scroll(function() {
+        if ($(this).scrollTop()) {
+            $("#toTop").stop(true, true).fadeIn()
+        } else {
+            $("#toTop").stop(true, true).fadeOut()
+        }
+    });
+    var e = ["感谢推荐！顶贴的都是好人  \\(^______^)/", "欢迎参与评论，博主很激动  \\(^______^)/", "要登陆了才能进行操作哦~"];
+    $(".diggit").bind("click", function() {
+        $.notific8($(".login_tips").length == 0 ? e[0] : e[2], {
+            life: 3e3,
+            heading: "来自博主的问候:",
+            theme: "smoke",
+            sticky: false,
+            horizontalEdge: "top",
+            verticalEdge: "right",
+            zindex: 1500
+        })
+    });
+    $("#btn_comment_submit").bind("click", function() {
+        $.notific8(e[1], {
+            life: 3e3,
+            heading: "来自博主的问候:",
+            theme: "smoke",
+            sticky: false,
+            horizontalEdge: "top",
+            verticalEdge: "right",
+            zindex: 1500
+        })
+    });
+    if ($(".login_tips").length != 0) {
+        $("#fastCom").bind("click", function() {
+            $.notific8(e[2], {
+                life: 3e3,
+                heading: "来自博主的问候:",
+                theme: "smoke",
+                sticky: false,
+                horizontalEdge: "top",
+                verticalEdge: "right",
+                zindex: 1500
+            })
+        })
+    }
+
+    ;(function() {
+        (function(e) {
+            return $.fn.wanker = function(e) {
+                var t;
+                t = $.extend({
+                    delay: 1e3,
+                    duration: 1500
+                }, e);
+                return this.each(function() {
+                    var e, n, r, i, s, o, u;
+                    e = $(this);
+                    i = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    if (!i) {
+                        r = false;
+                        o = null;
+                        n = null;
+                        u = null;
+                        s = function() {
+                            r = false;
+                            return n = null
+                        };
+                        return $(window).resize(function() {
+                            if (r) {
+                                n = Math.abs(new Date - o)
+                            } else {
+                                o = new Date;
+                                r = true
+                            } if (n > t.delay) {
+                                e.fadeIn()
+                            }
+                            if (u) {
+                                clearTimeout(u)
+                            }
+                            return u = setTimeout(function() {
+                                e.fadeOut();
+                                return s()
+                            }, t.duration)
+                        })
+                    }
+                })
+            }
+        })($)
+    }).call(this);
+    $("[data-wanker]").wanker();
+
+    $('#tbCommentBody').attr('placeholder','来吧~少年，消灭零回复！');
+
+
+}
+</script>
+<!--PageBeginHtml Block End-->
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/Wayou/"><img id="blogLogo" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/Wayou/">刘哇勇的部落格</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/Wayou/">首页</a></li>
+<li></li>
+<li></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/Wayou/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/Wayou/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 85&nbsp; </span>
+<span id="stats_article_count">文章 - 1&nbsp; </span>
+<span id="stats-comment_count">评论 - 1708</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/Wayou/p/es6_new_features.html">ES6新特性概览</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><p>本文基于<a href="https://github.com/lukehoban" target="_blank">lukehoban</a>/<a href="https://github.com/lukehoban/es6features" target="_blank"><strong>es6features</strong></a> ，同时参考了大量博客资料，具体见文末引用。</p>
+<p>ES6（<a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CCoQFjAA&amp;url=%68%74%74%70%3a%2f%2f%65%6e%2e%77%69%6b%69%70%65%64%69%61%2e%6f%72%67%2f%77%69%6b%69%2f%45%43%4d%41%53%63%72%69%70%74&amp;ei=Q99JU5jwAoGC8gWq9YDoCQ&amp;usg=AFQjCNGgS-TjEL_-efubqc1RnkUfmn6wew&amp;sig2=Kx2DkQ1Qtv0Wu2E_v_fwGQ&amp;bvm=bv.64542518,d.dGc" target="_blank">ECMAScript</a> 6）是即将到来的新版本JavaScript语言的标准，代号harmony(和谐之意，显然没有跟上我国的步伐，我们已经进入中国梦版本了)。上一次标准的制订还是2009年出台的ES5。目前ES6的标准化工作正在进行中，预计会在14年12月份放出正式敲定的版本。但大部分标准已经就绪，且各浏览器对ES6的支持也正在实现中。要查看ES6的支持情况请<a href="http://kangax.github.io/es5-compat-table/es6/" target="_blank">点此</a>。</p>
+<p>目前想要运行ES6代码的话，可以用<a href="https://github.com/google" target="_blank">google</a>/<a href="https://github.com/google/traceur-compiler" target="_blank"><strong>traceur-compiler</strong></a>将代码转译。<a href="http://google.github.io/traceur-compiler/demo/repl.html" target="_blank">点此</a>访问traceur-compiler 在线版本时实编辑ES6代码并查看转换后的结果，代码运行结果会在console显示。</p>
+<p>另外，关于Google Traceur，业界大神<a href="https://plus.google.com/+AddyOsmani" target="_blank">Addy Osmani</a>利用前者写了个Chrome插件<a href="https://chrome.google.com/webstore/detail/es6-repl/alploljligeomonipppgaahpkenfnfkn" target="_blank">ES6 Tepl</a>，安装后也可以进行ES6的测试。</p>
+<p>当然，并不是所有ES6新特性都被实现了，所以上面的方法可以测试大部分，有一些还是无法测试的。</p>
+<p>虽然ES6都还没真正发布，但已经有用<a href="http://blog.tastejs.com/rewriting-a-webapp-with-ecmascript-6" target="_blank">ES6重写的程序</a>了，各种关于ES789的提议已经开始了，这你敢信。潮流不是我等大众所能追赶的。</p>
+<p>潮流虽然太快，但我们不停下学习的步伐，就不会被潮流丢下的，下面来领略下ES6中新特性，一堵新生代JS的风采。</p>
+<h1>箭头操作符</h1>
+<p>如果你会C#或者Java，你肯定知道lambda表达式，ES6中新增的箭头操作符<span style="background-color: lightgrey;">=&gt;</span>便有异曲同工之妙。它简化了函数的书写。操作符左边为输入的参数，而右边则是进行的操作以及返回的值<span style="background-color: lightgrey;">Inputs=&gt;outputs</span>。</p>
+<p>我们知道在JS中回调是经常的事，而一般回调又以匿名函数的形式出现，每次都需要写一个<span style="background-color: lightgrey;">function</span>，甚是繁琐。当引入箭头操作符后可以方便地写回调了。请看下面的例子。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">array</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">[</span><span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">];</span>
+<span style="color: #75715e;">//传统写法</span>
+<span style="color: #a6e22e;">array</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">forEach</span><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">i</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">a</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #f8f8f2;">});</span>
+<span style="color: #75715e;">//ES6</span>
+<span style="color: #a6e22e;">array</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">forEach</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span> <span style="color: #f92672;">=</span> <span style="color: #f92672;">&gt;</span> <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span><span style="color: #f8f8f2;">));</span>
+</pre>
+</div>
+<p>大家可以打开文章开头提到的traceur在线代码转译页面输入代码来查看效果。</p>
+<h1>类的支持</h1>
+<p>ES6中添加了对类的支持，引入了<span style="background-color: lightgrey;">class</span>关键字（其实class在JavaScript中一直是保留字，目的就是考虑到可能在以后的新版本中会用到，现在终于派上用场了）。JS本身就是面向对象的，ES6中提供的类实际上只是JS原型模式的包装。现在提供原生的class支持后，对象的创建，继承更加直观了，并且父类方法的调用，实例化，静态方法和构造函数等概念都更加形象化。</p>
+<p>下面代码展示了类在ES6中的使用。再次啰嗦一句，你可以将代码贴到<a href="http://google.github.io/traceur-compiler/demo/repl.html" target="_blank">traceur</a>自己查看运行结果。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//类的定义</span>
+<span style="color: #66d9ef;">class</span> <span style="color: #a6e22e;">Animal</span> <span style="color: #f8f8f2;">{</span>
+	<span style="color: #75715e;">//ES6中新型构造器</span>
+    <span style="color: #a6e22e;">constructor</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #66d9ef;">this</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">name</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">;</span>
+    <span style="color: #f8f8f2;">}</span>
+    <span style="color: #75715e;">//实例方法</span>
+    <span style="color: #a6e22e;">sayName</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'My name is '</span><span style="color: #f92672;">+</span><span style="color: #66d9ef;">this</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #75715e;">//类的继承</span>
+<span style="color: #66d9ef;">class</span> <span style="color: #a6e22e;">Programmer</span> <span style="color: #66d9ef;">extends</span> <span style="color: #a6e22e;">Animal</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">constructor</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    	<span style="color: #75715e;">//直接调用父类构造器进行初始化</span>
+        <span style="color: #66d9ef;">super</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span>
+    <span style="color: #a6e22e;">program</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"I'm coding..."</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #75715e;">//测试我们的类</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">animal</span><span style="color: #f92672;">=</span><span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Animal</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'dummy'</span><span style="color: #f8f8f2;">),</span>
+<span style="color: #a6e22e;">wayou</span><span style="color: #f92672;">=</span><span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Programmer</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'wayou'</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #a6e22e;">animal</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">sayName</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出 ‘My name is dummy’</span>
+<span style="color: #a6e22e;">wayou</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">sayName</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出 ‘My name is wayou’</span>
+<span style="color: #a6e22e;">wayou</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">program</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出 ‘I'm coding...’</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h1>增强的对象字面量</h1>
+<p>对象字面量被增强了，写法更加简洁与灵活，同时在定义对象的时候能够做的事情更多了。具体表现在：</p>
+<ul>
+<li>可以在对象字面量里面定义原型</li>
+<li>定义方法可以不用function关键字</li>
+<li>直接调用父类方法</li>
+</ul>
+<p>这样一来，对象字面量与前面提到的类概念更加吻合，在编写面向对象的JavaScript时更加轻松方便了。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//通过对象字面量创建对象</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">human</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">breathe</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'breathing...'</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">};</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">worker</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">__proto__</span><span style="color: #f92672;">:</span> <span style="color: #a6e22e;">human</span><span style="color: #f8f8f2;">,</span> <span style="color: #75715e;">//设置此对象的原型为human,相当于继承human</span>
+    <span style="color: #a6e22e;">company</span><span style="color: #f92672;">:</span> <span style="color: #e6db74;">'freelancer'</span><span style="color: #f8f8f2;">,</span>
+    <span style="color: #a6e22e;">work</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'working...'</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">};</span>
+<span style="color: #a6e22e;">human</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">breathe</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出 ‘breathing...’</span>
+<span style="color: #75715e;">//调用继承来的breathe方法</span>
+<span style="color: #a6e22e;">worker</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">breathe</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出 ‘breathing...’</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h1>字符串模板</h1>
+<p>字符串模板相对简单易懂些。ES6中允许使用反引号 <span style="background-color: lightgrey;">`</span> 来创建字符串，此种方法创建的字符串里面可以包含由美元符号加花括号包裹的变量<span style="background-color: lightgrey;">${vraible}</span>。如果你使用过像C#等后端强类型语言的话，对此功能应该不会陌生。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//产生一个随机数</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">num</span><span style="color: #f92672;">=</span><span style="color: #f8f8f2;">Math.</span><span style="color: #a6e22e;">random</span><span style="color: #f8f8f2;">();</span>
+<span style="color: #75715e;">//将这个数字输出到console</span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #a6e22e;">your</span> <span style="color: #a6e22e;">num</span> <span style="color: #a6e22e;">is</span> <span style="color: #a6e22e;">$</span><span style="color: #f8f8f2;">{</span><span style="color: #a6e22e;">num</span><span style="color: #f8f8f2;">}</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #f8f8f2;">);</span>
+</pre>
+</div>
+<h1>解构</h1>
+<p>自动解析数组或对象中的值。比如若一个函数要返回多个值，常规的做法是返回一个对象，将每个值做为这个对象的属性返回。但在ES6中，利用解构这一特性，可以直接返回一个数组，然后数组中的值会自动被解析到对应接收该值的变量中。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">var</span> <span style="color: #f8f8f2;">[</span><span style="color: #a6e22e;">x</span><span style="color: #f8f8f2;">,</span><span style="color: #a6e22e;">y</span><span style="color: #f8f8f2;">]</span><span style="color: #f92672;">=</span><span style="color: #a6e22e;">getVal</span><span style="color: #f8f8f2;">(),</span><span style="color: #75715e;">//函数返回值的解构</span>
+    <span style="color: #f8f8f2;">[</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">,,</span><span style="color: #a6e22e;">age</span><span style="color: #f8f8f2;">]</span><span style="color: #f92672;">=</span><span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">'wayou'</span><span style="color: #f8f8f2;">,</span><span style="color: #e6db74;">'male'</span><span style="color: #f8f8f2;">,</span><span style="color: #e6db74;">'secrect'</span><span style="color: #f8f8f2;">];</span><span style="color: #75715e;">//数组解构</span>
+
+<span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">getVal</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #66d9ef;">return</span> <span style="color: #f8f8f2;">[</span> <span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">2</span> <span style="color: #f8f8f2;">];</span>
+<span style="color: #f8f8f2;">}</span>
+
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'x:'</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">x</span><span style="color: #f92672;">+</span><span style="color: #e6db74;">', y:'</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">y</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：x:1, y:2 </span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'name:'</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">name</span><span style="color: #f92672;">+</span><span style="color: #e6db74;">', age:'</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">age</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出： name:wayou, age:secrect </span>
+</pre>
+</div>
+<h1>参数默认值，不定参数，拓展参数</h1>
+<h2>默认参数值</h2>
+<p>现在可以在定义函数的时候指定参数的默认值了，而不用像以前那样通过逻辑或操作符来达到目的了。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">){</span>
+	<span style="color: #75715e;">//传统的指定默认参数的方式</span>
+	<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">name</span><span style="color: #f92672;">=</span><span style="color: #a6e22e;">name</span><span style="color: #f92672;">||</span><span style="color: #e6db74;">'dude'</span><span style="color: #f8f8f2;">;</span>
+	<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'Hello '</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #75715e;">//运用ES6的默认参数</span>
+<span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">sayHello2</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">name</span><span style="color: #f92672;">=</span><span style="color: #e6db74;">'dude'</span><span style="color: #f8f8f2;">){</span>
+	<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #a6e22e;">Hello</span> <span style="color: #a6e22e;">$</span><span style="color: #f8f8f2;">{</span><span style="color: #a6e22e;">name</span><span style="color: #f8f8f2;">}</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出：Hello dude</span>
+<span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'Wayou'</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：Hello Wayou</span>
+<span style="color: #a6e22e;">sayHello2</span><span style="color: #f8f8f2;">();</span><span style="color: #75715e;">//输出：Hello dude</span>
+<span style="color: #a6e22e;">sayHello2</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'Wayou'</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：Hello Wayou</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h2>不定参数</h2>
+<p>不定参数是在函数中使用命名参数同时接收不定数量的未命名参数。这只是一种语法糖，在以前的JavaScript代码中我们可以通过arguments变量来达到这一目的。不定参数的格式是三个句点后跟代表所有不定参数的变量名。比如下面这个例子中，<span style="background-color: lightgrey;">…x</span>代表了所有传入<span style="background-color: lightgrey;">add</span>函数的参数。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//将所有参数相加的函数</span>
+<span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(...</span><span style="color: #a6e22e;">x</span><span style="color: #f8f8f2;">){</span>
+	<span style="color: #66d9ef;">return</span> <span style="color: #a6e22e;">x</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">reduce</span><span style="color: #f8f8f2;">((</span><span style="color: #a6e22e;">m</span><span style="color: #f8f8f2;">,</span><span style="color: #a6e22e;">n</span><span style="color: #f8f8f2;">)</span><span style="color: #f92672;">=&gt;</span><span style="color: #a6e22e;">m</span><span style="color: #f92672;">+</span><span style="color: #a6e22e;">n</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #75715e;">//传递任意个数的参数</span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">));</span><span style="color: #75715e;">//输出：6</span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">4</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">5</span><span style="color: #f8f8f2;">));</span><span style="color: #75715e;">//输出：15</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h2>拓展参数</h2>
+<p>拓展参数则是另一种形式的语法糖，它允许传递数组或者类数组直接做为函数的参数而不用通过<span style="background-color: lightgrey;">apply</span>。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">people</span><span style="color: #f92672;">=</span><span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">'Wayou'</span><span style="color: #f8f8f2;">,</span><span style="color: #e6db74;">'John'</span><span style="color: #f8f8f2;">,</span><span style="color: #e6db74;">'Sherlock'</span><span style="color: #f8f8f2;">];</span>
+<span style="color: #75715e;">//sayHello函数本来接收三个单独的参数人妖，人二和人三</span>
+<span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">people1</span><span style="color: #f8f8f2;">,</span><span style="color: #a6e22e;">people2</span><span style="color: #f8f8f2;">,</span><span style="color: #a6e22e;">people3</span><span style="color: #f8f8f2;">){</span>
+	<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #a6e22e;">Hello</span> <span style="color: #a6e22e;">$</span><span style="color: #f8f8f2;">{</span><span style="color: #a6e22e;">people1</span><span style="color: #f8f8f2;">},</span><span style="color: #a6e22e;">$</span><span style="color: #f8f8f2;">{</span><span style="color: #a6e22e;">people2</span><span style="color: #f8f8f2;">},</span><span style="color: #a6e22e;">$</span><span style="color: #f8f8f2;">{</span><span style="color: #a6e22e;">people3</span><span style="color: #f8f8f2;">}</span><span style="color: #960050; background-color: #1e0010;">`</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #f8f8f2;">}</span>
+<span style="color: #75715e;">//但是我们将一个数组以拓展参数的形式传递，它能很好地映射到每个单独的参数</span>
+<span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">(...</span><span style="color: #a6e22e;">people</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：Hello Wayou,John,Sherlock </span>
+
+<span style="color: #75715e;">//而在以前，如果需要传递数组当参数，我们需要使用函数的apply方法</span>
+<span style="color: #a6e22e;">sayHello</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">apply</span><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">null</span><span style="color: #f8f8f2;">,</span><span style="color: #a6e22e;">people</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：Hello Wayou,John,Sherlock </span>
+</pre>
+</div>
+<h1>let与const 关键字</h1>
+<p>可以把<span style="background-color: lightgrey;">let</span>看成<span style="background-color: lightgrey;">var</span>，只是它定义的变量被限定在了特定范围内才能使用，而离开这个范围则无效。<span style="background-color: lightgrey;">const</span>则很直观，用来定义常量，即无法被更改值的变量。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">for</span> <span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">let</span> <span style="color: #a6e22e;">i</span><span style="color: #f92672;">=</span><span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">;</span><span style="color: #a6e22e;">i</span><span style="color: #f92672;">&lt;</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">;</span><span style="color: #a6e22e;">i</span><span style="color: #f92672;">++</span><span style="color: #f8f8f2;">)</span><span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">i</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出: 0,1</span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">i</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出：undefined,严格模式下会报错</span>
+</pre>
+</div>
+<h1>for of 值遍历</h1>
+<p>我们都知道<span style="background-color: lightgrey;">for in</span> 循环用于遍历数组，类数组或对象，ES6中新引入的<span style="background-color: lightgrey;">for of</span>循环功能相似，不同的是每次循环它提供的不是序号而是值。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">someArray</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">[</span> <span style="color: #e6db74;">"a"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"b"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"c"</span> <span style="color: #f8f8f2;">];</span>
+ 
+<span style="color: #66d9ef;">for</span> <span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span> <span style="color: #a6e22e;">of</span> <span style="color: #a6e22e;">someArray</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">v</span><span style="color: #f8f8f2;">);</span><span style="color: #75715e;">//输出 a,b,c</span>
+<span style="color: #f8f8f2;">}</span></pre>
+</div>
+<p class="emphasis_block"><em>注意，此功能google traceur并未实现，所以无法模拟调试,下面有些功能也是如此</em></p>
+<h1>iterator, generator</h1>
+<p>这一部分的内容有点生涩，详情可以参见<a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/" target="_blank">这里</a>。以下是些基本概念。</p>
+<ul>
+<li>iterator:它是这么一个对象，拥有一个next方法，这个方法返回一个对象{done,value}，这个对象包含两个属性，一个布尔类型的done和包含任意值的value</li>
+<li>iterable: 这是这么一个对象，拥有一个obj[@@iterator]方法，这个方法返回一个iterator</li>
+<li>generator: 它是一种特殊的iterator。反的next方法可以接收一个参数并且返回值取决与它的构造函数（generator function）。generator同时拥有一个throw方法</li>
+<li>generator 函数: 即generator的构造函数。此函数内可以使用<span style="background-color: lightgrey;">yield</span>关键字。在<span style="background-color: lightgrey;">yield</span>出现的地方可以通过generator的<span style="background-color: lightgrey;">next</span>或<span style="background-color: lightgrey;">throw</span>方法向外界传递值。generator 函数是通过<span style="background-color: lightgrey;">function*</span>来声明的</li>
+<li>yield 关键字：它可以暂停函数的执行，随后可以再进进入函数继续执行</li>
+</ul>
+<h1>模块</h1>
+<p>在ES6标准中，JavaScript原生支持module了。这种将JS代码分割成不同功能的小块进行模块化的概念是在一些三方规范中流行起来的，比如CommonJS和AMD模式。</p>
+<p>将不同功能的代码分别写在不同文件中，各模块只需导出公共接口部分，然后通过模块的导入的方式可以在其他地方使用。下面的例子来自<a href="http://code.tutsplus.com/tutorials/eight-cool-features-coming-in-es6--net-33175" target="_blank">tutsplus</a>:</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">// point.js</span>
+<span style="color: #a6e22e;">module</span> <span style="color: #e6db74;">"point"</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #66d9ef;">export</span> <span style="color: #66d9ef;">class</span> <span style="color: #a6e22e;">Point</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">constructor</span> <span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">x</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">y</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+            <span style="color: #66d9ef;">public</span> <span style="color: #a6e22e;">x</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">x</span><span style="color: #f8f8f2;">;</span>
+            <span style="color: #66d9ef;">public</span> <span style="color: #a6e22e;">y</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">y</span><span style="color: #f8f8f2;">;</span>
+        <span style="color: #f8f8f2;">}</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">}</span>
+ 
+<span style="color: #75715e;">// myapp.js</span>
+<span style="color: #75715e;">//声明引用的模块</span>
+<span style="color: #a6e22e;">module</span> <span style="color: #a6e22e;">point</span> <span style="color: #a6e22e;">from</span> <span style="color: #e6db74;">"/point.js"</span><span style="color: #f8f8f2;">;</span>
+<span style="color: #75715e;">//这里可以看出，尽管声明了引用的模块，还是可以通过指定需要的部分进行导入</span>
+<span style="color: #66d9ef;">import</span> <span style="color: #a6e22e;">Point</span> <span style="color: #a6e22e;">from</span> <span style="color: #e6db74;">"point"</span><span style="color: #f8f8f2;">;</span>
+ 
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">origin</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Point</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">origin</span><span style="color: #f8f8f2;">);</span>
+</pre>
+</div>
+<h1>Map，Set 和 WeakMap，WeakSet</h1>
+<p>这些是新加的集合类型，提供了更加方便的获取属性值的方法，不用像以前一样用<span style="background-color: lightgrey;">hasOwnProperty</span>来检查某个属性是属于原型链上的呢还是当前对象的。同时，在进行属性值添加与获取时有专门的<span style="background-color: lightgrey;">get</span>，<span style="background-color: lightgrey;">set</span> 方法。</p>
+<p>下方代码来自<a href="https://github.com/lukehoban/es6features" target="_blank">es6feature</a></p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">// Sets</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">s</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Set</span><span style="color: #f8f8f2;">();</span>
+<span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"hello"</span><span style="color: #f8f8f2;">).</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"goodbye"</span><span style="color: #f8f8f2;">).</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"hello"</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">size</span> <span style="color: #f92672;">===</span> <span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">;</span>
+<span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">has</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"hello"</span><span style="color: #f8f8f2;">)</span> <span style="color: #f92672;">===</span> <span style="color: #66d9ef;">true</span><span style="color: #f8f8f2;">;</span>
+
+<span style="color: #75715e;">// Maps</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">m</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Map</span><span style="color: #f8f8f2;">();</span>
+<span style="color: #a6e22e;">m</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">set</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"hello"</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">42</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #a6e22e;">m</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">set</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">34</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #a6e22e;">m</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">get</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">)</span> <span style="color: #f92672;">==</span> <span style="color: #ae81ff;">34</span><span style="color: #f8f8f2;">;</span>
+</pre>
+</div>
+<p>有时候我们会把对象作为一个对象的键用来存放属性值，普通集合类型比如简单对象会阻止垃圾回收器对这些作为属性键存在的对象的回收，有造成内存泄漏的危险。而<span style="background-color: #c0c0c0;">WeakMap</span>,<span style="background-color: #c0c0c0;">WeakSet</span>则更加安全些，这些作为属性键的对象如果没有别的变量在引用它们，则会被回收释放掉，具体还看下面的例子。</p>
+<p>正文代码来自<a href="https://github.com/lukehoban/es6features" target="_blank">es6feature</a></p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">// Weak Maps</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">wm</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">WeakMap</span><span style="color: #f8f8f2;">();</span>
+<span style="color: #a6e22e;">wm</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">set</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">s</span><span style="color: #f8f8f2;">,</span> <span style="color: #f8f8f2;">{</span> <span style="color: #a6e22e;">extra</span><span style="color: #f92672;">:</span> <span style="color: #ae81ff;">42</span> <span style="color: #f8f8f2;">});</span>
+<span style="color: #a6e22e;">wm</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">size</span> <span style="color: #f92672;">===</span> <span style="color: #66d9ef;">undefined</span>
+
+<span style="color: #75715e;">// Weak Sets</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">ws</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">WeakSet</span><span style="color: #f8f8f2;">();</span>
+<span style="color: #a6e22e;">ws</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">add</span><span style="color: #f8f8f2;">({</span> <span style="color: #a6e22e;">data</span><span style="color: #f92672;">:</span> <span style="color: #ae81ff;">42</span> <span style="color: #f8f8f2;">});</span><span style="color: #75715e;">//因为添加到ws的这个临时对象没有其他变量引用它，所以ws不会保存它的值，也就是说这次添加其实没有意思</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h1>Proxies</h1>
+<p>Proxy可以监听对象身上发生了什么事情，并在这些事情发生后执行一些相应的操作。一下子让我们对一个对象有了很强的追踪能力，同时在数据绑定方面也很有用处。</p>
+<p>以下例子借用自<a href="http://ariya.ofilabs.com/2013/07/es6-and-proxy.html" target="_blank">这里</a>。<code><span style="color: #75715e;"><span style="color: #f8f8f2; font-family: &#39;Courier New&#39;; line-height: 1.5;"><br></span></span></code></p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//定义被侦听的目标对象</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">engineer</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">{</span> <span style="color: #a6e22e;">name</span><span style="color: #f92672;">:</span> <span style="color: #e6db74;">'Joe Sixpack'</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">salary</span><span style="color: #f92672;">:</span> <span style="color: #ae81ff;">50</span> <span style="color: #f8f8f2;">};</span>
+<span style="color: #75715e;">//定义处理程序</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">interceptor</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">{</span>
+  <span style="color: #a6e22e;">set</span><span style="color: #f92672;">:</span> <span style="color: #66d9ef;">function</span> <span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">receiver</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">property</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">value</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">property</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">'is changed to'</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">value</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #a6e22e;">receiver</span><span style="color: #f8f8f2;">[</span><span style="color: #a6e22e;">property</span><span style="color: #f8f8f2;">]</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">value</span><span style="color: #f8f8f2;">;</span>
+  <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">};</span>
+<span style="color: #75715e;">//创建代理以进行侦听</span>
+<span style="color: #a6e22e;">engineer</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">Proxy</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">engineer</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">interceptor</span><span style="color: #f8f8f2;">);</span>
+<span style="color: #75715e;">//做一些改动来触发代理</span>
+<span style="color: #a6e22e;">engineer</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">salary</span> <span style="color: #f92672;">=</span> <span style="color: #ae81ff;">60</span><span style="color: #f8f8f2;">;</span><span style="color: #75715e;">//控制台输出：salary is changed to 60</span>
+</pre>
+</div>
+<p>上面代码我已加了注释，这里进一步解释。对于处理程序，是在被侦听的对象身上发生了相应事件之后，处理程序里面的方法就会被调用，上面例子中我们设置了<span style="background-color: lightgrey;">set</span>的处理函数，表明，如果我们侦听的对象的属性被更改，也就是被<span style="background-color: lightgrey;">set</span>了，那这个处理程序就会被调用，同时通过参数能够得知是哪个属性被更改，更改为了什么值。</p>
+<h1>Symbols</h1>
+<p>我们知道对象其实是键值对的集合，而键通常来说是字符串。而现在除了字符串外，我们还可以用symbol这种值来做为对象的键。Symbol是一种基本类型，像数字，字符串还有布尔一样，它不是一个对象。Symbol 通过调用symbol函数产生，它接收一个可选的名字参数，该函数返回的symbol是唯一的。之后就可以用这个返回值做为对象的键了。Symbol还可以用来创建私有属性，外部无法直接访问由symbol做为键的属性值。</p>
+<p>以下例子来自<a href="https://github.com/lukehoban/es6features" target="_blank">es6features</a></p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+
+  <span style="color: #75715e;">// 创建symbol</span>
+  <span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">key</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">Symbol</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"key"</span><span style="color: #f8f8f2;">);</span>
+
+  <span style="color: #66d9ef;">function</span> <span style="color: #a6e22e;">MyClass</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">privateData</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #66d9ef;">this</span><span style="color: #f8f8f2;">[</span><span style="color: #a6e22e;">key</span><span style="color: #f8f8f2;">]</span> <span style="color: #f92672;">=</span> <span style="color: #a6e22e;">privateData</span><span style="color: #f8f8f2;">;</span>
+  <span style="color: #f8f8f2;">}</span>
+
+  <span style="color: #a6e22e;">MyClass</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">prototype</span> <span style="color: #f92672;">=</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #a6e22e;">doStuff</span><span style="color: #f92672;">:</span> <span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">()</span> <span style="color: #f8f8f2;">{</span>
+      <span style="color: #f8f8f2;">...</span> <span style="color: #66d9ef;">this</span><span style="color: #f8f8f2;">[</span><span style="color: #a6e22e;">key</span><span style="color: #f8f8f2;">]</span> <span style="color: #f8f8f2;">...</span>
+    <span style="color: #f8f8f2;">}</span>
+  <span style="color: #f8f8f2;">};</span>
+
+<span style="color: #f8f8f2;">})();</span>
+
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">c</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">MyClass</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"hello"</span><span style="color: #f8f8f2;">)</span>
+<span style="color: #a6e22e;">c</span><span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">"key"</span><span style="color: #f8f8f2;">]</span> <span style="color: #f92672;">===</span> <span style="color: #66d9ef;">undefined</span><span style="color: #75715e;">//无法访问该属性，因为是私有的</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h1>Math，Number，String，Object 的新API</h1>
+<p>对Math,Number,String还有Object等添加了许多新的API。下面代码同样来自es6features，对这些新API进行了简单展示。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #f8f8f2;">Number.</span><span style="color: #a6e22e;">EPSILON</span>
+<span style="color: #f8f8f2;">Number.</span><span style="color: #a6e22e;">isInteger</span><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">Infinity</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// false</span>
+<span style="color: #f8f8f2;">Number.isNaN(</span><span style="color: #e6db74;">"NaN"</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// false</span>
+
+<span style="color: #f8f8f2;">Math.</span><span style="color: #a6e22e;">acosh</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// 1.762747174039086</span>
+<span style="color: #f8f8f2;">Math.</span><span style="color: #a6e22e;">hypot</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">4</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// 5</span>
+<span style="color: #f8f8f2;">Math.</span><span style="color: #a6e22e;">imul</span><span style="color: #f8f8f2;">(Math.</span><span style="color: #a6e22e;">pow</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">32</span><span style="color: #f8f8f2;">)</span> <span style="color: #f92672;">-</span> <span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span> <span style="color: #f8f8f2;">Math.</span><span style="color: #a6e22e;">pow</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">32</span><span style="color: #f8f8f2;">)</span> <span style="color: #f92672;">-</span> <span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// 2</span>
+
+<span style="color: #e6db74;">"abcde"</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">contains</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"cd"</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// true</span>
+<span style="color: #e6db74;">"abc"</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">repeat</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// "abcabcabc"</span>
+
+<span style="color: #f8f8f2;">Array.</span><span style="color: #a6e22e;">from</span><span style="color: #f8f8f2;">(document.</span><span style="color: #a6e22e;">querySelectorAll</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">'*'</span><span style="color: #f8f8f2;">))</span> <span style="color: #75715e;">// Returns a real Array</span>
+<span style="color: #f8f8f2;">Array.</span><span style="color: #a6e22e;">of</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// Similar to new Array(...), but without special one-arg behavior</span>
+<span style="color: #f8f8f2;">[</span><span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">].</span><span style="color: #a6e22e;">fill</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">7</span><span style="color: #f8f8f2;">,</span> <span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// [0,7,7]</span>
+<span style="color: #f8f8f2;">[</span><span style="color: #ae81ff;">1</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">3</span><span style="color: #f8f8f2;">].</span><span style="color: #a6e22e;">findIndex</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">x</span> <span style="color: #f92672;">=&gt;</span> <span style="color: #a6e22e;">x</span> <span style="color: #f92672;">==</span> <span style="color: #ae81ff;">2</span><span style="color: #f8f8f2;">)</span> <span style="color: #75715e;">// 1</span>
+<span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">"a"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"b"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"c"</span><span style="color: #f8f8f2;">].</span><span style="color: #a6e22e;">entries</span><span style="color: #f8f8f2;">()</span> <span style="color: #75715e;">// iterator [0, "a"], [1,"b"], [2,"c"]</span>
+<span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">"a"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"b"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"c"</span><span style="color: #f8f8f2;">].</span><span style="color: #a6e22e;">keys</span><span style="color: #f8f8f2;">()</span> <span style="color: #75715e;">// iterator 0, 1, 2</span>
+<span style="color: #f8f8f2;">[</span><span style="color: #e6db74;">"a"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"b"</span><span style="color: #f8f8f2;">,</span> <span style="color: #e6db74;">"c"</span><span style="color: #f8f8f2;">].</span><span style="color: #a6e22e;">values</span><span style="color: #f8f8f2;">()</span> <span style="color: #75715e;">// iterator "a", "b", "c"</span>
+
+<span style="color: #f8f8f2;">Object.</span><span style="color: #a6e22e;">assign</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">Point</span><span style="color: #f8f8f2;">,</span> <span style="color: #f8f8f2;">{</span> <span style="color: #a6e22e;">origin</span><span style="color: #f92672;">:</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Point</span><span style="color: #f8f8f2;">(</span><span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">,</span><span style="color: #ae81ff;">0</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">})</span>
+</pre>
+</div>
+<p>&nbsp;</p>
+<h1>Promises</h1>
+<p>Promises是处理异步操作的一种模式，之前在很多三方库中有实现，比如jQuery的<a href="http://api.jquery.com/category/deferred-object/" target="_blank">deferred</a> 对象。当你发起一个异步请求，并绑定了<span style="background-color: silver;">.when()</span>, <span style="background-color: silver;">.done()</span>等事件处理程序时，其实就是在应用promise模式。</p>
+<div class="highlight" style="background: #272822;">
+<pre><span style="color: #75715e;">//创建promise</span>
+<span style="color: #66d9ef;">var</span> <span style="color: #a6e22e;">promise</span> <span style="color: #f92672;">=</span> <span style="color: #66d9ef;">new</span> <span style="color: #a6e22e;">Promise</span><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">resolve</span><span style="color: #f8f8f2;">,</span> <span style="color: #a6e22e;">reject</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+    <span style="color: #75715e;">// 进行一些异步或耗时操作</span>
+    <span style="color: #66d9ef;">if</span> <span style="color: #f8f8f2;">(</span> <span style="color: #75715e;">/*如果成功 */</span> <span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">resolve</span><span style="color: #f8f8f2;">(</span><span style="color: #e6db74;">"Stuff worked!"</span><span style="color: #f8f8f2;">);</span>
+    <span style="color: #f8f8f2;">}</span> <span style="color: #66d9ef;">else</span> <span style="color: #f8f8f2;">{</span>
+        <span style="color: #a6e22e;">reject</span><span style="color: #f8f8f2;">(Error(</span><span style="color: #e6db74;">"It broke"</span><span style="color: #f8f8f2;">));</span>
+    <span style="color: #f8f8f2;">}</span>
+<span style="color: #f8f8f2;">});</span>
+<span style="color: #75715e;">//绑定处理程序</span>
+<span style="color: #a6e22e;">promise</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">then</span><span style="color: #f8f8f2;">(</span><span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">result</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+	<span style="color: #75715e;">//promise成功的话会执行这里</span>
+    <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">result</span><span style="color: #f8f8f2;">);</span> <span style="color: #75715e;">// "Stuff worked!"</span>
+<span style="color: #f8f8f2;">},</span> <span style="color: #66d9ef;">function</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">err</span><span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+	<span style="color: #75715e;">//promise失败会执行这里</span>
+    <span style="color: #a6e22e;">console</span><span style="color: #f8f8f2;">.</span><span style="color: #a6e22e;">log</span><span style="color: #f8f8f2;">(</span><span style="color: #a6e22e;">err</span><span style="color: #f8f8f2;">);</span> <span style="color: #75715e;">// Error: "It broke"</span>
+<span style="color: #f8f8f2;">});</span>
+</pre>
+</div>
+<h1>总结</h1>
+<p>总结就是一句话，前后端差异越来越小了。</p>
+<h1>REFERENCE</h1>
+<ul>
+<li>Google traceur online compiler <a href="http://google.github.io/traceur-compiler/demo/repl.html" target="_blank">http://google.github.io/traceur-compiler/demo/repl.html</a></li>
+<li>array destruction <a href="http://ariya.ofilabs.com/2013/02/es6-and-destructuring-assignment.html" target="_blank">http://ariya.ofilabs.com/2013/02/es6-and-destructuring-assignment.html</a></li>
+<li>class <a href="http://www.joezimjs.com/javascript/javascript-prototypal-inheritance-and-what-es6-classes-have-to-say-about-it/" target="_blank">http://www.joezimjs.com/javascript/javascript-prototypal-inheritance-and-what-es6-classes-have-to-say-about-it/</a></li>
+<li>enhanced object literal <a href="http://maximilianhoffmann.com/posts/object-based-javascript-in-es6" target="_blank">http://maximilianhoffmann.com/posts/object-based-javascript-in-es6</a></li>
+<li>parameters <a href="http://globaldev.co.uk/2013/10/es6-part-4/" target="_blank">http://globaldev.co.uk/2013/10/es6-part-4/</a></li>
+<li>let keyword <a href="http://globaldev.co.uk/2013/09/es6-part-2/" target="_blank">http://globaldev.co.uk/2013/09/es6-part-2/</a></li>
+<li>for of iterator <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of#Browser_compatibility</a></li>
+<li>the Iterator protocol <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol</a></li>
+<li>generators <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*</a></li>
+<li>ES6 Iterators, Generators, and Iterables <a href="http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/" target="_blank">http://domenic.me/2013/09/06/es6-iterators-generators-and-iterables/</a></li>
+<li>proxies <a href="http://ariya.ofilabs.com/2013/07/es6-and-proxy.html" target="_blank">http://ariya.ofilabs.com/2013/07/es6-and-proxy.html</a></li>
+<li>symbols <a href="http://tc39wiki.calculist.org/es6/symbols/" target="_blank">http://tc39wiki.calculist.org/es6/symbols/</a></li>
+<li>promise http://www.html5rocks.com/en/tutorials/es6/promises/</li>
+<li>8 cool features in ES6 <a href="http://code.tutsplus.com/tutorials/eight-cool-features-coming-in-es6--net-33175" target="_blank">http://code.tutsplus.com/tutorials/eight-cool-features-coming-in-es6--net-33175</a> （此文章错误较多）</li>
+</ul><a class="fastCom" id="fastCom" title="快速评论" href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#comment_form_container"></a></div><div id="MySignature" style="display: block;"><p>Feel free to repost but keep the link to this page please!</p></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/Wayou/category/467062.html" target="_blank">JavaScript</a></div>
+<div id="EntryTag">标签: <a href="https://www.cnblogs.com/Wayou/tag/javascript/">javascript</a>, <a href="https://www.cnblogs.com/Wayou/tag/es6/">es6</a>, <a href="https://www.cnblogs.com/Wayou/tag/ecmascript6/">ecmascript6</a>, <a href="https://www.cnblogs.com/Wayou/tag/harmony/">harmony</a></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(3663567,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;c5e8573b-1ed6-e111-aa3f-842b2b196315&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./ES6新特性概览 - 刘哇勇 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./ES6新特性概览 - 刘哇勇 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/Wayou/" target="_blank"><img src="./ES6新特性概览 - 刘哇勇 - 博客园_files/20140914104240.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/Wayou/">刘哇勇</a><br>
+            <a href="http://home.cnblogs.com/u/Wayou/followees">关注 - 10</a><br>
+            <a href="http://home.cnblogs.com/u/Wayou/followers">粉丝 - 2589</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor">荣誉：<a href="http://www.cnblogs.com/expert/" target="_blank">推荐博客</a></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;c5e8573b-1ed6-e111-aa3f-842b2b196315&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(3663567,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">76</span>
+    </div>
+    <div class="buryit" onclick="votePost(3663567,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/Wayou/p/things_you_dont_know_about_frontend.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/Wayou/p/things_you_dont_know_about_frontend.html" title="发布于2014-04-10 19:58">前端不为人知的一面--前端冷知识集锦</a><br><a href="https://www.cnblogs.com/Wayou/p/highlight_code_with_sublimetext_style.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/Wayou/p/highlight_code_with_sublimetext_style.html" title="发布于2014-04-14 17:24">如何在博客中使用SublimeText风格的代码高亮样式</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2014-04-14 11:17</span> <a href="https://www.cnblogs.com/Wayou/">刘哇勇</a> 阅读(<span id="post_view_count">255846</span>) 评论(<span id="post_comment_count">40</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=3663567" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#" onclick="AddToWz(3663567);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=123544,cb_entryId=3663567,cb_blogApp=currentBlogApp,cb_blogUserGuid='c5e8573b-1ed6-e111-aa3f-842b2b196315',cb_entryCreatedDate='2014/4/14 11:17:00';loadViewCount(cb_entryId);var cb_postType=1;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917269" class="layer">#1楼</a><a name="2917269" id="comment_anchor_2917269"></a>  <span class="comment_date">2014-04-14 12:20</span> <a id="a_comment_author_2917269" href="https://www.cnblogs.com/lvdabao/" target="_blank">吕大豹</a> <a href="http://msg.cnblogs.com/send/%E5%90%95%E5%A4%A7%E8%B1%B9" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917269" class="blog_comment_body">好全面的总结，感谢！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917269,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917269,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917269_avatar" style="display:none;">http://pic.cnblogs.com/face/520134/20160420115610.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917272" class="layer">#2楼</a><a name="2917272" id="comment_anchor_2917272"></a>  <span class="comment_date">2014-04-14 12:24</span> <a id="a_comment_author_2917272" href="https://www.cnblogs.com/majinyun0802/" target="_blank">majinyun0802</a> <a href="http://msg.cnblogs.com/send/majinyun0802" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917272" class="blog_comment_body">越来越像后端语言</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917272,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917272,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917272_avatar" style="display:none;">http://pic.cnblogs.com/face/316181/20150729112459.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917274" class="layer">#3楼</a><a name="2917274" id="comment_anchor_2917274"></a>  <span class="comment_date">2014-04-14 12:28</span> <a id="a_comment_author_2917274" href="https://www.cnblogs.com/yingbelieve/" target="_blank">yingbelieve</a> <a href="http://msg.cnblogs.com/send/yingbelieve" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917274" class="blog_comment_body">前端又哭了，兼容性啊兼容性啊</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917274,&#39;Digg&#39;,this)">支持(2)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917274,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917289" class="layer">#4楼</a><a name="2917289" id="comment_anchor_2917289"></a>  <span class="comment_date">2014-04-14 12:53</span> <a id="a_comment_author_2917289" href="https://www.cnblogs.com/prinsun/" target="_blank">Sun.M</a> <a href="http://msg.cnblogs.com/send/Sun.M" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917289" class="blog_comment_body">不错，不错，很全面~~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917289,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917289,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917289_avatar" style="display:none;">http://pic.cnblogs.com/face/124171/20140413112117.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917320" class="layer">#5楼</a><a name="2917320" id="comment_anchor_2917320"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2014-04-14 13:18</span> <a id="a_comment_author_2917320" href="https://www.cnblogs.com/Wayou/" target="_blank">刘哇勇</a> <a href="http://msg.cnblogs.com/send/%E5%88%98%E5%93%87%E5%8B%87" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917320" class="blog_comment_body"><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917272" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,2917272);">@</a>
+majinyun0802<br><fieldset class="comment_quote"><legend><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917272" title="查看引用原文">引用</a></legend>越来越像后端语言</fieldset><br>完全同意</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917320,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917320,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917320_avatar" style="display:none;">http://pic.cnblogs.com/face/431064/20140914104240.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917338" class="layer">#6楼</a><a name="2917338" id="comment_anchor_2917338"></a>  <span class="comment_date">2014-04-14 13:36</span> <a id="a_comment_author_2917338" href="https://www.cnblogs.com/DSharp/" target="_blank">人工智能-群513704292</a> <a href="http://msg.cnblogs.com/send/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-%E7%BE%A4513704292" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917338" class="blog_comment_body">好事啊，总结就是一句话，感觉我这个曾经的后端，终于能看懂JS代码了。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917338,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917338,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917338_avatar" style="display:none;">http://pic.cnblogs.com/face/865/20130414183807.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917341" class="layer">#7楼</a><a name="2917341" id="comment_anchor_2917341"></a>  <span class="comment_date">2014-04-14 13:37</span> <a id="a_comment_author_2917341" href="https://www.cnblogs.com/DSharp/" target="_blank">人工智能-群513704292</a> <a href="http://msg.cnblogs.com/send/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-%E7%BE%A4513704292" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917341" class="blog_comment_body">大家加把劲啊，以后没有前端后端，只有<b>全</b>端！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917341,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917341,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917341_avatar" style="display:none;">http://pic.cnblogs.com/face/865/20130414183807.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917342" class="layer">#8楼</a><a name="2917342" id="comment_anchor_2917342"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2014-04-14 13:37</span> <a id="a_comment_author_2917342" href="https://www.cnblogs.com/Wayou/" target="_blank">刘哇勇</a> <a href="http://msg.cnblogs.com/send/%E5%88%98%E5%93%87%E5%8B%87" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2917342" class="blog_comment_body"><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917341" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,2917341);">@</a>
+量子计算机<br><fieldset class="comment_quote"><legend><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2917341" title="查看引用原文">引用</a></legend>大家加把劲啊，以后没有前端后端，只有全端！</fieldset><br>完全同意</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2917342,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2917342,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_2917342_avatar" style="display:none;">http://pic.cnblogs.com/face/431064/20140914104240.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2921454" class="layer">#9楼</a><a name="2921454" id="comment_anchor_2921454"></a>  <span class="comment_date">2014-04-20 13:58</span> <a id="a_comment_author_2921454" href="https://www.cnblogs.com/codezyc/" target="_blank">codezyc</a> <a href="http://msg.cnblogs.com/send/codezyc" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2921454" class="blog_comment_body">好文。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2921454,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2921454,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#2921458" class="layer">#10楼</a><a name="2921458" id="comment_anchor_2921458"></a>  <span class="comment_date">2014-04-20 14:05</span> <a id="a_comment_author_2921458" href="https://www.cnblogs.com/codezyc/" target="_blank">codezyc</a> <a href="http://msg.cnblogs.com/send/codezyc" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_2921458" class="blog_comment_body">还可以在ES6 Fiddle中进行运行，</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(2921458,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(2921458,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3038921" class="layer">#11楼</a><a name="3038921" id="comment_anchor_3038921"></a>  <span class="comment_date">2014-10-05 14:53</span> <a id="a_comment_author_3038921" href="http://home.cnblogs.com/u/669887/" target="_blank">兵之诡道者</a> <a href="http://msg.cnblogs.com/send/%E5%85%B5%E4%B9%8B%E8%AF%A1%E9%81%93%E8%80%85" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3038921" class="blog_comment_body">不错</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3038921,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3038921,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3091902" class="layer">#12楼</a><a name="3091902" id="comment_anchor_3091902"></a>  <span class="comment_date">2014-12-23 10:00</span> <a id="a_comment_author_3091902" href="https://www.cnblogs.com/neverstop/" target="_blank">眼神与背影</a> <a href="http://msg.cnblogs.com/send/%E7%9C%BC%E7%A5%9E%E4%B8%8E%E8%83%8C%E5%BD%B1" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3091902" class="blog_comment_body">总结的不错，楼主辛苦了！另外问一下，楼主博文中的代码高亮是用什么方法实现的或者用了什么类库？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3091902,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3091902,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3091902_avatar" style="display:none;">http://pic.cnblogs.com/face/u206282.jpg?id=05164547</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3091913" class="layer">#13楼</a><a name="3091913" id="comment_anchor_3091913"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2014-12-23 10:06</span> <a id="a_comment_author_3091913" href="https://www.cnblogs.com/Wayou/" target="_blank">刘哇勇</a> <a href="http://msg.cnblogs.com/send/%E5%88%98%E5%93%87%E5%8B%87" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3091913" class="blog_comment_body"><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3091902" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3091902);">@</a>
+眼神与背影<br><fieldset class="comment_quote"><legend><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3091902" title="查看引用原文">引用</a></legend>总结的不错，楼主辛苦了！另外问一下，楼主博文中的代码高亮是用什么方法实现的或者用了什么类库？</fieldset><br>http://www.cnblogs.com/Wayou/p/highlight_code_with_sublimetext_style.html</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3091913,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3091913,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3091913_avatar" style="display:none;">http://pic.cnblogs.com/face/431064/20140914104240.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3108884" class="layer">#14楼</a><a name="3108884" id="comment_anchor_3108884"></a>  <span class="comment_date">2015-01-17 21:10</span> <a id="a_comment_author_3108884" href="https://www.cnblogs.com/ztzheng/" target="_blank">Mr.郑</a> <a href="http://msg.cnblogs.com/send/Mr.%E9%83%91" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3108884" class="blog_comment_body">语法越来越像java。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3108884,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3108884,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3108884_avatar" style="display:none;">http://pic.cnblogs.com/face/590199/20140401191258.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3126950" class="layer">#15楼</a><a name="3126950" id="comment_anchor_3126950"></a>  <span class="comment_date">2015-02-10 12:18</span> <a id="a_comment_author_3126950" href="https://www.cnblogs.com/vajoy/" target="_blank">vajoy</a> <a href="http://msg.cnblogs.com/send/vajoy" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3126950" class="blog_comment_body">symbol那个例子有问题，MyClass是在(function){})()里定义的，外部怎么可能new的到</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3126950,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3126950,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3126950_avatar" style="display:none;">http://pic.cnblogs.com/face/561179/20140803163107.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3193434" class="layer">#16楼</a><a name="3193434" id="comment_anchor_3193434"></a>  <span class="comment_date">2015-05-26 13:47</span> <a id="a_comment_author_3193434" href="http://home.cnblogs.com/u/683396/" target="_blank">卡拉不是狗</a> <a href="http://msg.cnblogs.com/send/%E5%8D%A1%E6%8B%89%E4%B8%8D%E6%98%AF%E7%8B%97" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3193434" class="blog_comment_body">var people=['Wayou','John','Sherlock'];<br>//sayHello函数本来接收三个单独的参数人妖，人二和人三<br>Wayou = 人妖 <br>哈哈</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3193434,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3193434,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3212872" class="layer">#17楼</a><a name="3212872" id="comment_anchor_3212872"></a>  <span class="comment_date">2015-06-22 11:19</span> <a id="a_comment_author_3212872" href="https://www.cnblogs.com/wteam-xq/" target="_blank">萧强</a> <a href="http://msg.cnblogs.com/send/%E8%90%A7%E5%BC%BA" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3212872" class="blog_comment_body">很不错的文章， 博主写的很透彻易懂蛤╮</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3212872,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3212872,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3212872_avatar" style="display:none;">http://pic.cnblogs.com/face/687225/20141125231217.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3226908" class="layer">#18楼</a><a name="3226908" id="comment_anchor_3226908"></a>  <span class="comment_date">2015-07-13 16:55</span> <a id="a_comment_author_3226908" href="https://www.cnblogs.com/luowenxing/" target="_blank">罗文兴</a> <a href="http://msg.cnblogs.com/send/%E7%BD%97%E6%96%87%E5%85%B4" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3226908" class="blog_comment_body">收藏了！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3226908,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3226908,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3247202" class="layer">#19楼</a><a name="3247202" id="comment_anchor_3247202"></a>  <span class="comment_date">2015-08-13 15:55</span> <a id="a_comment_author_3247202" href="https://www.cnblogs.com/sky-view/" target="_blank">SKY_VIEW</a> <a href="http://msg.cnblogs.com/send/SKY_VIEW" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3247202" class="blog_comment_body">直接import 模块过来用？不需要回调吗？如果是真的，那真是极好的</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3247202,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3247202,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3291441" class="layer">#20楼</a><a name="3291441" id="comment_anchor_3291441"></a>  <span class="comment_date">2015-10-24 21:21</span> <a id="a_comment_author_3291441" href="http://home.cnblogs.com/u/495539/" target="_blank">终天霸主</a> <a href="http://msg.cnblogs.com/send/%E7%BB%88%E5%A4%A9%E9%9C%B8%E4%B8%BB" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3291441" class="blog_comment_body">好想回到IE6时代，全世界只要兼容IE6就万事大吉了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3291441,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3291441,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3357719" class="layer">#21楼</a><a name="3357719" id="comment_anchor_3357719"></a>  <span class="comment_date">2016-02-01 12:03</span> <a id="a_comment_author_3357719" href="https://www.cnblogs.com/langjun/" target="_blank">Langjun</a> <a href="http://msg.cnblogs.com/send/Langjun" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3357719" class="blog_comment_body">哈哈，支持！~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3357719,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3357719,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3357719_avatar" style="display:none;">http://pic.cnblogs.com/face/434632/20140502133541.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3402156" class="layer">#22楼</a><a name="3402156" id="comment_anchor_3402156"></a>  <span class="comment_date">2016-04-07 12:35</span> <a id="a_comment_author_3402156" href="https://www.cnblogs.com/danlis/" target="_blank">Danlis</a> <a href="http://msg.cnblogs.com/send/Danlis" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3402156" class="blog_comment_body">来看看，虽然看不太懂</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3402156,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3402156,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3402156_avatar" style="display:none;">http://pic.cnblogs.com/face/760067/20160323174627.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3424969" class="layer">#23楼</a><a name="3424969" id="comment_anchor_3424969"></a>  <span class="comment_date">2016-05-07 09:00</span> <a id="a_comment_author_3424969" href="https://www.cnblogs.com/angestudy/" target="_blank">寻得乐中乐</a> <a href="http://msg.cnblogs.com/send/%E5%AF%BB%E5%BE%97%E4%B9%90%E4%B8%AD%E4%B9%90" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3424969" class="blog_comment_body">contains? 应该是includes吧？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3424969,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3424969,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3424969_avatar" style="display:none;">http://pic.cnblogs.com/face/u183698.jpg?id=20032246</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3435700" class="layer">#24楼</a><a name="3435700" id="comment_anchor_3435700"></a>  <span class="comment_date">2016-05-20 12:43</span> <a id="a_comment_author_3435700" href="https://www.cnblogs.com/manfredHu/" target="_blank">manfredHu</a> <a href="http://msg.cnblogs.com/send/manfredHu" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3435700" class="blog_comment_body">越来越像JAVA了，最近写node的时候发现公司的node居然语法跟ES6差不多，但是确实用ES5来实现的，后面可以考虑舍弃这部分polyfill了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3435700,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3435700,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3435700_avatar" style="display:none;">http://pic.cnblogs.com/face/652668/20150311153205.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3451836" class="layer">#25楼</a><a name="3451836" id="comment_anchor_3451836"></a>  <span class="comment_date">2016-06-14 14:11</span> <a id="a_comment_author_3451836" href="https://www.cnblogs.com/zhangwei595806165/" target="_blank">承影剑</a> <a href="http://msg.cnblogs.com/send/%E6%89%BF%E5%BD%B1%E5%89%91" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3451836" class="blog_comment_body">现在开始就可以使用这些新特性吗</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3451836,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3451836,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3451836_avatar" style="display:none;">http://pic.cnblogs.com/face/290106/20130929143841.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3537432" class="layer">#26楼</a><a name="3537432" id="comment_anchor_3537432"></a>  <span class="comment_date">2016-10-21 09:27</span> <a id="a_comment_author_3537432" href="https://www.cnblogs.com/zhangxyjack/" target="_blank">zhangxy_jack</a> <a href="http://msg.cnblogs.com/send/zhangxy_jack" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3537432" class="blog_comment_body">救了我的急, 真是太感谢了!</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3537432,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3537432,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3571451" class="layer">#27楼</a><a name="3571451" id="comment_anchor_3571451"></a>  <span class="comment_date">2016-12-03 19:32</span> <a id="a_comment_author_3571451" href="https://www.cnblogs.com/Model-Zachary/" target="_blank">Model-Zachary</a> <a href="http://msg.cnblogs.com/send/Model-Zachary" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3571451" class="blog_comment_body">var array = [1, 2, 3];<br><br>array.forEach(v = &gt; console.log(v));<br><br>确实这箭头使用的编译不出来，我用babel，直接报错</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3571451,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3571451,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3571451_avatar" style="display:none;">http://pic.cnblogs.com/face/1057644/20170107124924.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3586558" class="layer">#28楼</a><a name="3586558" id="comment_anchor_3586558"></a>  <span class="comment_date">2016-12-21 20:24</span> <a id="a_comment_author_3586558" href="https://www.cnblogs.com/shuimuDT/" target="_blank">木子青青</a> <a href="http://msg.cnblogs.com/send/%E6%9C%A8%E5%AD%90%E9%9D%92%E9%9D%92" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3586558" class="blog_comment_body">感谢楼主</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3586558,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3586558,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3586558_avatar" style="display:none;">http://pic.cnblogs.com/face/1053055/20161028201654.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3595751" class="layer">#29楼</a><a name="3595751" id="comment_anchor_3595751"></a>  <span class="comment_date">2017-01-04 09:21</span> <a id="a_comment_author_3595751" href="https://www.cnblogs.com/jerry-chin/" target="_blank">Jerry.Chin</a> <a href="http://msg.cnblogs.com/send/Jerry.Chin" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3595751" class="blog_comment_body"><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3571451" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3571451);">@</a>
+model-zachary<br>typo: at  = &gt;<br>it's supposed to be <b>=&gt;</b> (immediately followed by the arrow).</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3595751,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3595751,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3595751_avatar" style="display:none;">http://pic.cnblogs.com/face/771706/20161006131623.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3598348" class="layer">#30楼</a><a name="3598348" id="comment_anchor_3598348"></a>  <span class="comment_date">2017-01-07 00:15</span> <a id="a_comment_author_3598348" href="https://www.cnblogs.com/FlyAway2013/" target="_blank">CanntBelieve</a> <a href="http://msg.cnblogs.com/send/CanntBelieve" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3598348" class="blog_comment_body">各种语言越来越统一啊！ 就像日语里面夹杂中英语， 英语里面夹杂法语。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3598348,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3598348,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3598348_avatar" style="display:none;">http://pic.cnblogs.com/face/493842/20160218175622.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3630057" class="layer">#31楼</a><a name="3630057" id="comment_anchor_3630057"></a>  <span class="comment_date">2017-03-02 15:24</span> <a id="a_comment_author_3630057" href="https://www.cnblogs.com/EX32/" target="_blank">EX天亮以后</a> <a href="http://msg.cnblogs.com/send/EX%E5%A4%A9%E4%BA%AE%E4%BB%A5%E5%90%8E" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3630057" class="blog_comment_body">Proxies 那里 Proxy 需要 new 出来</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3630057,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3630057,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3636368" class="layer">#32楼</a><a name="3636368" id="comment_anchor_3636368"></a>  <span class="comment_date">2017-03-09 19:28</span> <a id="a_comment_author_3636368" href="https://www.cnblogs.com/jacket/" target="_blank">Jackets</a> <a href="http://msg.cnblogs.com/send/Jackets" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3636368" class="blog_comment_body"><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3571451" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3571451);">@</a>
+model-zachary<br>中间多了一个空格看不见啊！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3636368,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3636368,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3687501" class="layer">#33楼</a><a name="3687501" id="comment_anchor_3687501"></a>  <span class="comment_date">2017-05-09 10:15</span> <a id="a_comment_author_3687501" href="https://www.cnblogs.com/ahdung/" target="_blank">ahdung</a> <a href="http://msg.cnblogs.com/send/ahdung" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3687501" class="blog_comment_body">写的很好很详实，支持这种科普文。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3687501,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3687501,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3687501_avatar" style="display:none;">http://pic.cnblogs.com/face/234704/20150824143819.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3688618" class="layer">#34楼</a><a name="3688618" id="comment_anchor_3688618"></a>  <span class="comment_date">2017-05-10 11:28</span> <a id="a_comment_author_3688618" href="https://www.cnblogs.com/leee/" target="_blank">李可在江湖</a> <a href="http://msg.cnblogs.com/send/%E6%9D%8E%E5%8F%AF%E5%9C%A8%E6%B1%9F%E6%B9%96" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3688618" class="blog_comment_body">消灭中</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3688618,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3688618,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3688618_avatar" style="display:none;">http://pic.cnblogs.com/face/607624/20180607023119.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3731933" class="layer">#35楼</a><a name="3731933" id="comment_anchor_3731933"></a>  <span class="comment_date">2017-07-10 15:13</span> <a id="a_comment_author_3731933" href="https://www.cnblogs.com/DoubleLJ/" target="_blank">双木的林</a> <a href="http://msg.cnblogs.com/send/%E5%8F%8C%E6%9C%A8%E7%9A%84%E6%9E%97" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3731933" class="blog_comment_body">彩蛋很可爱~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3731933,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3731933,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3805360" class="layer">#36楼</a><a name="3805360" id="comment_anchor_3805360"></a>  <span class="comment_date">2017-10-09 15:10</span> <a id="a_comment_author_3805360" href="http://home.cnblogs.com/u/1253433/" target="_blank">旋风小P雳侠</a> <a href="http://msg.cnblogs.com/send/%E6%97%8B%E9%A3%8E%E5%B0%8FP%E9%9B%B3%E4%BE%A0" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3805360" class="blog_comment_body">不错</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3805360,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3805360,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3891967" class="layer">#37楼</a><a name="3891967" id="comment_anchor_3891967"></a>  <span class="comment_date">2018-01-17 15:33</span> <a id="a_comment_author_3891967" href="https://www.cnblogs.com/ilaozhao/" target="_blank">故里三杯茶</a> <a href="http://msg.cnblogs.com/send/%E6%95%85%E9%87%8C%E4%B8%89%E6%9D%AF%E8%8C%B6" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3891967" class="blog_comment_body">很实用~</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3891967,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3891967,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3891967_avatar" style="display:none;">http://pic.cnblogs.com/face/1082486/20161218124424.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3895338" class="layer">#38楼</a><a name="3895338" id="comment_anchor_3895338"></a>  <span class="comment_date">2018-01-22 22:26</span> <a id="a_comment_author_3895338" href="https://www.cnblogs.com/vipzhou/" target="_blank">西安-晁州</a> <a href="http://msg.cnblogs.com/send/%E8%A5%BF%E5%AE%89-%E6%99%81%E5%B7%9E" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3895338" class="blog_comment_body">厉害了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3895338,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3895338,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3895338_avatar" style="display:none;">http://pic.cnblogs.com/face/798032/20180802200545.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#3906152" class="layer">#39楼</a><a name="3906152" id="comment_anchor_3906152"></a>  <span class="comment_date">2018-02-08 16:45</span> <a id="a_comment_author_3906152" href="http://home.cnblogs.com/u/121492/" target="_blank">wbin</a> <a href="http://msg.cnblogs.com/send/wbin" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3906152" class="blog_comment_body">最后说的 异步 es7里面有了新的语法。asyn 和 await</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3906152,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3906152,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#4018952" class="layer">#40楼</a><a name="4018952" id="comment_anchor_4018952"></a><span id="comment-maxId" style="display:none;">4018952</span><span id="comment-maxDate" style="display:none;">2018/7/12 16:03:24</span>  <span class="comment_date">2018-07-12 16:03</span> <a id="a_comment_author_4018952" href="https://www.cnblogs.com/lenovo_tiger_love/" target="_blank">wzh0717</a> <a href="http://msg.cnblogs.com/send/wzh0717" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4018952" class="blog_comment_body">mark</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4018952,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4018952,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_4018952_avatar" style="display:none;">http://pic.cnblogs.com/face/u48606.jpg</span>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】超50万VC++源码: 大型组态工控、电力仿真CAD与GIS源码库！</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-Spread&#39;)">【前端】SpreadJS表格控件，可嵌入应用开发的在线Excel</a><br><a href="http://www.toastenglish.com/1024/cnblogs.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2-toast&#39;)">【免费】程序员21天搞定英文文档阅读</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.1087957.1087957.1087957" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-T2 - 腾讯云&#39;)">【推荐】如何快速搭建人工智能应用？</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://cloud.tencent.com/act/ecommerce?fromSource=gwzcw.1191780.1191780.1191780" target="_blank"><img width="300" height="250" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/24442-20180814102629155-1096944426.png" alt="qcloud0814" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;C1&#39;);"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="https://news.cnblogs.com/n/604562/" target="_blank">腾讯手机管家上线“青少年守护”功能，保障孩子上网安全</a><br> ·  <a href="https://news.cnblogs.com/n/604552/" target="_blank">海淀法院审结首例比特币现金争议案：判决OKCoin返还</a><br> ·  <a href="https://news.cnblogs.com/n/604559/" target="_blank">2018淘宝造物节门票开售：200余家神店加盟、MR购物首秀</a><br> ·  <a href="https://news.cnblogs.com/n/604539/" target="_blank">净利润13年来首度负增长 腾讯怎么了？</a><br> ·  <a href="https://news.cnblogs.com/n/604538/" target="_blank">科学家用粒子加速器做新研究：改变对中子星的认识</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="https://kb.cnblogs.com/page/603279/" target="_blank">成为一个有目标的学习者</a><br> ·  <a href="https://kb.cnblogs.com/page/602903/" target="_blank">历史转折中的“杭派工程师”</a><br> ·  <a href="https://kb.cnblogs.com/page/602573/" target="_blank">如何提高代码质量？</a><br> ·  <a href="https://kb.cnblogs.com/page/602486/" target="_blank">在腾讯的八年，我的职业思考</a><br> ·  <a href="https://kb.cnblogs.com/page/602163/" target="_blank">为什么我离开了管理岗位</a><br></div>» <a href="https://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><a style="text-decoration: underline;" href="http://wayou.github.io/" target="_blank"> GitHub主页 </a>
+<br>
+<a style="text-decoration: underline;" href="http://weibo.com/liuwayong" target="_blank">@刘哇勇</a>
+<br>
+<a href="mailto:liuwayong@gmail.com">liuwayong(at)gmail.com</a><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/Wayou/">刘哇勇</a><br>园龄：<a href="https://home.cnblogs.com/u/Wayou/" title="入园时间：2012-07-25">6年</a><br>荣誉：<a href="https://www.cnblogs.com/expert/">推荐博客</a><br>粉丝：<a href="https://home.cnblogs.com/u/Wayou/followers/">2589</a><br>关注：<a href="https://home.cnblogs.com/u/Wayou/followees/">10</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;c5e8573b-1ed6-e111-aa3f-842b2b196315&#39;)">+加关注</a></div><script>getFollowStatus('c5e8573b-1ed6-e111-aa3f-842b2b196315')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style="display:none"></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block"></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类<span style="font-size:11px;font-weight:normal">(90)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/Wayou/category/566741.html">CSS(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/Wayou/category/467069.html">DB(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/Wayou/category/467061.html">HTML5(13)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/Wayou/category/467062.html">JavaScript(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/Wayou/category/566742.html">jQuery(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/Wayou/category/467068.html">MVC(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/Wayou/category/565730.html">node.js(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/Wayou/category/479846.html">Others(29)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/Wayou/category/565732.html">three.js(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/Wayou/category/467064.html">札记(6)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/Wayou/p/goodui.html">1. 好的用户界面-界面设计的一些技巧(462)</a></li><li><a href="https://www.cnblogs.com/Wayou/p/things_you_dont_know_about_frontend.html">2. 前端不为人知的一面--前端冷知识集锦(273)</a></li><li><a href="https://www.cnblogs.com/Wayou/p/jquery_plugin_tutorial.html">3. jQuery插件开发精品教程，让你的jQuery提升一个台阶(255)</a></li><li><a href="https://www.cnblogs.com/Wayou/p/chrome-console-tips-and-tricks.html">4. Chrome 控制台不完全指南(168)</a></li><li><a href="https://www.cnblogs.com/Wayou/archive/2012/11/08/some_words.html">5. 一个.Net程序员关于学习的思考顺带思考人生(128)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2018 刘哇勇
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+<!--PageEndHtml Block Begin-->
+<a id="toTop" title="电梯直达顶部！" href="http://www.cnblogs.com/Wayou/p/es6_new_features.html#home" style="position: fixed; bottom: 0px; right: 0px; opacity: 0.5; display: none;">
+<img title="" alt="" src="./ES6新特性概览 - 刘哇勇 - 博客园_files/o_up.png">
+</a>
+
+<div class="wanker" data-wanker="">
+  <div class="wanker-content">
+    <h1>Bingo!!</h1>
+    <p>恭喜妳发现本彩蛋， happy coding</p>
+<p>\(^___________^)/</p>
+  </div>
+</div>
+
+<!--[if false]>
+少年，不得不说，这是缘分。简历快到碗里来，贴吧欢迎你 liuwayong@gmail.com :)  
+
+                                            `--.       `                                             
+                                          :hddhs.  .+yhs/`                                          
+                                         .yddddd+ -yddddd+                                          
+                                     ``  .yddddd+ +ddddddo`                                         
+                                   .+yys:`:yhhhs. :hdddhs. `                                        
+                                  `yddddd+``--.    .://-.+sss+.                                     
+                                  :ddddddy.   `---.`   `sdddddy-                                    
+ -/////////:-.               `://.`shdddh+  -oyhhhhs/` .ydddddh/`-------. .--```  `------.--------` 
+ /hhyyssssyyyy/`             `oss: `:++/-``/hhhhddddhs-`oddddds..yyooosy+`+hyooo- :yysshh+yyoyysyy/ 
+ /hhs.````./yhy- -:::::::-.  `///-      ./yddy.-hdddddho::+++:` .hh-o+:h+`+hs---` :yy--hh+hy.yy:oh/ 
+ /hhy/:::::oyho. :ooooooyyyo.`shy/    -oyyo/+: .y++hdy+oyo:`    .hh-hs:h+.ohs-..` :yy--hh+hy.yy:oh/ 
+ /hhhyyyyyyhhy:`  .-----:shy/`shy/  `+hdo``+o/ .o``yds .ydhy-   .hh-hs:h+oyyssyy+ :yy--hh+hy-yy/sh/ 
+ /hhs-...../yhy/.oyysssssyhy/`shy/  :hdh: :dds .o``yds .ydddy.  .hh-hs:h+sho``yh+ :yy--hh+hhssssss: 
+ /hhs-....-/yhho/hhs-```.shy/`shy/  -hdds-`-:- .s.`.:- .ydddy.  `/+ohho+-sho  yh+ :yy::hh+hy``````  
+ /hhhyyyyyyhyyo..syyyssssyyy/`syy/   :yddhyssssshhsssssyhddy:    /oy+oyo:shyooyh+ -yyssyo/yhoooooo: 
+ .----------.`    .---------` .--`    `-/////:-....-/+ooo+:`     --- `--..------`         .-------. <![endif]-->
+<!--PageEndHtml Block End-->
+
+
+</body></html>

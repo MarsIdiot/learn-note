@@ -1,0 +1,153 @@
+******springmvc示例代码集合******
+一、配置
+	1、springmvc.xml(controller扫描+注解驱动)
+		SpringMVC的核心配置文件
+		<?xml version="1.0" encoding="UTF-8"?>
+		<beans xmlns="http://www.springframework.org/schema/beans"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+			xmlns:context="http://www.springframework.org/schema/context"
+			xmlns:mvc="http://www.springframework.org/schema/mvc"
+			xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+			<!-- 配置controller扫描包 @Controller-->
+			<context:component-scan base-package="cn.itcast.springmvc.controller" />
+			
+			<!-- 注解驱动  @RequestMapping(value = "")-->
+			<mvc:annotation-driven />
+			
+			<!-- 配置视图解析器 -->
+			<bean
+				class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+				<!-- 配置逻辑视图的前缀 -->
+				<property name="prefix" value="/WEB-INF/jsp/" />
+				<!-- 配置逻辑视图的后缀 -->
+				<property name="suffix" value=".jsp" />
+			</bean>
+
+
+		</beans>
+
+	
+	2、web.xml
+		配置SpringMVC的前端控制器DispatcherServlet
+		
+		<?xml version="1.0" encoding="UTF-8"?>
+		<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xmlns="http://java.sun.com/xml/ns/javaee"
+			xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+			id="WebApp_ID" version="2.5">
+			<display-name>springmvc-first</display-name>
+			<welcome-file-list>
+				<welcome-file>index.html</welcome-file>
+				<welcome-file>index.htm</welcome-file>
+				<welcome-file>index.jsp</welcome-file>
+				<welcome-file>default.html</welcome-file>
+				<welcome-file>default.htm</welcome-file>
+				<welcome-file>default.jsp</welcome-file>
+			</welcome-file-list>
+
+			<!-- 配置SpringMVC前端控制器 -->
+			<servlet>
+				<servlet-name>springmvc-first</servlet-name>
+				<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+				<!-- 指定SpringMVC配置文件 -->
+				<!-- SpringMVC的配置文件的默认路径是/WEB-INF/${servlet-name}-servlet.xml -->
+				<init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>classpath:springmvc.xml</param-value>
+				</init-param>
+			</servlet>
+
+			<servlet-mapping>
+				<servlet-name>springmvc-first</servlet-name>
+				<!-- 设置所有以action结尾的请求进入SpringMVC -->
+				<url-pattern>*.action</url-pattern>
+			</servlet-mapping>
+		</web-app>
+
+二、controller一般写法示例
+	@RequestMapping(value = "item")
+	@Controller
+	public class ItemController {
+		@RequestMapping(value ="itemList.action")
+		public ModelAndView  itemList(){
+			// 创建页面需要显示的商品数据
+			List<Items> list = new ArrayList<>();
+			list.add(new Items(1, "1华为 荣耀8", 2398f, new Date(), "质量好！1"));
+			list.add(new Items(2, "2华为 荣耀8", 2398f, new Date(), "质量好！2"));
+			list.add(new Items(3, "3华为 荣耀8", 2398f, new Date(), "质量好！3"));
+			list.add(new Items(4, "4华为 荣耀8", 2399f, new Date(), "质量好！4"));
+			list.add(new Items(5, "5华为 荣耀8", 2399f, new Date(), "质量好！5"));
+			list.add(new Items(6, "6华为 荣耀8", 2399f, new Date(), "质量好！6"));
+
+			ModelAndView  mav=new ModelAndView();
+			mav.addObject("itemList",list);//将数据存到模型中
+			//mav.setViewName("/WEB-INF/jsp/itemList.jsp");
+			mav.setViewName("itemList");//返回jsp页面
+
+			return mav;
+		}
+
+	}
+
+三、处理POST提交乱码问题
+	  <!-- 处理POST提交乱码问题 -->
+	  在web.xml中
+	  <filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	  </filter>
+	  
+	  <filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>*.action</url-pattern>
+	  </filter-mapping>
+
+四、拦截器--登录验证
+	public class Interceptor1 implements HandlerInterceptor{
+
+		public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
+			System.out.println("方法前 1");
+			//判断用户是否登陆  如果没有登陆  重定向到登陆页面   不放行   如果登陆了  就放行了
+			// URL  http://localhost:8080/springmvc-mybatis/login.action
+			//URI /login.action
+			String requestURI = request.getRequestURI();
+			if(!requestURI.contains("/login")){
+				String username = (String) request.getSession().getAttribute("USER_SESSION");
+				if(null == username){
+					response.sendRedirect(request.getContextPath() + "/login.action");
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)
+				throws Exception {
+			// TODO Auto-generated method stub
+			System.out.println("方法后 1");
+			
+		}
+		
+		public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
+				throws Exception {
+			// TODO Auto-generated method stub
+			System.out.println("页面渲染后 1");
+			
+		}
+}
+
+
+五、对静态资源放行
+	<!--对静态资源放行-->
+    <mvc:resources location="/css/" mapping="/css/**" />
+    <mvc:resources location="/js/" mapping="/js/**" />
+    <mvc:resources location="/fonts/" mapping="/fonts/**" />
+
+	

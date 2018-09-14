@@ -1,0 +1,30 @@
+******springmvc整合mybatis******
+需要的jar包
+		1.spring（包括springmvc）
+		2.mybatis
+		3.mybatis-spring整合包
+		4.数据库驱动
+		5.第三方连接池。
+
+		
+整合思路
+		Dao层：
+		1、SqlMapConfig.xml，空文件即可，但是需要文件头。
+		2、applicationContext.xml
+		a)	数据库连接池
+		b)	SqlSessionFactory对象，需要spring和mybatis整合包下的。
+		c)	配置mapper文件扫描器。
+
+		Service层：
+		1、applicationContext-service.xml包扫描器，扫描@service注解的类。
+		2、applicationContext-trans.xml配置事务。
+
+		Controller层：
+		1、Springmvc.xml
+		a)	包扫描器，扫描@Controller注解的类。
+		b)	配置注解驱动
+		c)	配置视图解析器
+
+		Web.xml文件：
+		1、配置spring
+		2、配置前端控制器。

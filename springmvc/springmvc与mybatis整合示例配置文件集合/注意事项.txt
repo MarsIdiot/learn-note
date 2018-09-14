@@ -1,0 +1,4 @@
+******注意事项******
+1.此示例配置，除了web.xml外，其他配置文件都在类路径下(即src下)
+
+2.在sqlMapConfig.xml中，只需头文件即可，在applicationContext.xml中一配置扫描包

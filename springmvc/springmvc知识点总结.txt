@@ -1,0 +1,192 @@
+******springmvc简单介绍******
+一、入门程序
+	1.动态工程
+	2.导包
+	3.配置文件
+		处理器(springmvc.xml  Controller扫描包+注解驱动)+前端控制器(web.xml  DispaccherServlet)
+	4.创建jsp    创建pojo   创建controller  
+
+二、架构分析
+	一个中心
+		前端控制器
+	三个基本点(三大组件)
+		处理器映射器、处理器适配器、视图解析器
+		
+	需要用户开发的组件有handler、view
+
+三、参数绑定
+	1.默认支持参数类型
+		HttpServletRequest	HttpServletResponse  HttpSession	
+	2.简单类型
+		基本数据类型(推荐使用包装类型)
+		整形：Integer、int
+		字符串：String
+		单精度：Float、float
+		双精度：Double、double
+		布尔型：Boolean、boolean
+	3.pojo类型
+		其实就是与页面表单对应的bean
+		Items items   input name=name  Items对象中的属性名一致
+		要求：pojo对象中的属性名和表单中input的name属性一致。
+	
+	4.包装pojo类型
+		QueryVo(里面Items) QueryVo vo    input name=items.name
+		要求：QueryVo对象中的属性名和表单中input的name属性一致。
+	5.自定义参数绑定
+		日期的转换
+		一般使用<mvc:annotation-driven/>注解驱动加载处理器适配器
+
+四、springmvc整合mybatis
+	需要的jar包
+		1.spring（包括springmvc）
+		2.mybatis
+		3.mybatis-spring整合包
+		4.数据库驱动
+		5.第三方连接池。
+
+	整合思路
+		Dao层：
+		1、SqlMapConfig.xml，空文件即可，但是需要文件头。
+		2、applicationContext.xml
+		a)	数据库连接池
+		b)	SqlSessionFactory对象，需要spring和mybatis整合包下的。
+		c)	配置mapper文件扫描器。
+
+		Service层：
+		1、applicationContext-service.xml包扫描器，扫描@service注解的类。
+		2、applicationContext-trans.xml配置事务。
+
+		Controller层：
+		1、Springmvc.xml
+		a)	包扫描器，扫描@Controller注解的类。
+		b)	配置注解驱动
+		c)	配置视图解析器
+
+		Web.xml文件：
+		1、配置spring
+		2、配置前端控制器。
+		
+五、Springmvc与Struts2区别
+	1.入口  servlet   Filter
+	2.实例化	单例   多例
+	3.返回值   Request域 值栈		
+	
+
+******springmvc深入介绍******
+六、高级数据绑定
+	数组
+		Integer[] ids    name="ids"(多个)  value="${item.id }"
+		
+	List
+		由于不能直接绑定List类型，需进行包装
+		QueryVo vo   QueryVo{List<item>  itemList}
+		name="itemList[index].name"
+		
+
+七、Controller层方法返回值
+	ModelAndView  无敌的  带数据  返回视图路径
+	String  返回视图路径   modle带数据(推荐 解耦)
+	void
+
+八、springmvc上传图片步骤总结
+	1.加入包
+		文件上传包
+		io流包
+	2.虚拟目录
+		D:\upload    /pic
+	3.表单书写
+		1)enctype="multipart/form-data"
+		
+		2)<img src="/pic/${item.pic}" width=100 height=100/>
+			此处前缀'src'必须同虚拟目录一致，不然访问不到图片
+		3)<input type="file"  name="pictureFile"/> 
+		
+	4.在springmvc.xml中配置文件上传解析器
+		<!-- 文件上传,id必须设置为multipartResolver -->
+		<bean id="multipartResolver"
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<!-- 设置文件上传大小 -->
+			<property name="maxUploadSize" value="5000000" />
+		</bean>
+	5.在controller中获取并上传和更新数据库
+		1)MultipartFile pictureFile
+			名称必须与input中的相同
+		2)设置图片名称
+			String picName = UUID.randomUUID().toString();
+		3)获取文件后缀名
+			String extName=FilenameUtils.getExtension(pictureFile.getOriginalFilename());
+		4) 开始上传
+			pictureFile.transferTo(new File("D:\\upload\\" + picName +"."+ extName));
+				此处文件写法还可为："D:/upload/"
+		5)更新数据库
+			// 设置图片名到商品中
+			item.setPic(picName + extName);
+			// 更新商品
+			this.itemService.updateItemById(item);
+		6)处理页面
+
+九、json数据交互(springmvc框架下)
+	环境要求：如果需要springMVC支持json，必须加入json的处理jar
+	
+	页面：
+		$(function(){
+			//此处注意需用''来包裹，才能称之为json串
+			var params = '{"id": 1,"name": "测试商品","price": 99.9,"detail": "测试商品描述","pic": "123456.jpg"}';
+			
+			$.ajax({
+				url : "${pageContext.request.contextPath }/json.action",
+				data : params,//发生数据
+				contentType : "application/json;charset=UTF-8",//发送数据的格式
+				type : "post",
+				dataType : "json",//回调
+				success : function(data){
+					alert(data.name);
+				}
+			});
+		});
+	
+	控制器：
+		此处注意对@RequestBody和@ResponseBody的使用
+		public @ResponseBody Item testJson(@RequestBody Item item) {
+			return item;//由于ResponseBody的注解，直接将Item转换为json格式返回前端
+		}
+
+	@RequestBody注解实现接收http请求的json数据，将json数据转换为java对象进行绑定
+	@ResponseBody注解实现将Controller方法返回java对象转换为json响应给客户端
+		
+十、拦截器Interceptor——验证是否登录
+	处理流程
+	1、有一个登录页面，需要写一个Controller访问登录页面
+	
+	2、登录页面有一提交表单的动作。需要在Controller中处理。
+		a)	判断用户名密码是否正确（在控制台打印）
+		b)	如果正确,向session中写入用户信息（写入用户名username）
+		c)	跳转到商品列表
+	
+	3、拦截器。
+		a)	拦截用户请求，判断用户是否登录（登录请求不能拦截）
+		b)	如果用户已经登录。放行
+		c)	如果用户未登录，跳转到登录页面。
+		
+	需要注意的是：	
+		a)登录请求login.action不能拦截
+		String requestURI = request.getRequestURI();
+		if(!requestURI.contains("/login"))
+
+		b)放行问题：
+			根据session中的user是否为空来判断
+
+
+		
+		
+
+
+
+
+
+
+
+
+
+
+	

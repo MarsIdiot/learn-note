@@ -1,0 +1,17 @@
+1.npm install --registry=http://r.npm.10101111.com/ #安装依赖
+2.npm run dev #启动
+
+
+
+创建vue 项目
+	npm install -g vue-cli #安装脚手架
+	vue init webpack vue_demo（在你想要创建工程的目录下新建一个文件夹，我这里是F:\first_vue
+							在命令行内cd到你新建的文件夹目录下）
+	cd vue_demo
+	npm install   或npm install --registry=http://r.npm.10101111.com/ #安装依赖
+	npm run dev  #启动
+	访问: http://localhost:8080/
+	
+	
+	
+参考：https://www.jianshu.com/p/1fcc8d55e44b
