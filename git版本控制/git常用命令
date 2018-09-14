@@ -1,0 +1,40 @@
+/**
+变化之处
+*/
+/**
+reference----http://www.cnblogs.com/specter45/p/github.html#s1
+*/
+
+/**
+*常见命令
+*/
+git config --global user.name "HanShuliang" //设置用户名
+git config --global user.email "13241153187@163.com" //设置邮箱
+
+git init //把这个目录变成Git可以管理的仓库
+　　git add README.md //文件添加到仓库
+　　git add . //不但可以跟单一文件，还可以跟通配符，更可以跟目录。一个点就把当前目录下所有未追踪的文件全部add了
+　　git commit -m "first commit" //把文件提交到仓库
+　　git remote add origin git@github.com:wangjiax9/practice.git //关联远程仓库
+　　git push -u origin master //把本地库的所有内容推送到远程库上
+
+
+/**
+*一般流程：
+*/
+一般流程：
+1.建立本地仓库
+	#本地仓库的地址
+		git cd g:
+		cd +本地地址
+	#初始化仓库
+		git init
+	#添加文件
+		git add .
+	#提交文件
+		git commit -m "提交文件"
+2.关联GitHub仓库
+	git remote add origin +github仓库地址
+
+3.推送文件
+	git push -u origin master
