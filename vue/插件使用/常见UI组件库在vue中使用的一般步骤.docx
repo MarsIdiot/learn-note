@@ -1,0 +1,7 @@
+
+
+##1.下载组件库
+	例如：npm install --save  'element-ui'
+##2.在main.js中引入组件库
+
+##3.全局引入或按需引入
