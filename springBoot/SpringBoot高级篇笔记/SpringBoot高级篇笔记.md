@@ -236,7 +236,7 @@ Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统�
     public void sendMQ(){
         Map<String,Object> map1=new HashMap<String, Object>();
         map1.put("msg","哇晒，牛逼呀RabbitMQ");
-        map1.put("data",Arrays.asList("周天浪2",1234));
+        map1.put("data",Arrays.asList("xxxx",1234));
 
         rabbitTemplate.convertAndSend("exchange.direct","atguigu.news",map1);
     }
@@ -371,7 +371,7 @@ springBoot默认支持两种技术和ES交互；
 ~~~properties
 #application.properties
 #Jest操作ES配置
-spring.elasticsearch.jest.uris=http://10.103.41.43:9200
+spring.elasticsearch.jest.uris=http://xxxxx:9200
 ~~~
 
 
@@ -396,7 +396,7 @@ public class SpringBoot02ElasticsearchApplicationTests {
        
         Article article=new Article(1,"ztl","weahter","今天天气晴，阳光明媚，是出行");
 		//创建索引
-        Index index = new Index.Builder(article).index("ucar").type("news").build();
+        Index index = new Index.Builder(article).index("uxxx").type("news").build();
         try {
             //
             jestClient.execute(index);
@@ -419,7 +419,7 @@ public class SpringBoot02ElasticsearchApplicationTests {
                 "    }\n" +
                 "}";
         //创建搜索对象
-        Search search = new Search.Builder(query).addIndex("ucar").addType("news").build();
+        Search search = new Search.Builder(query).addIndex("uxxx").addType("news").build();
         try {
             //执行
             SearchResult searchResult = jestClient.execute(search);
@@ -451,7 +451,7 @@ public class SpringBoot02ElasticsearchApplicationTests {
 ~~~properties
 #SpringData来操作ES配置
 spring.data.elasticsearch.cluster-name=elasticsearch
-spring.data.elasticsearch.cluster-nodes=10.103.41.43:9300
+spring.data.elasticsearch.cluster-nodes=xxxxx:9300
 ~~~
 
 3.使用
@@ -637,8 +637,8 @@ public class SpringBoot03TaskApplicationTests {
             helper.setFrom("18780024842@163.com");
 
             //上传文件
-            helper.addAttachment("1.jpg",new File("C:\\Users\\ucarinc\\Pictures\\Saved Pictures\\1.jpg"));
-            helper.addAttachment("1.jpg",new File("C:\\Users\\ucarinc\\Pictures\\Saved Pictures\\2.jpg"));
+            helper.addAttachment("1.jpg",new File("C:\\Users\\xxx\\Pictures\\Saved Pictures\\1.jpg"));
+            helper.addAttachment("1.jpg",new File("C:\\Users\\xxxx\\Pictures\\Saved Pictures\\2.jpg"));
 
             //发送
             javaMailSender.send(message);
