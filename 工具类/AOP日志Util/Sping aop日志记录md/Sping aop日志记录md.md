@@ -1,4 +1,4 @@
-# Sping aop日志记录md
+# Spring aop日志记录md
 
 ###  一、实现方式一：自定义注解
 
@@ -8,7 +8,7 @@
 
 此方法需自定义注解，通过对方法的注解绑定切入点（即：需要记录的方法）
 
-优点：通过注解可以绑定指定的方法
+优点：可绑定*任意的方法*
 
 缺点：需一一去注解，比较麻烦
 
@@ -24,7 +24,7 @@ import java.lang.annotation.*;
  * @Auther:
  * @Date: 2018/12/11 10:11
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.METHOD)//指定注解类型为方法
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
@@ -32,6 +32,7 @@ public @interface OperLog {
 
     //操作类型  内部操作/外部操作
     String operType() default "";
+    //其他
 }
 
 ~~~
@@ -48,7 +49,6 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Method;
 
 /**
@@ -71,21 +71,23 @@ public class OperLogAspect {
      */
     // 此处可使用@Around注解指定aop切入条件：
   //@Around("within(cn.itcast.crm.service..*)&&@annotation(cn.itcast.crm.annotation.OperLog) ")
-    public Object doAroundMethod(ProceedingJoinPoint pjp) throws Throwable {
-        long startTime=System.currentTimeMillis();//开始时间
-
-        //获取注解方法1
+    
+    //JoinPoint：提供访问当前被通知方法的目标对象、方法参数等数据
+    public Object doAroundMethod(ProceedingJoinPoint pjp,OperLog  operLog) throws Throwable {
+        //long startTime=System.currentTimeMillis();//开始时间
+        
+        //第一种方式获取方法名
         Signature sig = pjp.getSignature();
         MethodSignature msig = null;
-        if (!(sig instanceof MethodSignature)) {
+        if (!(sig instanceof MethodSignature)) {//判断注解的是否是方法
             throw new IllegalArgumentException("该注解只能用于方法");
         }
         msig = (MethodSignature) sig;
-        Object target = pjp.getTarget();
+        Object target = pjp.getTarget();//获取目标对象
         Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
         System.out.println("监听到调用方法为："+currentMethod);
 
-        //获取方法名2
+        //第二种方式获取方法名
         //String targetMethodName = pjp.getSignature().getName();
 
         //获取传入参数
@@ -100,7 +102,8 @@ public class OperLogAspect {
         Object result  = pjp.proceed();//执行方法，获取返回参数
         //###################下面代码为方法执行后#####################
         System.out.println(currentMethod+"返回参数："+result);
-
+		
+        //todo 将记录入库
 
         long endTime=System.currentTimeMillis();//结束时间
         float excTime=(float)(endTime-startTime)/1000;
@@ -115,10 +118,13 @@ public class OperLogAspect {
 #### 3、配置
 
 ~~~xml
-</beans>
+<!-- 目的：规定切面的使用：如何触发，触发之后做什么 -->
+
+<beans>
 	<!-- 切面 注入到Sping -->
     <bean id="optLogAspect" class="cn.itcast.crm.logAspect.OperLogAspect" />
-    <!--切入点为自定义注解类-->
+    
+    <!--aop配置：切面、切入点（如何绑定目标对象）、切入的方法-->
     <aop:config>
         <aop:aspect ref="optLogAspect">
             <!--配置切入点：被注解了OperLog的方法-->
@@ -127,8 +133,6 @@ public class OperLogAspect {
             <aop:around method="doAroundMethod" pointcut-ref="optLogPointCut" />
         </aop:aspect>
     </aop:config>
-    <aop:aspectj-autoproxy proxy-target-class="true" />
-
 </beans>
 ~~~
 
@@ -158,9 +162,9 @@ public class OperLogAspect {
 
 此方法不需自定义注解，只需要通过指定包名来绑定切入点（即：需要记录的方法）
 
-优点：只需指定相应包即可绑定该包下所有的方法，无需单个注解
+优点：只需指定相应包即可绑定该包下所有的方法，*无需单个注解*
 
-缺点：切入方式太粗糙，很可能记录到不需要记录的方法。
+缺点：切入方式太*粗糙*，很可能记录到不需要记录的方法。
 
 #### 1、切面OperLogAspec
 
@@ -246,16 +250,23 @@ public class OperLogAspect {
 </beans>
 	<!-- 切面 注入到Sping -->
     <bean id="optLogAspect" class="cn.itcast.crm.logAspect.OperLogAspect" />
+
     <!--切入点为自定义注解类-->
     <aop:config>
         <aop:aspect ref="optLogAspect">
-            <!--配置切入点：被注解了OperLog的方法-->
-            <aop:pointcut id="optLogPointCut" expression="@annotation(cn.itcast.crm.annotation.OperLog)" />
+            
+            
+            <!--配置切入点：指定需要切入的包-->
+            <!--
+				包名后面的”..“ ，表示当前包及子包   另外：“.”表示当前包
+				第二个”*“ 表示类名,*即所有类。 
+				.*(..) 表示任何方法名,括号表示参数,两个点表示任何参数类型 
+			-->
+            <aop:pointcut id="optLogPointCut" expression="execution(* cn.itcast.crm.controller..*.*(..))" />
             <!--调用切面的具体方法-->
             <aop:around method="doAroundMethod" pointcut-ref="optLogPointCut" />
         </aop:aspect>
     </aop:config>
-    <aop:aspectj-autoproxy proxy-target-class="true" />
 
 </beans>
 ```
@@ -270,23 +281,35 @@ public class OperLogAspect {
 
 ### 三、切面Aspect详解
 
-#### 一、注解解析
-
-此处使用了spring的AOP（面向切面编程）特性
-
-**通过@Aspect注解使该类成为切面类**
-
- **通过@Pointcut 指定切入点 ，这里指定的切入点为MyLog注解类型，也就是被@MyLog注解修饰的方法，进入该切入点。**
+#### 一、使用注解代替xml配置
 
 - @Before 前置通知：在某连接点之前执行的通知，但这个通知不能阻止连接点之前的执行流程（除非它抛出一个异常）。
-- @Around 环绕通知：可以实现方法执行前后操作，需要在方法内执行point.proceed(); 并返回结果。
-- @AfterReturning 后置通知：在某连接点正常完成后执行的通知：例如，一个方法没有抛出任何异常，正常返回。
+
+- @Around 环绕通知：可以实现方法执行前后操作，需要在方法内执行point.proceed(); 并返回结果。（控制方法的执行时间）
+
 - @AfterThrowing 异常通知：在方法抛出异常退出时执行的通知。
+
 - @After 后置通知：在某连接点正常完成后执行的通知：例如，一个方法没有抛出任何异常，正常返回
 
-#### 二、获取方法
+  ~~~java
+  @Component
+  //声明这是一个切面Bean
+  @Aspect
+  public class OperLogAspect {
+      /**
+       * 环绕触发，可根据业务场景选择@before @After
+       * 触发条件：cn.itcast.crm包下面所有的类且注解为OperLog的
+       * @param pjp
+       */
+      //指定扫描的包   指定切入点点
+      @Around("within(cn.itcast.crm.service..*) &&@annotation(cn.itcast.crm.annotation.OperLog) ")
+      public Object doAroundMethod(ProceedingJoinPoint pjp) throws Throwable {
+  ~~~
 
-**以参数的形式**
+
+#### 二、获取方法的2种方式
+
+1返回结果：**以参数的形式**
 
 如：例如 public void add(JoinPoint joinpoint){}
 
@@ -299,11 +322,11 @@ if (!(sig instanceof MethodSignature)) {
 }
 msig = (MethodSignature) sig;
 Object target = pjp.getTarget();
-Method currentMethod = target.getClass().getMethod(msig.getName(), 		msig.getParameterTypes());
+Method currentMethod = target.getClass().getMethod(msig.getName(),msig.getParameterTypes());
 System.out.println("监听到调用方法为："+currentMethod);
 ~~~
 
-**只包含方法（建议）**
+2、返回结果：**只包含方法名（建议）**
 
 如： add
 
@@ -312,6 +335,22 @@ System.out.println("监听到调用方法为："+currentMethod);
 JoinPoint joinpoint = new JoinPoint();
 String targetMethodName = joinpoint.getSignature().getName();
 ~~~
+
+#### 三、关于环绕通知返回值的问题
+
+​	如果前端需要返回值，则在切面里必须返回值，因为数据返回前端的操作是由切面处理的，而非目标对象。
+
+```java
+必须返回方法执行结果
+public Object doAroundMethod(ProceedingJoinPoint pjp) throws Throwable {
+    
+        //###################上面代码为方法执行前####################
+        Object result  = pjp.proceed();//执行方法，获取返回值
+        //###################下面代码为方法执行后#####################
+       
+        return result;
+    }
+```
 
 ### 四、aop日志记录字段设计
 
@@ -390,7 +429,8 @@ public class OptLogAspect {
         // 获取 方法签名对象
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-
+		
+        //获取注解携带的数据
         OptLogDO optLogDO = new OptLogDO();
         OptLogAnnotation optLogAnnotation = method.getAnnotation(OptLogAnnotation.class);
 
@@ -408,7 +448,8 @@ public class OptLogAspect {
         // 获取 目标类名
         String className = joinPoint.getTarget().getClass().getName();
         optLogDO.setInterfaceName(className);
-
+		
+        
         // 获取 方法名
         String methodName = signature.getName();
         optLogDO.setMethodName(methodName);
@@ -423,8 +464,8 @@ public class OptLogAspect {
             for (int i = 0; i < parameterNames.length; i++) {
                 requestParams.put(parameterNames[i], parameterValues[i]);
             }
-            String requestJson = JSON.toJSONString(requestParams);
-            optLogDO.setRequestParams(requestJson.length() <= 5000 ? requestJson : requestJson.substring(0, 5000));
+            String requestJson = JSON.toJSONString(requestParams);//转成json串
+            optLogDO.setRequestParams(requestJson.length() <= 5000 ? requestJson : requestJson.substring(0, 5000));//限制其长度
         } else {
             optLogDO.setRequestParams("");
         }
