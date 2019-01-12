@@ -8,11 +8,9 @@
 
 Docker支持将软件编译成一个镜像；然后在镜像中各种软件做好配置，将镜像发布出去，其他使用者可以直接使用这个镜像；
 
-运行中的这个镜像称为容器，容器启动是非常快速的。另外，容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。
+运行中的这个镜像称为容器，容器启动是非常快速的。另外，容器是完全使用沙箱机制，相互之间不会有任何接口,更重要的是容器性能开销极低。
 
 ![](images/搜狗截图20180303145450.png)
-
-
 
 ![](images/搜狗截图20180303145531.png)
 
@@ -94,9 +92,9 @@ ip addr
 
 ```shell
 1、检查内核版本，必须是3.10及以上
-uname -r
+[root@localhost ~]# uname -r
 2、安装docker
-yum install docker
+[root@localhost ~]# yum install docker
 3、输入y确认安装
 4、启动docker
 [root@localhost ~]# systemctl start docker
@@ -106,7 +104,7 @@ Docker version 1.12.6, build 3e8e77d/1.12.6
 [root@localhost ~]# systemctl enable docker
 Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
 6、停止docker
-systemctl stop docker
+[root@localhost ~]# systemctl stop docker
 ```
 
 ## 4、Docker常用命令&操作
@@ -134,51 +132,47 @@ https://hub.docker.com/
 2、拉取镜像
 [root@localhost ~]# docker pull tomcat
 3、根据镜像启动容器
-docker run --name mytomcat -d tomcat:latest
-4、docker ps  
-查看运行中的容器
+[root@localhost ~]# docker run --name mytomcat -d tomcat:latest
+4、查看运行中的容器
+[root@localhost ~]# docker ps 
 5、 停止运行中的容器
-docker stop  容器的id
+ docker stop  容器的id
 6、查看所有的容器
-docker ps -a
+ docker ps -a
 7、启动容器
-docker start 容器id
+ docker start 容器id
 8、删除一个容器
  docker rm 容器id
-9、启动一个做了端口映射的tomcat
+9、启动一个做了端口映射的tomcat（'重要）
 [root@localhost ~]# docker run -d -p 8888:8080 tomcat
 -d：后台运行
 -p: 将主机的端口映射到容器的一个端口    主机端口:容器内部的端口
 
+'说明:' 关于端口映射实现访问容器(参看4-4)
+
 10、为了演示简单关闭了linux的防火墙
-service firewalld status ；查看防火墙状态
-service firewalld stop：关闭防火墙
+ 原因：防火墙户会拦截某些端口号,在和Linux通信的时候,往往会先关闭防火墙,减少一些通信验证的麻烦.
+ 注意：在实际工作中，web服务器关闭防火墙一定要谨慎，避免服务器感染病毒
+ service firewalld status ；查看防火墙状态
+ service firewalld stop：关闭防火墙
 11、查看容器的日志
 docker logs container-name/container-id
 
 更多命令参看
 https://docs.docker.com/engine/reference/commandline/docker/
 可以参考每一个镜像的文档
-
 ````
 
-
-
 ### 3）、安装MySQL示例
-
-```shell
-docker pull mysql
-```
-
-
 
 错误的启动
 
 ```shell
+[root@localhost ~]# docker pull mysql
 [root@localhost ~]# docker run --name mysql01 -d mysql
 42f09819908bb72dd99ae19e792e0a5d03c48638421fa64cce5f8ba0f40f5846
 
-mysql退出了
+'...mysql退出了
 [root@localhost ~]# docker ps -a
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                           PORTS               NAMES
 42f09819908b        mysql               "docker-entrypoint.sh"   34 seconds ago      Exited (1) 33 seconds ago                            mysql01
@@ -191,7 +185,7 @@ c4f1ac60b3fc        tomcat              "catalina.sh run"        About an hour a
 //错误日志
 [root@localhost ~]# docker logs 42f09819908b
 error: database is uninitialized and password option is not specified 
-  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD；这个三个参数必须指定一个
+  You need to specify one of MYSQL_ROOT_PASSWORD, MYSQL_ALLOW_EMPTY_PASSWORD and MYSQL_RANDOM_ROOT_PASSWORD；这个三个参数必须指定一个（指定密码，允许空密码，随机密码）
 ```
 
 正确的启动
@@ -214,11 +208,9 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 ad10e4bc5c6a        mysql               "docker-entrypoint.sh"   4 seconds ago       Up 2 seconds        0.0.0.0:3306->3306/tcp   mysql02
 ```
 
-
-
 几个其他的高级操作
 
-```
+```shell
 docker run --name mysql03 -v /conf/mysql:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
 把主机的/conf/mysql文件夹挂载到 mysqldocker容器的/etc/mysql/conf.d文件夹里面
 改mysql的配置文件就只需要把mysql配置文件放在自定义的文件夹下（/conf/mysql）
@@ -229,7 +221,35 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag --
 
 
 
+## 5、关于对上文一些命令、术语的补充说明
 
+### 1）端口映射与容器互联 
+
+​	在启动容器的时候，如果不指定对应的参数，在容器外部是无法通过网络来访问容器内部的网络应用和服务的。
+　　当容器中运行一些网络应用，要让外部访问这些应用时，可以通过-p或-P参数来指定端口映射。当使用-P(大写P)标记时，Docker会随机映射一个端口到内部容器开放的网络端口(端口范围在Linux系统使用的端口之外，一般都过万)。
+
+示例说明：
+
+~~~shell
+[root@docker ~]# docker run -d --name nginx_1 -P nginx:latest 
+f769af3e98478b27b87e008f3ad785e2055da4047442c4a8dcb8f621f810dbea
+[root@docker ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                   NAMES
+f769af3e9847        nginx:latest        "nginx -g 'daemon ..."   3 seconds ago       Up 2 seconds        0.0.0.0:32768->80/tcp   nginx_1
+
+也可具体指定：
+[root@docker ~]# docker run -d --name nginx_1 -p 32768:80  nginx:latest 
+~~~
+
+​	通过docker ps可以看到nginx_1容器的80端口被映射到本机的32768端口上。访问宿主主机的32768端口就可以访问容器内的应用程序提供的Web界面：
+
+![](images/1188507-20171129142707472-56449345.png)
+
+更多请参考：(https://www.cnblogs.com/jie-fang/p/7920863.html)
+
+## 6、其他高级命令与技巧拓展
+
+参考：https://www.jianshu.com/p/0231568ab335         作者：  [BGbiao](https://www.jianshu.com/u/9c46ece5b7bd)
 
 
 
