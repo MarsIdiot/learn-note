@@ -118,7 +118,13 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service 
 | 列表 | docker images                                   | 查看所有本地镜像                                         |
 | 删除 | docker rmi image-id                             | 删除指定的本地镜像                                       |
 
-https://hub.docker.com/
+查看镜像名及命令       https://hub.docker.com/
+
+镜像加速： https://www.docker-cn.com/registry-mirror
+
+​	加速命令：docker pull registry.docker-cn.com/library/镜像名
+
+​	栗子：docker pull registry.docker-cn.com/library/tomcat
 
 ### 2）、容器操作
 
