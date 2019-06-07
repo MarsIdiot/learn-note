@@ -1,0 +1,58 @@
+/* 书 P137  5.9
+*/
+
+class A{
+	void f(){//输出英文字母表
+		int firstEnglish, lastEnglish;  
+        	char firstE = 'A', lastE = 'Z';      //获取首字母与末字母的值  
+          
+       	 	firstEnglish = (int)firstE;  
+        	lastEnglish = (int)lastE;  
+          
+        	System.out.println("英文字母表： ");  
+        	for(int i = firstEnglish; i <= lastEnglish; ++i)  
+        	{  
+            		char uppercase, lowercase;   
+              
+            		uppercase = (char)i;  
+            		lowercase = (char)(i + 32);  
+              
+            		System.out.print(" " + uppercase + lowercase);  
+        	}  
+          
+       		 System.out.println();  
+   	 }  
+	
+}
+
+class B extends A{
+	void g(){//输出希腊字母表
+		int firstLetter, lastLetter;  
+        	char firstG = 'α', lastG = 'ω';      //获取首字母与末字母的值  
+          
+        	firstLetter = (int)firstG;  
+        	lastLetter = (int)lastG;  
+          
+        	System.out.println("希腊字母表： ");  
+        	for(int i = firstLetter; i <= lastLetter; ++i)  
+        	{  
+            		char greekLetter;  
+              
+            		greekLetter = (char)i;  
+              
+            		System.out.print(" "+greekLetter);  
+       		 }  
+          
+        	System.out.println();  
+		
+	}
+}
+
+
+public class Test4_book_5_9{
+	public static void main(String args[]){
+		B b=new B();
+		b.f();
+		b.g();
+	}
+}

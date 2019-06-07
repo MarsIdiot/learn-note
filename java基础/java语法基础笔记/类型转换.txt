@@ -1,0 +1,4 @@
+ 
+1.×Ö·û×ªÕûĞÎ
+
+n=Integer.parseInt(str);

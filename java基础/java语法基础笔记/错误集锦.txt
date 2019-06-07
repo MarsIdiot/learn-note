@@ -1,0 +1,18 @@
+1.定义变量的有效范围
+	*{}为一个范围，在其符号内有效
+	注意：定义的整体性与局部性
+2.书写格式
+	*int number=in.nextInt() //next与Int()之间无逗号
+	*
+	*
+3.对已声明的变量，输入时不需在声明
+	eg：	int number;
+		number=in.nextInt();//此处不能在前面加int，因为已声明过了，不然会报错
+		//其实这里遵循要调用变量，必须对其赋值
+4.在输出某值时：必须用System.out.print()来输出
+	eg：int shuzhu(){
+		return m;
+		}
+	     如若在调用并输出shuzu()函数时，直接写 shuzhu(); 是错误的，
+	   需写成 :
+			System.out.print(shuzhu());

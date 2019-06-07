@@ -1,0 +1,64 @@
+JFileChooser打开和保存文件的功能(实现了保存和打开---用流实现) (2012-03-29 23:07:32)转载▼
+标签： 杂谈	
+一、保存文件
+saveFc=new JFileChooser();//创建文件选择器
+saveFc.addChoosableFileFilter(new FileFilter(){//添加文件过滤，保存文件格式为.txt格式的文件
+public boolean accept(File f) {//这个的意思是说，如果是目录或者为.txt文件格式的文件就显示出来
+if (f.isDirectory()) {//如果是目录就可以访问
+return true;
+}
+if (f.getName().endsWith(".txt")) {//如果是,txt文件格式的文件,那么就可以显示出来
+return true;
+}
+return false;
+}
+public String getDescription() {
+return "*.txt";
+}
+});
+//保存如果要保存的文件在用户选择的目录中已有文件存在，那么就提示一个JOpitonPane来显示一个对话框
+if(file.exists()){//已存在文件
+JOptionPane.showConfirmDialog(fc, file + "文件已经存在,是否覆盖!", "文件存在", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);//显示一个对话框来实现是否覆盖源文件
+}
+//下面是保存文件
+//doc是文档对象 doc=JTextPane.getDocument();//获取文档 得到
+//使用对象的反序列化来完成
+private void saveFile(File f, Document doc) {//保存文件
+FileOutputStream fous = null;
+ObjectOutputStream oous = null;//对象序列化
+try {
+fous = new FileOutputStream(f);//写入到这个目录中
+oous = new ObjectOutputStream(fous);
+oous.writeObject(doc);//把文档写入文件中
+} catch (IOException ex) {
+Logger.getLogger(ImageDemoView.class.getName()).log(Level.SEVERE, null, ex);
+} finally {
+try {
+fous.close();
+oous.close();
+} catch (IOException ex) {
+Logger.getLogger(ImageDemoView.class.getName()).log(Level.SEVERE, null, ex);
+}
+}
+}
+二、数据载入，打开文件
+//下面是载入文件数据，要和保存相对应
+private void loadFile(File f) {//载入文件
+try {
+FileInputStream fins = null;
+ObjectInputStream oins = null;
+fins = new FileInputStream(f);//从此文件读取数据
+oins = new ObjectInputStream(fins);
+Document doc = (Document) oins.readObject();//获取文本的数据对象
+picTextPane.setDocument(doc);//设置文本面板的文档
+oins.close();
+fins.close();
+} catch (ClassNotFoundException ex) {
+Logger.getLogger(ImageDemoView.class.getName()).log(Level.SEVERE, null, ex);
+} catch (IOException ex) {
+Logger.getLogger(ImageDemoView.class.getName()).log(Level.SEVERE, null, ex);
+}
+}
+技术总结：
+此文章中主要攻克的难点就是 保存和 打开 文件，对于保存和打开来说技术都是一样的。只不过是相反的步骤。
+保存用到的类有 FileInputStream ,ObjectInputStream使用对象的反序列化把对象写入(writeObject(Object obj))到FileInputStream对象流中。写入到文件中。当载入数据后根据保存的格式来读取。使用的类有 FileOutputStream ,ObjectOutputStream对象来序列化使用readObject()方法获得对象。

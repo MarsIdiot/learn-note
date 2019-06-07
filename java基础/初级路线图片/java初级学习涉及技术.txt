@@ -1,0 +1,8 @@
+阶段一  
+1：学习HTML     2:学习CSS    3:Javascript    4:jquery    5:xml解析   6：Bootstrap     
+阶段二  
+7:JAVAse基础      8：mysql数据库     9：Powerdesigner   10:JDBC    11:JAVAWEB       
+阶段三
+12:oracle         13:struts2         14:Hibernate       15:Spring
+阶段四
+16:Maven         17:SpringMVC      18:MyBatis

@@ -1,0 +1,23 @@
+扫描仪
+	1.导入扫描仪   import java.util.Scanner;
+	2.声明并赋值   Scanner in=new Scanner(System.in);
+	3.使用：	
+		整型 in.nextInt（）;
+		双精度 in.nextDouble();
+		字符串 in.next();
+eg：	    
+import java.util.Scanner;
+public class Test{
+       public static void main(String[] args){
+		Scanner in=new Scanner(System.in);
+		System.out.println("请输入你的名字");
+		String name=in.next();
+		System.out.println("请输入你的年龄");
+		int age=in.nextInt();
+		System.out.println("请输入你的性别");
+		String sex=in.next();
+		System.out.println("名字:"+name);
+		System.out.println("年龄:"+age);
+		System.out.println("性别:"+sex);
+	}
+}  

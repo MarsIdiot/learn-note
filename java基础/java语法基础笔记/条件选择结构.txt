@@ -1,0 +1,60 @@
+1.强制类型转换   
+	（类型名）表达式，如（int）a;
+
+2.布尔运算boolean  
+	eg：   int A=50;int B=90;
+		boolean flag;
+		flag=A!=B;
+		System.out.println(flag);
+
+3.if条件结构
+	if（条件）{
+		//语句
+	}//符合条件就执行语句，否者跳过不执行
+   运算符 &&，||，！（同c++一样)
+4.if-else结构
+	if（）{
+	}else（）{
+	}
+5.多重if结构
+	eg：
+		if(){
+		        //语句
+		}else if(){
+			//语句
+		}else if(0{
+			//语句
+		}else if(){
+			//语句
+		}
+6.switch语句     switch()  case   default
+	eg:
+
+		switch(mingci//只接收int和char类型){//开关
+			case 1://案例
+				System.out.println("出任武林盟主");
+				break;//跳出
+
+			case 2:
+				System.out.println("出任武当掌门");
+				break;
+
+			case 3:
+				System.out.println("出任峨眉掌门");
+				break;
+
+			default://默认
+				System.out.println("逐出师门");
+			
+		}
+	}		
+}
+
+
+
+
+
+
+
+		
+			

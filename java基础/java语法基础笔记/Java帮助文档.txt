@@ -1,0 +1,21 @@
+生成Java帮助文档：命令格式：javadoc –d 文件夹名 –auther –version *.java
+
+/** //格式
+
+*类描述
+
+*@author 作者名
+
+*@version 版本号
+
+*/
+
+/**
+
+*方法描述
+
+*@param 参数描述
+
+*@return 返回值描述
+
+*/ 

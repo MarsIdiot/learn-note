@@ -1,0 +1,17 @@
+方法1：
+import java.util.Random;
+public class Test_random{
+	public static void main(String[]args){
+		Random xx=new Random();
+		int numner=xx.nextInt(10);//随机数有10个(0~9)
+		System.out.println("随机数为"+number);
+	}
+}
+
+
+方法2：
+public class Test_random{
+	public static void main(String[]args){
+		System.out.println((int)(Math.random()*10));
+	}
+}
