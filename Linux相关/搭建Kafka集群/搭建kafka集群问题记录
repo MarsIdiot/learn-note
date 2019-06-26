@@ -1,0 +1,41 @@
+
+zookeeper
+	多个软件包，多份配置  启动多个zookeeper
+	需要JDK环境
+	clientPort端口都写成了2183  都不一样
+
+	启动/关闭：
+	 /usr/local/app/zookeeper01/bin/zkServer.sh start
+	  /usr/local/app/zookeeper01/bin/zkServer.sh stop
+kafka:
+	一个软件包，多份配置  启动多个kafka
+	更换JDK版本: kafka_2.12-2.2.0版本比较新，JDK1.7换成1.8
+
+	hadoop001:2181,hadoop001:2182,hadoop001:2183
+	127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183
+
+	启动：bin/kafka-server-start.sh config/server-1.properties
+	关闭：bin/kafka-server-stop.sh
+
+xShell:
+	复制：
+	cp -avx  /usr/local/app/zookeeper-3.4.14   /usr/local/app/zookeeper03
+	解压：
+	 tar -zxvf jdk-7u80-linux-x64.tar.gz
+	 
+
+	 移除：
+	 rm -rf  xxx
+	 JDK有效版本：
+		 which Java
+		 which javac
+	 重新加载配置：
+	 	source  /etc/profile
+	 &：是为了能退出命令行
+
+	
+XFtps:
+	选择SFTP 22
+
+linux:
+	系统位数：getconf LONG_BIT
