@@ -4,6 +4,12 @@
 	生产与消费
 	发布与订阅
 	group、topic、partion、broker Server之间的关系
+	
+	
+	
+	
+	
+	
 	消息生产：规则，消息更新是覆盖吗？
 ```
 
@@ -14,6 +20,7 @@
 	topic、Partition、segement的关系？
 		包含关系？
 ```
+
 
 
 
@@ -55,11 +62,12 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 另外：一个group内的consumer只能消费不同的partition,于是问题：不同group的Owner能消费同一个partition吗？
 
 ```text
-是的。不论这个Owner是否是同一个group。
+不同的组之间消费是相互不受影响的，相互隔离。
+如果是同一个组，只能有一个Owner去消费一个partition
 
 kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 下的不同的 partitions (区)只能有一个 Owner 去消费。所以只有多个分区后才能启动多个消费者，对应不同的区去消费。其中协调消费部分是由 server 端协调而成。
 
-总结：每个 topic 下的一个partition(区)只能有一个 Owner 去消费。
+总结：不同组互不影响，同一组内每个 topic 下的一个partition(区)只能有一个 Owner 去消费。
 ```
 
 5） 
@@ -112,7 +120,7 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 参考：https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html
 ~~~
 
-### 涉及概念
+涉及概念
 
 - Partition
 
@@ -122,8 +130,6 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 
 - Segment
 
-  ​
-
   ```text
   partition物理上由多个segment组成。Segment
   ```
@@ -131,5 +137,12 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 - offset
 
   ```text
-  每个partition都由一系列有序的、不可变的消息组成，这些消息被连续的追加到partition中。partition中的每个消息都有一个连续的序列号叫做offset,用于partition唯一标识一条消息
+  每个partition都由一系列有序的、不可变的消息组成，这些消息被连续的追加到partition中。partition中的每个消息都有一个连续的序列号叫做offset,用于partition唯一标识一条消息。
   ```
+
+Kafka高效文件存储设计特点
+
+- Kafka把topic中一个parition大文件分成多个小文件段，通过多个小文件段，就容易定期清除或删除已经消费完文件，减少磁盘占用。
+- 通过索引信息可以快速定位message和确定response的最大大小。
+- 通过index元数据全部映射到memory，可以避免segment file的IO磁盘操作。
+- 通过索引文件稀疏存储，可以大幅降低index文件元数据占用空间大小。
