@@ -5,10 +5,16 @@
 	spring是对象的容器,帮我们"管理"项目中的所有对象
 
 二、IOC 和 DI: 
+	依赖注入是实现控制反转（Inversion of Control – IoC）的一个模式(应用)。
+	
+	
 	IOC :控制反转,将对象的创建权交给了 Spring. 
 	
 	DI :Dependency Injection 依赖注入.
-		需要有IOC的环境,Spring创建这个类的过程中,Spring将类的依赖的属性设置进去. 
+		需要有IOC的环境,Spring创建这个类的过程中,Spring将类的依赖的属性设置进去.
+	
+	目的：它的本质目的是解耦，保持软件组件之间的松散耦合，为设计开发带来灵活性。
+	
 
 三、Beans之Bean元素配置
 	bean创建方式(空参构造,静态方法，实例方法)
