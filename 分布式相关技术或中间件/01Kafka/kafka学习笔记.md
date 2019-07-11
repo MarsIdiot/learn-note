@@ -1,4 +1,4 @@
-## #研究Kafka消息广播、单播
+研究Kafka消息广播、单播
 
 ```
 	生产与消费
@@ -39,7 +39,7 @@ kafka集群会保留所有的消息，无论其被消费与否。两种策略删
 发布时如不指定，为默认的group。
 每个Consumer属于一个特定的Consumer Group（可为每个Consumer指定group name，若不指定group name则属于默认的group），会维护一个索引，用于标识一个消费集群的消费位置。为了对减小一个consumer group中不同consumer之间的分布式协调开销，指定partition为最小的并行消费单位，即一个group内的consumer只能消费不同的partition。
 
-消费时？如果发布时指定消费时也需指定才能消费到？
+消费时？如果发布时指定消费时也需指定才能消费到？该是如此
 ```
 
 3）消息有序性？
@@ -63,7 +63,13 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 总结：不同组互不影响，同一组内每个 topic 下的一个partition(区)只能有一个 Owner 去消费。
 ```
 
-5） 
+5）kafka协调存储的机制？
+
+
+
+6） kafka协调消费的机制？
+
+
 
 
 
@@ -71,9 +77,9 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 
 ## 1、基本概念
 
-```textpom
 参考：https://github.com/aalansehaiyang/technology-talk/blob/master/middle-software/kafka.md
-```
+
+Kafka是由LinkedIn开发的一个开源分布式基于发布/订阅的消息系统，Scala编写。 Producer向broker push消息；Consumer从broker pull消息（pull模式则可以根据Consumer的消费能力以适当的速率消费消息）
 
 - Broker
 
@@ -109,9 +115,7 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 
 ## 2、kafak存储机制
 
-~~~
 参考：https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html
-~~~
 
 涉及概念
 
@@ -124,7 +128,7 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
 - Segment
 
   ```text
-  partition物理上由多个segment组成。Segment
+  partition物理上由多个segment组成。
   ```
 
 - offset
@@ -132,6 +136,10 @@ kafka 的消息模型是对 topic 分区以达到分布式效果。每个 topic 
   ```text
   每个partition都由一系列有序的、不可变的消息组成，这些消息被连续的追加到partition中。partition中的每个消息都有一个连续的序列号叫做offset,用于partition唯一标识一条消息。
   ```
+
+Partition命令规则
+
+  在Kafka文件存储中，同一个topic下有多个不同partition，每个partition为一个目录，partiton命名规则为topic名称+有序序号，第一个partiton序号从0开始，序号最大值为partitions数量减1。
 
 Kafka高效文件存储设计特点
 
