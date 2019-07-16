@@ -128,9 +128,31 @@ b.  客户端Handle类编写(继承xxxChannelxxHandler,即：ChannelInboundHandlerAdapter)
 
 补充：发送消息时必须存在flush		
 
-  	
+ 练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/testlearn>	
 
-  	
+###   4.TCP沾包/拆包问题解决之道
+
+传输打大包文时出现
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 9. 问题记录
 
