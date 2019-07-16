@@ -14,6 +14,10 @@ rm -f  xxx.jar   删除jar包
 
 java -jar  xxx.jar  &     后台启动
 
+nohup java -jar dkey-service-os-0.0.1-SNAPSHOT.jar &      
+
+​		---------nohup 后台启动(带有nohup.out，实时日志)(开发测试阶段推荐)
+
 4、查看是否启动
 
    1） 查看正在运行与Java相关的进程
