@@ -1,263 +1,263 @@
-# NettyȨ��ָ��(�ڶ���)�ʼ�
+# Netty权威指南(第二版)笔记
 
-## ����ƪ
+## 初级篇
 
-Netty(����ƪ)
-  	�ȿ�������֪ʶ ����ԭ��  �����и������˽�
-  	������ʵս  ����� ��η�������  ��μ�����Ϣ����
-  	������ʱ��  �ټ��������о�
+Netty(初级篇)
+  	先看看基础知识 大致原理  对其有个大致了解
+  	再入门实战  搭建服务 如何发送请求  如何监听消息请求
+  	后面有时间  再继续深入研究
 
-### 1.����IO
+### 1.基础IO
 
-#### 1.1  UNIX��5��IOģ��
+#### 1.1  UNIX的5种IO模型
 
-1)����IOģ��
-  	�����´��������Ҫ��ȡ��Ӧ�����ݰ����ں˻�һֱ�ȴ����ݰ�ֱ��׼�������������ֱ���˿̲ż����������������Եȴ����̳�Ϊ������
+1)阻塞IO模型
+  	进程下达命令后，需要获取相应的数据包，内核会一直等待数据包直到准备就绪或出错，直到此刻才继续后续操作，所以等待过程称为阻塞。
 
-2)������IOģ��
-  	���������������ڣ��ں˴������ж�����������ں˻�û��׼�������ݰ�,����̻ᷴ���´�����(��ѯ)ֱ���ں˴������ݰ�׼���ã�����һֱ�������ں˴���
+2)非阻塞IO模型
+  	与阻塞的区别在于，内核处增加判断条件，如果内核还没有准备好数据包,则进程会反复下达命令(轮询)直到内核处的数据包准备好，不会一直阻塞在内核处。
 
-3)IO����ģ��
-  	�ԱȸĽ�������������Ȼ�ᷴ����ѯ��������������ͬһʱ���ִ��ͬһ���̣�Ч�����ɲ��ߡ�
-  	ʵ�ַ�ʽ�������ڸ���ģ����������ѯ���ƣ�����ѯ���ƿɽ��ն���������󣬵���ѯ�������ݰ�׼������ʱ�������ص���Ӧ����ִ�к�������(���������������ݴ��ں˸��Ƶ��û��Ļ�����)��
-  	�������˹�����������ѯ�����ϣ����䶯̬������ѯ���������������ķ�����в������ɱܿ�ĳ������һֱ��������״̬��
+3)IO复用模型
+  	对比改进：非阻塞中虽然会反复轮询，但是依旧是在同一时间段执行同一进程，效率依旧不高。
+  	实现方式：所以在复用模型中引入轮询机制，该轮询机制可接收多个命令请求，当轮询到有数据包准备就绪时，立即回调对应服务执行后续操作(后续操作：将数据从内核复制到用户的缓存区)。
+  	分析：此过程阻塞在轮询机制上，但其动态批量轮询机制让满足条件的服务进行操作，可避开某个服务一直处于阻塞状态。
 
-4)�ź�����IOģ��
-  	�Աȣ�����ģ�͵ĸĽ��棬�źŴ������������ѯ���ƹ��ܣ�ʵ�������ѯ����(ֻ��ʵ�ַ�ʽ��ͬ)��
-  	ʵ�ַ�ʽ��Ŀǰ�о��븴��ģ��ûɶ����(���ף�������)
+4)信号驱动IO模型
+  	对比：复用模型的改进版，信号处理程序代替轮询机制功能，实则就是轮询机制(只是实现方式不同)。
+  	实现方式：目前感觉与复用模型没啥区别(留白？？？？)
 
-5)�첽IOģ��
-  	ʵ�ַ�ʽ�������´��������ں�����ĳ�������������ں�������������ɺ�(�������ݰ�׼�������󣬻�Ҫ�����ݴ��ں˸��Ƶ��û��Ļ�����)��֪ͨ�û���
-  	���ź����������ź�����IO���ں�֪ͨ���Ǻ�ʱ���Կ�ʼһ��IO����;���첽IOģ�����ں�֪ͨ����IO������ʱ��ɡ�����ǰ����IO������ʼʱ֪ͨ�������ڽ���ʱ֪ͨ��
+5)异步IO模型
+  	实现方式：进程下达命令让内核启动某个操作，并让内核在整个操作完成后(即：数据包准备就绪后，还要将数据从内核复制到用户的缓存区)才通知用户。
+  	与信号驱动区别：信号驱动IO由内核通知我们何时可以开始一个IO操作;而异步IO模型由内核通知我们IO操作何时完成。即：前者在IO操作开始时通知，后者在结束时通知。
   		
 
-���ڲ���ϵͳ���ԣ��ײ���֧���첽IOͨ�ŵģ�����Java�ںܳ�һ��ʱ��û�������Ӧ����⡣������JDK1.4�״�����(2004��)��
+对于操作系统而言，底层是支持异步IO通信的，不过Java在很长一段时间没有提高相应的类库。不过在JDK1.4首次引入(2004年)。
 
-#### 1.2 IO��·���ü���
+#### 1.2 IO多路复用技术
 
   	
 
-#### 1.3 Java��IO�ݽ�
+#### 1.3 Java的IO演进
 
-  	BIO����>NIO����>AIO
+  	BIO——>NIO——>AIO
 
-## ����ƪ  Netty����ָ��
+## 入门篇  Netty开发指南
 
-### 2.NIO����
+### 2.NIO入门
 
-2.1 ��ͳBIO
-Block����IO
+2.1 传统BIO
+Block阻塞IO
 
-2.2 α�첽IO
-��BIO�����ϼ����̳߳أ����޷������ͬ���������⡣
+2.2 伪异步IO
+在BIO基础上加入线程池，但无法解决其同步阻塞问题。
 
-2.3 NIO���
+2.3 NIO编程
 
-1)NIO���
-  	������ͨ����ת��(���򡪡�>˫��)
-  	������Buffer�ļ���(��дЧ��)
-  	��·������Selector(��ѯ���Channel)(��NIO���������Ҫ)����������ͻ��˵Ĳ�������
+1)NIO简介
+  	从流到通道的转变(单向——>双向)
+  	缓冲区Buffer的加入(读写效率)
+  	多路复用器Selector(轮询多个Channel)(对NIO编程至关重要)：处理多个客户端的并发接入
 
-2)�������������
+2)服务端序列流程
 
-��ʼ����
-  	1) �����������ͨ�� �󶨼�����ַ
-  	2) ������·������Selector�߳�
-  	3) ���������ͨ��ע�ᵽSelector�ļ���Accept�¼�(�����ͻ��˽���)
-  	4) Selector������ѭ����ѯ׼��������Key(���û�пͻ��˽��룬��Selectorÿ��1s������һ��)
+初始化：
+  	1) 开启服务监听通道 绑定监听地址
+  	2) 开启多路复用器Selector线程
+  	3) 将服务监听通道注册到Selector的监听Accept事件(即：客户端接入)
+  	4) Selector内无线循环轮询准备就绪的Key(如果没有客户端接入，则Selector每隔1s被唤醒一次)
 
-��������
-  	1) �ͻ��˷����������
-  	2) Selector�ļ���Accept�¼���������ͻ��˵Ľ��룬���ͻ��˵���Ϣд�뵽�µ�Key
-  	(Key����SelectionKey�� �������и��ݿͻ���������Ϣ��װ��ͨ��channel�����Ҹ�key��������ΪOP_ACCEPT)
-  	3) Selector����ѯ���¼����Accept����������handleInput(key)�������д������˴����SelectionKey(Accept)����һ�ݣ�����ΪRead��������
-  	���´���ѯ�ͻ�ִ��Read�������˴���ѯ���̰�Accept����ת��ΪRead�������������Ϳ��Ը���SelectionKey����λ�������ж������¼����ͣ�
-  	4) ��ѯ��Read����ʱ����Ӧ��ͨ�����ȡ��Ϣ�����������������
-  	5) ����Ϣ��װͶ�ݵ�ҵ���̳߳��У�����ҵ���߼�����
-  	6) ��Pojo������뵽������������ͨ���첽writer�ӿڽ��첽��Ϣ���͸��ͻ��ˡ�
+处理请求：
+  	1) 客户端发起接入请求
+  	2) Selector的监听Accept事件会监听到客户端的接入，将客户端的信息写入到新的Key
+  	(Key即：SelectionKey， 包含含有根据客户端请求消息封装的通道channel，并且该key属性种类为OP_ACCEPT)
+  	3) Selector会轮询到新加入的Accept操作，调用handleInput(key)方法进行处理，此处会把SelectionKey(Accept)复制一份，但改为Read读操作；
+  	待下次轮询就会执行Read操作（此处轮询过程把Accept操作转换为Read读操作，这样就可以根据SelectionKey操作位的类型判断网络事件类型）
+  	4) 轮询到Read操作时，对应的通道会读取消息到缓冲区并对其解码
+  	5) 将消息封装投递到业务线程池中，进行业务逻辑编排
+  	6) 将Pojo对象编码到缓冲区，利用通道异步writer接口将异步消息发送给客户端。
   	
-3)�ͻ�����������
+3)客户端序列流程
 
-### 3.Netty����Ӧ��
+### 3.Netty入门应用
 
-#### 1.����˿���
+#### 1.服务端开发
 
-a. ������������д
-  	1) �������������������(ServerBootStrap)
-  		���߳��顢ͨ��(NioServerSocketChannel)��TCP������IO����Handler��
-  	2) �󶨶˿ڣ�ͬ���ȴ��ɹ�
-  	3) �ȴ������������˿ڹر�
-  	4) �����˳����ͷ��̳߳���Դ
-  	5) main������д 
+a. 服务端启动类编写
+  	1) 服务端启动辅助类配置(ServerBootStrap)
+  		绑定线程组、通道(NioServerSocketChannel)、TCP参数、IO处理Handler类
+  	2) 绑定端口，同步等待成功
+  	3) 等待服务器监听端口关闭
+  	4) 优雅退出，释放线程池资源
+  	5) main函数编写 
 
-b. �����Handle���д(�̳�xxxChannelxxHandler������SimpleChannelInboundHandler<����ChannelInboundHandlerAdapter)
-  	6) ��дHandler��
-  		1) ������Ϣ
+b. 服务端Handle类编写(继承xxxChannelxxHandler，即：SimpleChannelInboundHandler<——ChannelInboundHandlerAdapter)
+  	6) 编写Handler类
+  		1) 接收消息
   			channelRead(ChannelHandlerContext ctx, Object msg){ctx.write(msg);}
   				+
-  			channelReadComplete(ChannelHandlerContext ctx){ ctx.writeAndFlush()} ˢ�»��沢�ر�ͨ������ͨ��
-  		2) �쳣����
+  			channelReadComplete(ChannelHandlerContext ctx){ ctx.writeAndFlush()} 刷新缓存并关闭通道结束通信
+  		2) 异常处理
   			exceptionCaught(ChannelHandlerContext ctx, Throwable cause){ctx.close();}
 
-���䣺���ڷ���˹ر�ͨ��ͨ�����Ż�����
+补充：关于服务端关闭通信通道的优化建议
 
-   1. ��һ�ַ���(�Ƽ�)��дһ���յ�buf����ˢ��д��������ɺ�ر�sock channel���ӡ�
-        	?	?	ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-   2. �ڶ��ַ�������client�˹ر�channel���ӣ������Ļ����ᴥ������channelReadComplete������
-        	?	ctx.flush(); 
-   3. �����֣��ĳ�����д��Ҳ���ԣ���������д����û�е�һ�ַ����ĺá�
-        	ctx.flush().close().sync(); 		
+      1. 第一种方法(推荐)：写一个空的buf，并刷新写出区域。完成后关闭sock channel连接。
+         ​	?	ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+      2. 第二种方法：在client端关闭channel连接，这样的话，会触发两次channelReadComplete方法。
+         ?	ctx.flush(); 
+      3. 第三种：改成这种写法也可以，但是这中写法，没有第一种方法的好。
+         ctx.flush().close().sync(); 		
 
-#### 2.�ͻ��˿���
+#### 2.客户端开发
 
-a.  �ͻ����������д
-  	1) �ͻ�����������������(BootStrap)
-  		���߳��顢ͨ��(NioSocketChannel)��TCP������IO����Handler��
-  	2) �󶨶˿ڣ������첽�������
-  	3) �ȴ��ͻ��˼����˿ڹر�
-  	4) �����˳����ͷ��̳߳���Դ
-  	5) main������д 
+a.  客户端启动类编写
+  	1) 客户端启动辅助类配置(BootStrap)
+  		绑定线程组、通道(NioSocketChannel)、TCP参数、IO处理Handler类
+  	2) 绑定端口，发起异步连解操作
+  	3) 等待客户端监听端口关闭
+  	4) 优雅退出，释放线程池资源
+  	5) main函数编写 
 
-b.  �ͻ���Handle���д(�̳�xxxChannelxxHandler,����ChannelInboundHandlerAdapter)
-  	1) ������Ϣ
+b.  客户端Handle类编写(继承xxxChannelxxHandler,即：ChannelInboundHandlerAdapter)
+  	1) 发送消息
   	channelActive(ChannelHandlerContext ctx){ctx.writeAndFlush();} 
 
-  	2) ������Ϣ
+  	2) 接收消息
   	channelRead0(ChannelHandlerContext ctx, ByteBuf msg){ctx.channel().close().sync();}
 
-  	3) �쳣����
+  	3) 异常处理
   	exceptionCaught(ChannelHandlerContext ctx, Throwable cause){ctx.close();}
 
-���䣺������Ϣʱ�������flush		
+补充：发送消息时必须存在flush		
 
- ��ϰ�����ַ��<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
+ 练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
 
-###   4.TCPմ��/���������֮��
+###   4.TCP沾包/拆包问题解决之道
 
-��������ʱ����
+传输打大报文时出现
 
-#### մ������
+#### 沾包与拆包
 
-TCP��һ��������Э�飬��ν��������û�н��޵�һ�����ݡ���������ˮû�зֽ��ߡ�
+TCP是一个“流”协议，所谓流，就是没有界限的一串数据。就像河里的水没有分界线。
 
-���弰�䵼��ԭ��TCP���������ְ�������ҵ��֮��Ĳ��쵼��
+含义及其导致原因：TCP缓存区划分包规则与业务之间的差异导致
 
-?	TCP�ײ㲻�˽��ϲ�ҵ�����ݵľ��庬�壬�������TCP��������ʵ��������а��Ļ��֣�������ҵ������Ϊ��һ�������İ��ᱻ��ֳɶ�������ͣ���Ѷ��С����װ��һ��������ݰ����͡�
+	TCP底层不了解上层业务数据的具体含义，它会根据TCP缓存区的实际情况进行包的划分，所以在业务上认为，一个完整的包会被拆分成多个包发送，或把多个小包封装成一个大的数据包发送。
 
-![.\pictures\TCPմ�����ͼ��˵��.png](.\pictures\TCPմ�����ͼ��˵��.png)
+![.\pictures\TCP沾包拆包图解说明.png](.\pictures\TCP沾包拆包图解说明.png)
 
-#### ����ԭ��
-
-
-
-#### �������
-
-- ��Ϣ����
-
-�̶����ȣ������ÿո�
-
-- �ڰ�β���뻻�з����зָ�
-
-- ����Ϣ��Ϊ��Ϣͷ����Ϣ��(��Ϣͷ����Ϣ����)
+#### 发生原因
 
 
-- ���������ӵ�Ӧ�ò�Э��
+
+#### 解决策略
+
+- 消息定长
+
+固定长度，不够用空格补
+
+- 在包尾加入换行符进行分割
+
+- 将消息分为消息头和消息体(消息头存消息长度)
 
 
-#### �쳣����
+- 其他更复杂的应用层协议
 
-��ϰ�����ַ:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
 
-#### �������
+#### 异常案例
+
+练习代码地址:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
+
+#### 解决案例
 
 LineBasedFrameDecoder +StringEncoder
 
-LineBasedFrameDecoder ������������Ϣ�Ի��з��ָ�Ի��з�Ϊ������־�Ľ�������
+LineBasedFrameDecoder ：将缓存区消息以换行符分割。以换行符为结束标志的解码器。
 
-StringEncoder������ϢתΪ�ַ���
+StringEncoder：将消息转为字符串
 
- ��ϰ�����ַ:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_01_LineBasedFrameDecoder>
+ 练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_01_LineBasedFrameDecoder>
 
-### 5.  �ָ���Ͷ�����������Ӧ��
+### 5.  分割符和定长解码器的应用
 
-TCP�����ķ�ʽ�������ݴ��䣬�ϲ�Ӧ��Э��Ϊ�˶���Ϣ�������֣�����������4�з�ʽ��
+TCP以流的方式进行数据传输，上层应用协议为了对消息进行区分，常采用如下4中方式：
 
-- ��Ϣ����
+- 消息定长
 
-- ���з��ָ�     ������ָ����һ�У��Ƚϳ������Ե����г���
+- 换行符分割     （特殊分割符的一中，比较常用所以单独列出）
 
-- ����ָ����Ϊ������־
+- 特殊分割符作为结束标志
 
-- ��Ϣ=��Ϣͷ����Ϣ���ȣ�+��Ϣ��
+- 消息=消息头（消息长度）+消息体
 
-�ָ����������DelimiterBasedFrameDecoder
+分割符解码器：DelimiterBasedFrameDecoder
 
-������������FixedLengthFrameDecoder
+定长解码器：FixedLengthFrameDecoder
 
-#### �ָ��������
+#### 分割符解码器
 
-��ϰ����ַ:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_02_DelimiterBasedFrameDecoder>
+练习代码址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_02_DelimiterBasedFrameDecoder>
 
-#### ����������
+#### 定长解码器
 
-��ϰ�����ַ:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_03_FixedLengthFrameDecoder>
+练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_03_FixedLengthFrameDecoder>
 
-#### ��Ҫ����
+#### 重要补充
 
-�ͻ��˻��Ƿ���ˣ�����Ҫ���ӽ��������������ҵ����Ҫ����ѡ��
+客户端还是服务端，都需要添加解码器。这个工具业务需要进行选择。
 
-?	���ڿͻ�����˵��������Ϣ���ᴥ�������������ڽ��շ���������Ϣ�ǻᴥ����������
+	对于客户端来说：发送消息不会触发解码器，而在接收服务器端消息是会触发解码器。
+	
+	对于服务端来说：接收服务端消息触发到解码器，回复消息时不会触发解码器。   
 
-?	���ڷ������˵�����շ������Ϣ���������������ظ���Ϣʱ���ᴥ����������   
+总之，对于客户端还是服务端而言，只有接收他端的消息才会触发解码器。
 
-��֮�����ڿͻ��˻��Ƿ���˶��ԣ�ֻ�н������˵���Ϣ�Żᴥ����������
+## 中级篇  Netty编解码开发指南
 
-## �м�ƪ  Netty����뿪��ָ��
+### 6.编解码技术
 
-### 6.����뼼��
+#### java序列化缺点
 
-#### java���л�ȱ��
+无法跨语言
 
-�޷�������
+序列化后的码流太大     (与二进制编码后大小对比)
 
-���л��������̫��     (������Ʊ�����С�Ա�)
+序列化性能太低           (与二进制编码效率对比)
 
-���л�����̫��           (������Ʊ���Ч�ʶԱ�)
+#### 业界主流编解码框架
 
-#### ҵ�������������
+Google的Protobuf
 
-Google��Protobuf
+Facebook的Thrift
 
-Facebook��Thrift
+JBoss的Marshalling
 
-JBoss��Marshalling
-
-### 7.Java���л�
-
-
-
-## �߼�ƪ Netty��Э�鿪����Ӧ��
+### 7.Java序列化
 
 
 
-
-
-## Դ�����ƪ  Netty���ܽ��ܺ�Դ�����
-
-
-
-## �ܹ�����ҵӦ��ƪ  Netty�߼�����
+## 高级篇 Netty多协议开发和应用
 
 
 
-## �����¼ƪ
 
-  1. IO����ģ�����ź�����IOģ�͵����𣿺����Ƿ�Ч�ʸ��ߣ�
 
-2. �ʻ㣺
-   unix linux���ںˣ���ѯ���׽��֣�bio nio aio �����̳߳�
+## 源码分析篇  Netty功能介绍和源码分析
 
-   �̳߳أ��������߳���Դ		
+
+
+## 架构和行业应用篇  Netty高级特性
+
+
+
+## 问题记录篇
+
+  1. IO复用模型与信号驱动IO模型的区别？后者是否效率更高？
+
+2. 词汇：
+   unix linux，内核，轮询，套接字，bio nio aio 区别，线程池
+
+   线程池：灵活调配线程资源		
 
 
   		
