@@ -234,7 +234,11 @@ JBoss的Marshalling
 
 ### 7.Java序列化
 
+ObjectDecoder  + ObjectEncoder     （编解码，并可以处理TCP沾包拆包问题)
 
+Netty Java序列化服务端开发		    (接收解码，发送编码)
+
+Netty Java序列化客户端开发		    (发送编码，接收解码)
 
 ## 高级篇 Netty多协议开发和应用
 
