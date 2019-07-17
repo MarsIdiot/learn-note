@@ -130,7 +130,7 @@ b.  客户端Handle类编写(继承xxxChannelxxHandler,即：ChannelInboundHandlerAdapter)
 
 补充：发送消息时必须存在flush		
 
- 练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/testlearn>	
+ 练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
 
 ###   4.TCP沾包/拆包问题解决之道
 
@@ -166,7 +166,7 @@ TCP是一个“流”协议，所谓流，就是没有界限的一串数据。就像河里的水没有分界线。
 
 #### 异常案例
 
-练习代码地址:    <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/tcpbug>
+练习代码地址:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug>
 
 #### 解决案例
 
@@ -176,15 +176,39 @@ LineBasedFrameDecoder ：将缓存区消息以换行符分割。以换行符为结束标志的解码器。
 
 StringEncoder：将消息转为字符串
 
- 练习代码地址:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/tcpbug>
+ 练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_01_LineBasedFrameDecoder>
 
 ### 5.分割符和定长解码器的应用
 
+TCP以流的方式进行数据传输，上层应用协议为了对消息进行区分，常采用如下4中方式：
 
+- 消息定长
+
+- 换行符分割     （特殊分割符的一中，比较常用所以单独列出）
+
+- 特殊分割符作为结束标志
+
+- 消息=消息头（消息长度）+消息体
+
+分割符解码器：DelimiterBasedFrameDecoder
+
+定长解码器：FixedLengthFrameDecoder
+
+#### 分割符解码器
+
+练习代码址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_02_DelimiterBasedFrameDecoder>
+
+#### 定长解码器
+
+练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_03_FixedLengthFrameDecoder>
 
 ## 中级篇  Netty编解码开发指南
 
+### 6.编解码技术
 
+
+
+### 7.Java序列化
 
 
 
