@@ -178,7 +178,7 @@ StringEncoder：将消息转为字符串
 
  练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_01_LineBasedFrameDecoder>
 
-### 5.分割符和定长解码器的应用
+### 5.  分割符和定长解码器的应用
 
 TCP以流的方式进行数据传输，上层应用协议为了对消息进行区分，常采用如下4中方式：
 
@@ -201,6 +201,16 @@ TCP以流的方式进行数据传输，上层应用协议为了对消息进行区分，常采用如下4中方式：
 #### 定长解码器
 
 练习代码地址:<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/b_tcpbug_fix_03_FixedLengthFrameDecoder>
+
+#### 重要补充
+
+客户端还是服务端，都需要添加解码器。这个工具业务需要进行选择。
+
+?	对于客户端来说：发送消息不会触发解码器，而在接收服务器端消息是会触发解码器。
+
+?	对于服务端来说：接收服务端消息触发到解码器，回复消息时不会触发解码器。   
+
+总之，对于客户端还是服务端而言，只有接收他端的消息才会触发解码器。
 
 ## 中级篇  Netty编解码开发指南
 
