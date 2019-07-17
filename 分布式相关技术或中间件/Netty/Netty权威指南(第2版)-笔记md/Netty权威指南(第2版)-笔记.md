@@ -100,9 +100,9 @@ b. ·şÎñ¶ËHandleÀà±àĞ´(¼Ì³ĞxxxChannelxxHandler£¬¼´£ºSimpleChannelInboundHandler<¡
 ²¹³ä£º¹ØÓÚ·şÎñ¶Ë¹Ø±ÕÍ¨ĞÅÍ¨µÀµÄÓÅ»¯½¨Òé
 
    1. µÚÒ»ÖÖ·½·¨(ÍÆ¼ö)£ºĞ´Ò»¸ö¿ÕµÄbuf£¬²¢Ë¢ĞÂĞ´³öÇøÓò¡£Íê³Éºó¹Ø±Õsock channelÁ¬½Ó¡£
-        			ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+        	?	?	ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
    2. µÚ¶şÖÖ·½·¨£ºÔÚclient¶Ë¹Ø±ÕchannelÁ¬½Ó£¬ÕâÑùµÄ»°£¬»á´¥·¢Á½´ÎchannelReadComplete·½·¨¡£
-        		ctx.flush(); 
+        	?	ctx.flush(); 
    3. µÚÈıÖÖ£º¸Ä³ÉÕâÖÖĞ´·¨Ò²¿ÉÒÔ£¬µ«ÊÇÕâÖĞĞ´·¨£¬Ã»ÓĞµÚÒ»ÖÖ·½·¨µÄºÃ¡£
         	ctx.flush().close().sync(); 		
 
@@ -132,13 +132,49 @@ b.  ¿Í»§¶ËHandleÀà±àĞ´(¼Ì³ĞxxxChannelxxHandler,¼´£ºChannelInboundHandlerAdapter)
 
 ###   4.TCPÕ´°ü/²ğ°üÎÊÌâ½â¾öÖ®µÀ
 
-´«Êä´ò´ó°üÎÄÊ±³öÏÖ
+´«Êä´ò´ó±¨ÎÄÊ±³öÏÖ
+
+#### Õ´°üÓë²ğ°ü
+
+TCPÊÇÒ»¸ö¡°Á÷¡±Ğ­Òé£¬ËùÎ½Á÷£¬¾ÍÊÇÃ»ÓĞ½çÏŞµÄÒ»´®Êı¾İ¡£¾ÍÏñºÓÀïµÄË®Ã»ÓĞ·Ö½çÏß¡£
+
+º¬Òå¼°Æäµ¼ÖÂÔ­Òò£ºTCP»º´æÇø»®·Ö°ü¹æÔòÓëÒµÎñÖ®¼äµÄ²îÒìµ¼ÖÂ
+
+?	TCPµ×²ã²»ÁË½âÉÏ²ãÒµÎñÊı¾İµÄ¾ßÌåº¬Òå£¬Ëü»á¸ù¾İTCP»º´æÇøµÄÊµ¼ÊÇé¿ö½øĞĞ°üµÄ»®·Ö£¬ËùÒÔÔÚÒµÎñÉÏÈÏÎª£¬Ò»¸öÍêÕûµÄ°ü»á±»²ğ·Ö³É¶à¸ö°ü·¢ËÍ£¬»ò°Ñ¶à¸öĞ¡°ü·â×°³ÉÒ»¸ö´óµÄÊı¾İ°ü·¢ËÍ¡£
+
+![.\pictures\TCPÕ´°ü²ğ°üÍ¼½âËµÃ÷.png](.\pictures\TCPÕ´°ü²ğ°üÍ¼½âËµÃ÷.png)
+
+#### ·¢ÉúÔ­Òò
 
 
 
+#### ½â¾ö²ßÂÔ
+
+- ÏûÏ¢¶¨³¤
+
+¹Ì¶¨³¤¶È£¬²»¹»ÓÃ¿Õ¸ñ²¹
+
+- ÔÚ°üÎ²¼ÓÈë»»ĞĞ·û½øĞĞ·Ö¸î
+
+- ½«ÏûÏ¢·ÖÎªÏûÏ¢Í·ºÍÏûÏ¢Ìå(ÏûÏ¢Í·´æÏûÏ¢³¤¶È)
 
 
+- ÆäËû¸ü¸´ÔÓµÄÓ¦ÓÃ²ãĞ­Òé
 
+
+#### Òì³£°¸Àı
+
+Á·Ï°´úÂëµØÖ·:    <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/tcpbug>
+
+#### ½â¾ö°¸Àı
+
+LineBasedFrameDecoder +StringEncoder
+
+LineBasedFrameDecoder £º½«»º´æÇøÏûÏ¢ÒÔ»»ĞĞ·û·Ö¸î¡£ÒÔ»»ĞĞ·ûÎª½áÊø±êÖ¾µÄ½âÂëÆ÷¡£
+
+StringEncoder£º½«ÏûÏ¢×ªÎª×Ö·û´®
+
+ Á·Ï°´úÂëµØÖ·:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/tcpbug>
 
 
 
