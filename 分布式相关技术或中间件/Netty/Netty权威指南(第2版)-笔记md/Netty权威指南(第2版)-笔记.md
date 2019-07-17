@@ -41,6 +41,8 @@ Netty(初级篇)
 
   	BIO——>NIO——>AIO
 
+## 入门篇  Netty开发指南
+
 ### 2.NIO入门
 
 2.1 传统BIO
@@ -176,28 +178,38 @@ StringEncoder：将消息转为字符串
 
  练习代码地址:   <https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/tcpbug>
 
+### 5.分割符和定长解码器的应用
+
+
+
+## 中级篇  Netty编解码开发指南
 
 
 
 
 
+## 高级篇 Netty多协议开发和应用
 
 
 
 
 
+## 源码分析篇  Netty功能介绍和源码分析
 
 
 
+## 架构和行业应用篇  Netty高级特性
 
-9. 问题记录
+
+
+## 问题记录篇
 
   1. IO复用模型与信号驱动IO模型的区别？后者是否效率更高？
 
-10. 词汇：
-    unix linux，内核，轮询，套接字，bio nio aio 区别，线程池
+2. 词汇：
+   unix linux，内核，轮询，套接字，bio nio aio 区别，线程池
 
-    线程池：灵活调配线程资源		
+   线程池：灵活调配线程资源		
 
 
   		
