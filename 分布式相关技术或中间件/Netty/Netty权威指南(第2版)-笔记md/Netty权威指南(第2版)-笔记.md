@@ -134,21 +134,21 @@ b.  客户端Handle类编写(继承xxxChannelxxHandler,即：ChannelInboundHandl
 
 ###   4.TCP沾包/拆包问题解决之道
 
-传输打大报文时出现
+传输大报文时出现
 
 #### 沾包与拆包
 
 TCP是一个“流”协议，所谓流，就是没有界限的一串数据。就像河里的水没有分界线。
 
-含义及其导致原因：TCP缓存区划分包规则与业务之间的差异导致
-
-	TCP底层不了解上层业务数据的具体含义，它会根据TCP缓存区的实际情况进行包的划分，所以在业务上认为，一个完整的包会被拆分成多个包发送，或把多个小包封装成一个大的数据包发送。
+沾包拆包解释如下图：
 
 ![.\pictures\TCP沾包拆包图解说明.png](.\pictures\TCP沾包拆包图解说明.png)
 
 #### 发生原因
 
+TCP底层不了解上层业务数据的具体含义，它会根据TCP缓存区的实际情况进行包的划分，所以在业务上认为，一个完整的包会被拆分成多个包发送，或把多个小包封装成一个大的数据包发送。
 
+总结：TCP缓存区划分包规则与业务之间的差异导致。
 
 #### 解决策略
 
@@ -170,7 +170,7 @@ TCP是一个“流”协议，所谓流，就是没有界限的一串数据。�
 
 #### 解决案例
 
-LineBasedFrameDecoder +StringEncoder
+在包尾加入换行符：LineBasedFrameDecoder +StringEncoder
 
 LineBasedFrameDecoder ：将缓存区消息以换行符分割。以换行符为结束标志的解码器。
 
@@ -239,6 +239,42 @@ ObjectDecoder  + ObjectEncoder     （编解码，并可以处理TCP沾包拆包
 Netty Java序列化服务端开发		    (接收解码，发送编码)
 
 Netty Java序列化客户端开发		    (发送编码，接收解码)
+
+###  8.Google Protobuf编解码
+
+Protobuf优点
+
+1）在谷歌内部长期使用，产品成熟度高
+
+2）跨语言，支持多种如C++、Java和Python.（使用protoc.exe代码生成工具，一次定义xxx.proto,即生产需要语言的源代码）
+
+3）编码后消息更小，有利于存储和传输
+
+4）编解码性能高
+
+5）支持不同版本协议的向前兼容
+
+6）支持定义可选字段和必选字段
+
+#### Protobuf入门
+
+1）开发前准备：proto.exe  + protobuf-java-2.5.0.jar
+
+2）编写 xxx.proto文件，用proto.exe 生成对于的java文件
+
+protoc ./SubscribeReqProto.proto --java_out=./
+
+3）编码  对比编码前后数据
+
+练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/d_protobuf_self>
+
+#### Netty的Protobuf使用
+
+练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/d_protobuf_02_netty>
+
+### 9.JBoss Marsshalling编解码
+
+同Protobuf相似，故省略。
 
 ## 高级篇 Netty多协议开发和应用
 
