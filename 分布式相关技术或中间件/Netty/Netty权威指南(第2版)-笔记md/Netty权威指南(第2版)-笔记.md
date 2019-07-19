@@ -280,9 +280,43 @@ protoc ./SubscribeReqProto.proto --java_out=./
 
 ### 10.Http协议开发和应用
 
+#### Netty Http文件服务器示例开发
+
+练习代码地址：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/e_http_01_file/server>
+
+#### Netty Http+XML协议栈示例开发
+
+目前常用业务交互数据栈如：Http+XML，Restful+Json
+
+Jibx
+
+### 11. WebSocket协议开发
+
+#### Http协议的弊端
+
+弊端：http通信完全是由客户端控制的—请求--应答模式；开销大，不适合低延时应用。
+
+WebSocket引入：WebSocke将网络套接字引入客户端和服务端，二者之间通过套接字建立长连接，可互发数据。
+
+#### WebSocket入门
+
+**H5**中引入的WebSocket。**目的在于取代轮询(**比较流行的轮询技术—Comet技术)。
+
+简介：
+
+​	在WebSocket API中，客户端浏览器只需要一个握手的动作，二者之间就建立起一条快速通道，就可以互传数据。WebSocket是基于TPC的双向全双工进行消息传递，即：在同一时刻，即可发送消息，也可接收消息。相比Http的半双工协议，性能得到很大提升。
+
+评价：未来实时Web应用的首选方案。
+
+#### Netty WebSocket 协议开发
 
 
 
+### 12. UDP协议开发
+
+
+
+### 13.  文件传输
 
 
 
@@ -302,6 +336,8 @@ protoc ./SubscribeReqProto.proto --java_out=./
    unix linux，内核，轮询，套接字，bio nio aio 区别，线程池
 
    线程池：灵活调配线程资源		
+
+   异构系统
 
 
   		
