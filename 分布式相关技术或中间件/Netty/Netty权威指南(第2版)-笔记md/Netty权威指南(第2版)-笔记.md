@@ -482,15 +482,17 @@ String编解码是根据JBoss的marshaller。
 
 3）握手和安全机制
 
+检测是否连接成功；白名单；重复登录检测防止资源泄露。
+
 4）心跳检测机制
+
+检测链路的可用性
 
 5）断连重连
 
+练习代码：<https://github.com/MarsIdiot/JavaTest/tree/master/src/netty/g_netty_priavte_protocol>
 
-
-
-
-
+遇到问题：自己想使用netty自带的Jboss Marshalling,不过没成功。以致于引入三方的Jboss Marshalling才编解码成功。(此处需要注意的是，使用Marshalling是为了编解码String类型)
 
 ### 13.  服务端创建
 
