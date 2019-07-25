@@ -510,7 +510,79 @@ String编解码是根据JBoss的marshaller。
 
 ### 13.  服务端创建
 
+##### 时序图
 
+![.\pictures\Nettty服务端创建时序图.png](.\pictures\Nettty服务端创建时序图.png)
+
+说明：
+
+1）图中1：ServerBootStrap采用构建器Bulider模式与其他组件和类交互。如：绑定线程池、服务端Channel、绑定监听端口、创建ChannelPipeline、父Handler（图中5）、子Handler（图中9）。
+
+2）图中2：服务端的线程池一般BossEventLoopGroup和WorkerEventLoopGroup两个EventLoopGroup来进行工作。
+
+具体可参与下面的【补充-Netty线程模型】部分。
+
+简单说来：BossEventLoopGroup负责轮询准备好的Channel，然后交给WorkerEventLoopGroup。EventLoopGroup(此处指WorkerEventLoopGroup)对于多个EventLoop，这个取决于客户端数量，为每个Channle分配一个EventLoop来处理客户端的所有的IO事件，每个EventLoop对应自己的一个Selector，EventLoop负责调用Selector执行轮询操作。
+
+EventLoop不仅处理IO事件，也处理自定义Task和定时任务Task，这样线程模型就形成了统一。避免多线程并发和锁竞争。
+
+4）ChannelPipeline本质上就是一个处理网络事件流的职责链，负责和管理ChannelHandler。
+
+5）父Handler与子Handler
+
+父Handler：BossEventLoopGroup对应的ChannelPipeline下的Handler。处理来自于客户端的很多的Channel。
+
+子Handler：WorkerEventLoopGroup对应的ChannelPipeline下的Handler。负责处理某个具体Channel的具体IO事件。
+
+##### 补充-Netty线程模型
+
+参考：[Netty精粹之基于EventLoop机制的高效线程模型](https://www.cnblogs.com/heavenhome/articles/6554262.html)
+
+1. Selector
+2. EventLoopGroup/EventLoop
+3. ChannelPipeline
+
+0）Reactor模式示意图
+
+![](.\pictures\Reactor模式示意图.png)
+
+1）Selector
+
+Selector是JAVA NIO提供的SelectableChannel多路复用器，它内部维护着三个SelectionKey集合，负责配合select操作将就绪的IO事件分离出来，落地为SelectionKey。
+
+在Netty线程模型中，我认为Selector充当着demultiplexer的角色，而对于SelectionKey我们可以将它看成Reactor模式中的资源。
+
+2）EventLoopGroup/EventLoop
+
+EventLoopGroup是一组EventLoop的抽象。实际上为更好的利用多核CPU资源，Netty实例中一般会有多个EventLoop同时工作，每个EventLoop维护着一个Selector实例。
+
+3）BossEventLoopGroup 和WorkerEventLoopGroup工作流程
+
+在Netty服务器编程中我们需要BossEventLoopGroup和WorkerEventLoopGroup两个EventLoopGroup来进行工作。
+
+通常一个服务端口即一个ServerSocketChannel对应一个Selector和一个EventLoop线程，也就是我们建议BossEventLoopGroup的线程数参数这是为1。
+
+BossEventLoop负责接收客户端的连接并将SocketChannel交给WorkerEventLoopGroup来进行IO处理。
+
+如下所示其工作流图：
+
+![.\pictures\Boss&WorkerGroup工作示意图.png](.\pictures\Boss&WorkerGroup工作示意图.png)
+
+说明：
+
+​	如上图，BossEventLoopGroup通常是一个单线程的EventLoop，EventLoop维护着一个注册ServerSocketChannel的Selector实例，BoosEventLoop不断轮询Selector将连接事件分离出来，通常是OP_ACCEPT事件，然后将accept得到的SocketChannel交给WorkerEventLoopGroup，WorkerEventLoopGroup会由next选择其中一个EventLoop来将这个SocketChannel注册到其维护的Selector并对其后续的IO事件进行处理。
+
+​	在Reactor模式中BossEventLoopGroup主要是对多线程的扩展，而每个EventLoop的实现涵盖IO事件的分离，和分发（Dispatcher）。
+
+4）ChannelPipeline
+
+在Netty中ChannelPipeline维护着一个ChannelHandler的链表队列，每个SocketChannel都有一个维护着一个ChannelPipeline实例，而每个ChannelPipeline实例通常维护着一个ChannelHandler链表队列，由于SocketChannel是和SelectionKey关联的，也就是Reactor模式中的资源，当EventLoop将SelectionKey分离出来的时候会将SelectionKey关联的Channel交给Channel关联的ChannelHandler链来处理，那么ChannelPipeline其实是担任着Reactor模式中的请求处理器这个角色。
+
+​	ChannelPipeline的默认实现是DefaultChannelPipeline，DefaultChannelPipeline本身维护着一个用户不可见的tail和head的ChannelHandler，他们分别位于链表队列的头部和尾部。tail在更上从的部分，而head在靠近网络层的方向。
+
+​	在Netty中关于ChannelHandler有两个重要的接口，ChannelInBoundHandler和ChannelOutBoundHandler。inbound可以理解为网络数据从外部流向系统内部，而outbound可以理解为网络数据从系统内部流向系统外部。
+
+​	用户实现的ChannelHandler可以根据需要实现其中一个或多个接口，将其放入Pipeline中的链表队列中，ChannelPipeline会根据不同的IO事件类型来找到相应的Handler来处理，同时链表队列是责任链模式的一种变种，自上而下或自下而上所有满足事件关联的Handler都会对事件进行处理。
 
 ### 14.客户端创建
 
