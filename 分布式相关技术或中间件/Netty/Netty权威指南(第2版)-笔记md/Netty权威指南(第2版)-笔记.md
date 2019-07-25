@@ -316,7 +316,7 @@ WebSocket引入：WebSocke将网络套接字引入客户端和服务端，二者
 
 绝大多数的私有协议传输层都基于TCP/IP，所以利用Netty的NIO TCP协议栈可以非常方便的进行私有协议的定制和开发。
 
-##### 私有协议介绍
+#### 私有协议介绍
 
 私有协议本质上是厂商内部发展和采用的标准，除非授权，其他厂商一般无权使用。私有协议也称非标准协议，就是未经国际和国家标准化组织采纳和批准。
 
@@ -347,7 +347,7 @@ WebSocket引入：WebSocke将网络套接字引入客户端和服务端，二者
 
 - 除请求和响应消息本身以外，还需携带一些控制和管理的命令，如：链路建立的握手的请求和响应消息、链路检测的心跳消息。
 
-##### Netty协议栈功能设计介绍
+#### Netty协议栈功能设计介绍
 
 Netty协议栈用于内部模块间通信，基于TCP/IP。它是一个类HTTP的应用层协议，但是比传统的标准协议更灵活、轻巧、实用。
 
@@ -472,7 +472,7 @@ String编解码是根据JBoss的marshaller。
 
 统一的消息拦截、接口日志、安全、加解密等可以方便的添加和删除，不需要修改业务逻辑。类似与AOP。
 
-##### Netty协议栈开发
+#### Netty协议栈开发
 
 1）数据结构定义
 
@@ -494,7 +494,7 @@ String编解码是根据JBoss的marshaller。
 
 遇到问题：自己想使用netty自带的Jboss Marshalling,不过没成功。以致于引入三方的Jboss Marshalling才编解码成功。(此处需要注意的是，使用Marshalling是为了编解码String类型)
 
-##### 运行协议栈
+#### 运行协议栈
 
 - 正常场景
 
@@ -510,7 +510,9 @@ String编解码是根据JBoss的marshaller。
 
 ### 13.  服务端创建
 
-##### 时序图
+#### 创建流程
+
+时序图
 
 ![.\pictures\Nettty服务端创建时序图.png](.\pictures\Nettty服务端创建时序图.png)
 
@@ -534,7 +536,7 @@ EventLoop不仅处理IO事件，也处理自定义Task和定时任务Task，这�
 
 子Handler：WorkerEventLoopGroup对应的ChannelPipeline下的Handler。负责处理某个具体Channel的具体IO事件。
 
-##### 补充-Netty线程模型
+#### 补充-Netty线程模型
 
 参考：[Netty精粹之基于EventLoop机制的高效线程模型](https://www.cnblogs.com/heavenhome/articles/6554262.html)
 
@@ -586,11 +588,111 @@ BossEventLoop负责接收客户端的连接并将SocketChannel交给WorkerEventL
 
 ### 14.客户端创建
 
-
-
-
+##### 流程
 
 ## 源码分析篇  Netty功能介绍和源码分析
+
+### 15章  ByteBuf和相关辅助类
+
+#### ByteBuf功能说明
+
+1、Java NIO ByteBuffer的缺点：
+
+1）长度固定。编码时Pojo太大会出现越界问题
+
+2）只有一个标识位置的指针position。读写时需手动调用对应的方法如：flip()、rewind()，且处理不好容易出现问题。
+
+总结：简单说来，就是读操作和写操作共用一个指针导致的限制。由于读和写每次的开始位置position必然是不一样的，导致出现了flip()和rewind()等辅助方法。所以，针对这一点的复杂性，Netty在构建ByteBuf时，读操作和写操作分别拥有自己的position。
+
+3）API功能有限
+
+2、ByteBuf实现原理
+
+1)读写原理
+
+ByteBuf通过两个位置指针来协助缓存区进行读写操作。读操作是readerIndex，写操作是writerIndex。
+
+readerIndex和writerIndex之间是可读取区域，对应Java ByteBuffer的position和limit；
+
+writerIndex和capacity之间是可写的区域，对应Java ByteBuffer的limit和capacity；
+
+详细如下图示例说明：先写N数据，再读M数据，当然M<N。
+
+![.\pictures\netty的ByteBuf读写操作示例图.png](.\pictures\netty的ByteBuf读写操作示例图.png)
+
+2）空间动态扩展原理
+
+put操作前进行空间校验，空间不足时重新创建一个ByteBuf，并将旧ByteBuf复制到新ByteBuf，最后释放旧ByteBuf。
+
+3、ByteBuf的功能简介
+
+1）顺序读写|随机读写
+
+2）readerIndex和writerIndex  
+
+3）discardReadBytes
+
+释放已经读取的区域。不过一般时损失性能而获取空间，使用需谨慎，不会频繁使用。
+
+4）clear操作
+
+不改变缓存区内容，只是重置position,即重置readerIndex和writerIndex  为0。
+
+5）Mark和Reset
+
+Mark+Reset=回滚
+
+Mark是记录当前的position,预防读写回滚的情况。（读写前）
+
+Reset将当前的position设置为Mark记录的position，实现回滚。(读写后)
+
+如clear操作不改变内容，只是修改position。
+
+6）查找
+
+7）Derived  Buffers
+
+类似于数据库视图，主要用以下几个方法。
+
+duplicate()：复制一套position，同其共用缓冲区。
+
+copy()：完全复制，自己的缓冲区。
+
+slice():同duplicate()类似，对应可读子缓存区的区域。
+
+8）转换成标准的ByteBuffer
+
+nioBuffer():复制一套position，同其共用缓冲区。后续如果ByteBuf有扩展行为ByteBuffer感应不到。
+
+#### 源码分析
+
+1）继承关系
+
+![.\pictures\ByteBuf主要功能继承图.png](.\pictures\ByteBuf主要功能继承图.png)
+
+从内存分配的角度，ByteBuf可分为两类。堆内存和直接内存。
+
+2）AbstractByteBuf源码分析
+
+3）AbstractReferenceCountedByteBuf源码分析
+
+从类名可以看出，主要是对引用做计数。类似于JVM内存回收的对象引用计数器，用于跟踪对象的分配和销毁，做自动内存回收。
+
+申请retain()、释放release()。
+
+4）UnpooledHeapByteBuf源码分析
+
+
+
+5）PooledByteBuf源码分析
+
+6）PooledDirectByteBuf源码分析
+
+
+
+### 16章  Channel和Unsafe
+
+
 
 
 
