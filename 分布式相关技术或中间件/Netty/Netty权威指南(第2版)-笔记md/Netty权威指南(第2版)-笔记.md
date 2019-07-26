@@ -670,7 +670,15 @@ nioBuffer():复制一套positions，共用缓冲区。后续如果ByteBuf有扩�
 
 ![.\pictures\ByteBuf主要功能继承图.png](.\pictures\ByteBuf主要功能继承图.png)
 
-从内存分配的角度，ByteBuf可分为两类。堆内存和直接内存。
+a.  从内存分配的角度，ByteBuf可分为两类：堆内存和直接内存。
+
+关于堆内存和直接内存再次不扩展，详情可参阅：[堆外内存(直接内存)](https://www.cnblogs.com/qingchen521/p/9177357.html)
+
+正是因为各有利弊，所以Netty提供了多种ByteBuf供开发者使用，要特别说明的是，ByteBuf的最佳实践是在I/O通信线程的读写缓存区使用DirectByteBuf，后端业务消息的编解码模块使用HeapByteBuf，这样组合可以达到性能最优。
+
+b.  从内存回收角度，ByteBuf可分为两类：基于对象池的ByteBuf和普通ByteBuf。
+
+对象池可循环利用已有的ByteBuf,提升内存利用率，降低频繁GC。但是内存池的管理维护更加复杂，使用也需谨慎。不过，Netty提高了灵活的使用策略供开发者选择。
 
 2）AbstractByteBuf源码分析
 
@@ -682,13 +690,49 @@ nioBuffer():复制一套positions，共用缓冲区。后续如果ByteBuf有扩�
 
 4）UnpooledHeapByteBuf源码分析
 
+UnpooledHeapByteBuf是基于堆内存进行内存分配的字节缓存区，没有基于对象池技术实现，这意味着每次I/O读写都会创建新的UnpooledHeapByteBuf。
 
+相比于PooledHeapByteBuf，其实现原理更简单，也不容易出现内存管理方面的问题。因此，在满足性能的情况下，推荐使用。
 
 5）PooledByteBuf源码分析
 
 6）PooledDirectByteBuf源码分析
 
+#### 相关辅助类功能介绍
 
+1）ByteBufHolder
+
+ByteBufHolder是ByteBuf的容器，为了应对不同的消息体可能需要不同的字段和功能，方便开发者拓展。继承此类就可以按需封装自己的实现。
+
+2）ByteBufAllocator
+
+字节缓冲区分配器。
+
+3）CompositeByteBuf
+
+允许将多个ByteBuf的实例组装到一起，形成一个统一的视图，类似于数据库将多表组装成视图展示。
+
+主要用一个List<CompositeByteBuf.Component>集合类，Component实质就是ByteBuf的封装实现类。Component聚合了ByteBuf对象，维护了在集合中的位置偏移量信息等。
+
+功能上有主要扩展：addComponent()、removeComponent()等。
+
+4）ByteBufUtil
+
+非常有用的工具类，提供了一些列静态方法用于操作ByteBuf。
+
+其中最有用的方法就是对字符串的编码解码：
+
+（1）ByteBuf encodeString(ByteBufAllocator alloc, CharBuffer src, Charset charset)；
+
+对需要编码的字符串src按照指定的字符集charset进行编码，利用指定的ByteBufAllocator 生成一个新的ByteBuf。
+
+（2）String decodeString(ByteBuffer src, Charset charset)；
+
+使用指定的ByteBuffer 和charset进行对ByteBuffer 进行解码，获取解码后的字符串。
+
+（3）String hexDump(ByteBuf buffer, int fromIndex, int length);
+
+将参数ByteBuf的内容以十六进制字符串打印出来，用于输出日志或者打印码流，方便问题定位，提升系统的可维护性。
 
 ### 16章  Channel和Unsafe
 
