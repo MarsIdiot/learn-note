@@ -602,7 +602,7 @@ BossEventLoop负责接收客户端的连接并将SocketChannel交给WorkerEventL
 
 2）只有一个标识位置的指针position。读写时需手动调用对应的方法如：flip()、rewind()，且处理不好容易出现问题。
 
-总结：简单说来，就是读操作和写操作共用一个指针导致的限制。由于读和写每次的开始位置position必然是不一样的，导致出现了flip()和rewind()等辅助方法。所以，针对这一点的复杂性，Netty在构建ByteBuf时，读操作和写操作分别拥有自己的position。
+总结：本质上，就是读操作和写操作共用一个指针导致的限制。由于读和写每次的开始位置position必然是不一样的，导致出现了flip()和rewind()等辅助方法。所以，针对这一点的复杂性及局限性，Netty在构建ByteBuf时，读操作和写操作分别拥有自己的position。
 
 3）API功能有限
 
@@ -632,21 +632,21 @@ put操作前进行空间校验，空间不足时重新创建一个ByteBuf，并�
 
 3）discardReadBytes
 
-释放已经读取的区域。不过一般时损失性能而获取空间，使用需谨慎，不会频繁使用。
+释放已经读取的区域。以损失性能而获取空间，使用需谨慎，不会频繁使用。
 
 4）clear操作
 
-不改变缓存区内容，只是重置position,即重置readerIndex和writerIndex  为0。
+不改变缓存区内容，只是重置positions,即重置readerIndex和writerIndex  为0。
 
 5）Mark和Reset
 
 Mark+Reset=回滚
 
-Mark是记录当前的position,预防读写回滚的情况。（读写前）
+Mark是记录当前的positions,预防读写回滚的情况。（读写前）
 
-Reset将当前的position设置为Mark记录的position，实现回滚。(读写后)
+Reset将当前的positions设置为Mark记录的positions，实现回滚。(读写后)
 
-如clear操作不改变内容，只是修改position。
+如clear操作不改变内容，只是修改positions。
 
 6）查找
 
@@ -654,15 +654,15 @@ Reset将当前的position设置为Mark记录的position，实现回滚。(读写
 
 类似于数据库视图，主要用以下几个方法。
 
-duplicate()：复制一套position，同其共用缓冲区。
+duplicate()：复制一套positions，共用缓冲区。
 
-copy()：完全复制，自己的缓冲区。
+copy()：完全复制，拥有自己的缓冲区。
 
-slice():同duplicate()类似，对应可读子缓存区的区域。
+slice():复制对应可读子缓存区的区域，共用缓冲区。
 
 8）转换成标准的ByteBuffer
 
-nioBuffer():复制一套position，同其共用缓冲区。后续如果ByteBuf有扩展行为ByteBuffer感应不到。
+nioBuffer():复制一套positions，共用缓冲区。后续如果ByteBuf有扩展行为ByteBuffer感应不到。
 
 #### 源码分析
 
