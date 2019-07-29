@@ -207,7 +207,7 @@ TCP以流的方式进行数据传输，上层应用协议为了对消息进行�
 客户端还是服务端，都需要添加解码器。这个工具业务需要进行选择。
 
 	对于客户端来说：发送消息不会触发解码器，而在接收服务器端消息是会触发解码器。
-	
+
 	对于服务端来说：接收服务端消息触发到解码器，回复消息时不会触发解码器。   
 
 总之，对于客户端还是服务端而言，只有接收他端的消息才会触发解码器。
@@ -736,6 +736,139 @@ ByteBufHolder是ByteBuf的容器，为了应对不同的消息体可能需要不
 
 ### 16章  Channel和Unsafe
 
+类似于NIO的Channel，Netty提供了自己的Channel和子类实现，用于异步I/O操作和其他相关操作。
+
+Unsafe是一个内部接口，聚合在Channel中协助进行网络的读写相关操作。因为其设计初衷就是Channel的内部辅助类，不应该被Netty框架调用，所以命名为Unsafe。
+
+#### Channel功能说明
+
+io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能。包含但不限于网络的读写，链路的连接、关闭，获取通信双方的网络地址等。它也包含了Netty框架相关的一些功能，包含获取该Channel的EventLoop，获取缓冲分配器ByteBufAllocator和pipeline等。
+
+1）工作原理
+
+为何不直接使用JDK NIO原生Channel?
+
+- 原生的没有统一的Channel接口供业务开发
+
+  对于用户而言，没有统一的操作视图，使用起来不方便。
+
+- 原生的同样需要对其ServerSocketChannel和SocketChannel抽象类进行实现功能和继承拓展功能难度很大，其工作量和重新开发一个新的Channle功能类出不多。
+
+- Netty的Channel需要能够跟Netty的整体架构融合在一起。
+
+  如I/O模型、基于ChannelPipeline的定制模型，以及基于元数据描述配置化的TCP参数等。这些原生Channle都没提供，需要重新封装。
+
+- 自定义的功能实现更灵活
+
+它的设计原理比较简单，但功能却比较复杂，Channel接口主要设计理念如下：
+
+- 采用Facade模式进行统一封装
+
+  网络IO操作及其关联操作。
+
+- 接口的定义尽量大而全
+
+  为SocketChannel和ServerSocketChannel提供统一的视图，由不同子类实现不同的功能，公共功能抽象在父类中实现，最大程度实现功能和借口的重用。
+
+- 将相关的功能类聚合在Channel中
+
+  聚合而非包含，由Channel统一负责分配和调度，功能实现更加灵活。
+
+
+2）功能介绍
+
+网络I/0操作
+
+（1)Channel read()
+
+从当前的Channel 读取数据到第一个inbound缓存区中，如果被成功读取，则触发ChannelHandler.channelRead(ChannelHandlerContext  ctx, Object o)事件，读取操作API调用完成后，紧接着会触发ChannelHandler.channelReadAndComplete(ChannelHandlerContext  ctx)事件，这样业务的ChannelHandler可以决定是否继续读取数据。如果由读操作被挂起，则后续的读操作会被忽略。
+
+（2)ChannelFuture write(Object msg)
+
+请求将当前的msg通过ChannelPipeline写入到目标Channel中。需要注意的是，write操作只是将消息存入到消息发送环形数组中，并没有被真正发送，只有调用flush操作才会被写入Channel中，发送给对方。
+
+（3)ChannelFuture write(Object msg,  ChannelPromise promise)
+
+功能与write(Object msg)类似，但是携带了ChannelPromise参数负责设置写入操作的结果。
+
+（4)ChannelFuture writeAndFlush(Object msg, ChannelPromise var2)
+
+功能与（3）相同，但是它会把消息写入然后发送，相当于write和flush操作的组合。
+
+（5)ChannelFuture writeAndFlush(Object msg)
+
+功能与（4）相同，但是没有携带ChannelPromise 。
+
+（6)Channel flush()
+
+将环形数组里的消息全部写入到目标Channel中，发送给通信对方。
+
+（7)ChannelFuture close(ChannelPromise var1)
+
+主动关闭当前连接，通过ChannelPromise 设置操作结果并进行结果通知。无论操作是否成功，都可以通过ChannelPromise获取操作结果。
+
+该操作会级联触发ChannlePipeline中所有的ChannelHander的ChannelHandler.close(ChannelHandlerContext  ctx, ChannelPromise  var2）事件。
+
+（8)ChannelFuture connect(SocketAddress remoteAddress)
+
+连接指定的服务端地址。
+
+如果因连接超时而失败，ChannelFuture 中的操作结果就会是ConnectTimeoutException;
+
+如果连接被拒绝，操作结果为ConnectExceptio。
+
+同样，该方法会级联触发ChannlePipeline中所有的ChannelHander的connect()。
+
+（9)ChannelFuture bind(SocketAddress localAddress)
+
+绑定制定的本地地址。
+
+（10)ChannelConfig config()
+
+获取当前Channel的配置信息，如：CONNECT_TIMEOUT_MILLIS。
+
+（11)boolean isOpen()
+
+当前Channel是否已打开。
+
+（12)boolean isRegistered()
+
+当前Channel是否已经注册到EventLoop上。
+
+（13)boolean isActive()
+
+当前Channel是否已激活。
+
+（14)ChannelMetadata metadata()
+
+获取当前Channel的元数据，包括TCP参数配置等。
+
+其他重要常用API
+
+（1)EventLoop eventLoop()
+
+获取Channel注册的EventLoop 。
+
+（2)ChannelMetadata metadata()
+
+常用
+
+（3)Channel parent()
+
+对于服务端而言，其父Channel 为空，对客户端而言，其父Channel 就是创建它的ServerSocketChannel。
+
+#### Channle源码分析
+
+
+
+#### Unsafe功能说明
+
+
+
+
+
+#### Unsafe源码分析
+
 
 
 
@@ -758,7 +891,7 @@ ByteBufHolder是ByteBuf的容器，为了应对不同的消息体可能需要不
 
 
 
-  		
+
   		
   		
   		
