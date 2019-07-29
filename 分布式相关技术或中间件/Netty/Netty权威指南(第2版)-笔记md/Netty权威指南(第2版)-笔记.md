@@ -602,7 +602,7 @@ BossEventLoop负责接收客户端的连接并将SocketChannel交给WorkerEventL
 
 2）只有一个标识位置的指针position。读写时需手动调用对应的方法如：flip()、rewind()，且处理不好容易出现问题。
 
-总结：本质上，就是读操作和写操作共用一个指针导致的限制。由于读和写每次的开始位置position必然是不一样的，导致出现了flip()和rewind()等辅助方法。所以，针对这一点的复杂性及局限性，Netty在构建ByteBuf时，读操作和写操作分别拥有自己的position。
+总结：本质上，就是读操作和写操作共用一个指针导致的限制。由于读和写每次的开始位置position必然是不一样的(初始化时除外)，导致出现了flip()和rewind()等辅助方法。所以，针对这一点的复杂性及局限性，Netty在构建ByteBuf时，读操作和写操作分别拥有自己的position。
 
 3）API功能有限
 
@@ -672,7 +672,7 @@ nioBuffer():复制一套positions，共用缓冲区。后续如果ByteBuf有扩�
 
 a.  从内存分配的角度，ByteBuf可分为两类：堆内存和直接内存。
 
-关于堆内存和直接内存再次不扩展，详情可参阅：[堆外内存(直接内存)](https://www.cnblogs.com/qingchen521/p/9177357.html)
+关于堆内存和直接内存在此不扩展，详情可参阅：[堆外内存(直接内存)](https://www.cnblogs.com/qingchen521/p/9177357.html)
 
 正是因为各有利弊，所以Netty提供了多种ByteBuf供开发者使用，要特别说明的是，ByteBuf的最佳实践是在I/O通信线程的读写缓存区使用DirectByteBuf，后端业务消息的编解码模块使用HeapByteBuf，这样组合可以达到性能最优。
 
