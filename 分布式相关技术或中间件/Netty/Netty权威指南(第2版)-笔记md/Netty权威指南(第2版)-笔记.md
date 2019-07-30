@@ -904,7 +904,7 @@ Netty是基于事件驱动的，I/O操作时驱动事件会在ChannelPipeline中
 
 ~~~~java
 /**
-*SelectableChannel为NioSocketChannel和NioServerSocketChannel的公共父类，用于设置SelectableChannel参数和进行I/O操作；
+*SelectableChannel为NioSocketChannel和NioServerSocketChannel的公共父类，属于原生JDK NIO，用于设置SelectableChannel参数和进行I/O操作；
 */
 private final SelectableChannel ch;
 
@@ -940,9 +940,67 @@ private SocketAddress requestedRemoteAddress;
 
 （2）核心API源码分析
 
-Channle的注册：
+方法一：Channle的注册：
 
-设置网路操作位位处理读操作之前
+~~~java
+protected void doRegister() throws Exception {
+    boolean selected = false;//标识注册是否成功
+
+    while(true) {
+        try {
+            //this.javaChannel()指的是SelectableChannel；
+            this.selectionKey = this.javaChannel().register(this.eventLoop().selector, 0, this);
+            return;
+        } catch (CancelledKeyException var3) {//当前注册返回的selectionKey已经被取消，则抛出该异常
+            if (selected) {
+                throw var3;
+            }
+			
+            //将已经取消的selectionKey从多路复用器中删除；
+            this.eventLoop().selectNow();
+            selected = true;
+        }
+    }
+}
+
+在注册是，需要指定监听的网络操作为来表示Channel对哪几类网络事件感兴趣，而JDK NIO中SelectionKey类定义了一下几种：
+ public static final int OP_READ = 1 << 0;//对应十进制1   （1*2）^0 = 1  
+ public static final int OP_WRITE = 1 << 2;//4 
+ public static final int OP_CONNECT = 1 << 3;//8  客户端连接服务端操作位
+ public static final int OP_ACCEPT = 1 << 4;//16  服务端接收客户端连接操作位
+此处注册的是0，说明对任何事件都不感兴趣，仅仅完成注册操作。
+值得注意的是：可以通过注册成功返回的selectionKey从多路复用器中获取Channel对象。
+~~~
+
+方法二：设置网路操作位为读（处理读操作之前）：
+
+~~~java
+protected void doBeginRead() throws Exception {
+    //Channel是否关闭
+    if (!this.inputShutdown) {
+        SelectionKey selectionKey = this.selectionKey;
+        //Channel当前状态是否正常
+        if (selectionKey.isValid()) {
+            this.readPending = true;
+            //当前位操作
+            int interestOps = selectionKey.interestOps();
+            /*
+            将当前位操作与读操作进行按位与操作，如果等于0，表示当前没有设置读操作位。
+            此处只有当interestOps不为0，才会设置位操作。
+            */
+            if ((interestOps & this.readInterestOp) == 0) {
+                //设置位操作
+                selectionKey.interestOps(interestOps | this.readInterestOp);
+            }
+
+        }
+    }
+}
+
+补充说明：关于位操作
+&  两个为真才为真  1 & 0 = 0；0 & 1 = 0；1 & 1 = 1；0 & 0 = 0
+|  一个为真就为真  1 | 0 = 1；0 | 1 = 1；1 | 1 = 1；0 | 0 = 0；
+~~~
 
 
 
