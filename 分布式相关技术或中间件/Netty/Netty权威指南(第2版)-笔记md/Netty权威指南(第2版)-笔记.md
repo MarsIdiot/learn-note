@@ -868,7 +868,7 @@ channelReadAndComplete()放行方法：ctx.fireChannelReadComplete();
 
 Channel的子类非常多，继承关系复杂。所以此处以NioSocketChannel和NioServerSocketChannel作为重点来展开。
 
-1）继承关系
+##### 1）继承关系
 
 NioSocketChannel继承实现关系图：
 
@@ -878,7 +878,7 @@ NioServerSocketChannel继承实现关系图：
 
 ![.\pictures\NioServerSocketChannel继承实现关系图.png](.\pictures\NioServerSocketChannel继承实现关系图.png)
 
-2）AbstractChannel源码分析
+##### 2）AbstractChannel源码分析
 
 （1）成员变量分析
 
@@ -898,7 +898,7 @@ Netty是基于事件驱动的，I/O操作时驱动事件会在ChannelPipeline中
 
 这中类似于AOP的自定义切面，性能更高，但是功能却基本等价。
 
-3）AbstractNioChannel源码分析
+##### 3）AbstractNioChannel源码分析
 
 （1）成员变量分析
 
@@ -1002,9 +1002,98 @@ protected void doBeginRead() throws Exception {
 |  一个为真就为真  1 | 0 = 1；0 | 1 = 1；1 | 1 = 1；0 | 0 = 0；
 ~~~
 
+##### 4）AbstractNioByteChannel源码分析
+
+主要成员变量Runnable flushTask;用来继续写半包消息。
+
+主要方法 doWrite(ChannelOutboundBuffer in)；用于在循环体数组发送消息、清除半包标识等。
+
+发送对象为：ByteBuf或FileRegion。
+
+##### 5）AbstractNioMessageChannel源码分析
+
+无成员变量，主要方法 doWrite(ChannelOutboundBuffer in) ；用于在循环体数组发送消息、清除半包标识等。
+
+发送对象为：Pojo;
+
+##### 6）NioServerSocketChannel源码分析
+
+（1）成员变量
+
+~~~java
+/*
+*包含客户端的NioSocketChannel信息集合；
+*/
+private static final ChannelMetadata METADATA = new ChannelMetadata(false);
+private static final SelectorProvider DEFAULT_SELECTOR_PROVIDER = SelectorProvider.provider();
+/*
+*用于配置ServerSocketChannel的TCP参数；
+*/
+private final ServerSocketChannelConfig config;
 
 
+/*
+*静态方法开启一个ServerSocketChannel；
+*/
+ private static java.nio.channels.ServerSocketChannel newSocket(SelectorProvider provider) {
+        try {
+            return provider.openServerSocketChannel();
+        } catch (IOException var2) {
+            throw new ChannelException("Failed to open a server socket.", var2);
+        }
+    }
 
+~~~
+
+（2）主要API
+
+方法一：doBind()  绑定端口
+
+~~~java
+protected void doBind(SocketAddress localAddress) throws Exception {
+    this.javaChannel().socket().bind(localAddress, this.config.getBacklog());
+}
+~~~
+
+服务端在进行端口绑定的时候，可以指定backlog,表示允许客户端排队的最大长度。
+
+方法二：doReadMessages()
+
+对于NioServerSocketChannel而言，它的读取操作就是接收客户端的连接，创建NioSocketChannel对象。
+
+~~~java
+protected int doReadMessages(List<Object> buf) throws Exception {
+    
+    //接收客户端新的连接
+    SocketChannel ch = this.javaChannel().accept();
+
+    try {
+        if (ch != null) {
+            //创建新的NioSocketChannel并加入到List<Object> buf)中；
+            buf.add(new NioSocketChannel(this, ch));
+            return 1;
+        }
+    } catch (Throwable var6) {
+        logger.warn("Failed to create a new channel from an accepted socket.", var6);
+
+        try {
+            ch.close();
+        } catch (Throwable var5) {
+            logger.warn("Failed to close a socket.", var5);
+        }
+    }
+
+    return 0;
+}
+~~~
+
+##### 7）NioSocketChannel源码分析
+
+（1）连接操作
+
+（2）写半包
+
+（3）读写操作
 
 #### Unsafe功能说明
 
