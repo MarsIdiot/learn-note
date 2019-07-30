@@ -766,6 +766,8 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
   网络IO操作及其关联操作。
 
+  [Facade模式参考](<https://www.cnblogs.com/skywang/articles/1375447.html>)
+
 - 接口的定义尽量大而全
 
   为SocketChannel和ServerSocketChannel提供统一的视图，由不同子类实现不同的功能，公共功能抽象在父类中实现，最大程度实现功能和借口的重用。
@@ -774,14 +776,21 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
   聚合而非包含，由Channel统一负责分配和调度，功能实现更加灵活。
 
-
 2）功能介绍
 
-网络I/0操作
+**网络I/0操作**
 
 （1)Channel read()
 
-从当前的Channel 读取数据到第一个inbound缓存区中，如果被成功读取，则触发ChannelHandler.channelRead(ChannelHandlerContext  ctx, Object o)事件，读取操作API调用完成后，紧接着会触发ChannelHandler.channelReadAndComplete(ChannelHandlerContext  ctx)事件，这样业务的ChannelHandler可以决定是否继续读取数据。如果由读操作被挂起，则后续的读操作会被忽略。
+从当前的Channel 读取数据到第一个inbound缓存区中，如果被成功读取，则触发ChannelHandler.channelRead(ChannelHandlerContext  ctx, Object o)事件，读取操作API调用完成后，紧接着会触发ChannelHandler.channelReadAndComplete(ChannelHandlerContext  ctx)事件，这样业务的ChannelHandler可以决定是否继续读取数据。**如果有读操作被挂起，则后续的读操作会被忽略。**
+
+**此处值得注意的是：ChannelHandler的执行顺序。**
+
+读取顺序：ChannelHandler1.channelRead()—>ChannelHandler2.channelRead()—>ChannelHandler1.channelReadAndComplete()—>ChannelHandler2.channelReadAndComplete()
+
+channelRead()放行方法：ctx.fireChannelRead(msg);
+
+channelReadAndComplete()放行方法：ctx.fireChannelReadComplete();
 
 （2)ChannelFuture write(Object msg)
 
@@ -843,7 +852,7 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
 获取当前Channel的元数据，包括TCP参数配置等。
 
-其他重要常用API
+**其他重要常用API**
 
 （1)EventLoop eventLoop()
 
@@ -851,13 +860,91 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
 （2)ChannelMetadata metadata()
 
-常用
-
 （3)Channel parent()
 
 对于服务端而言，其父Channel 为空，对客户端而言，其父Channel 就是创建它的ServerSocketChannel。
 
 #### Channle源码分析
+
+Channel的子类非常多，继承关系复杂。所以此处以NioSocketChannel和NioServerSocketChannel作为重点来展开。
+
+1）继承关系
+
+NioSocketChannel继承实现关系图：
+
+![.\pictures\NioSocketChannel继承实现关系图.png](.\pictures\NioSocketChannel继承实现关系图.png)
+
+NioServerSocketChannel继承实现关系图：
+
+![.\pictures\NioServerSocketChannel继承实现关系图.png](.\pictures\NioServerSocketChannel继承实现关系图.png)
+
+2）AbstractChannel源码分析
+
+（1）成员变量分析
+
+类变量
+
+非静态变量
+
+​	Handle estimatorHandle；用于预测下一个报文的大小，它基于之前数据的采样进行分析预测。
+
+​	其他：聚合封装了各种功能。
+
+（2）核心API源码分析
+
+在进行网络操作读写时，直接调用ChannelPipeline中对应的事件方法。
+
+Netty是基于事件驱动的，I/O操作时驱动事件会在ChannelPipeline中传播，由ChannelPipeline对应的ChannelHander对事件进行来拦截和处理，不关心的事件可以忽略。
+
+这中类似于AOP的自定义切面，性能更高，但是功能却基本等价。
+
+3）AbstractNioChannel源码分析
+
+（1）成员变量分析
+
+~~~~java
+/**
+*SelectableChannel为NioSocketChannel和NioServerSocketChannel的公共父类，用于设置SelectableChannel参数和进行I/O操作；
+*/
+private final SelectableChannel ch;
+
+/**
+*代表JDK SelectionKey的OP_READ;
+*/
+protected final int readInterestOp;
+
+/**
+*该SelectionKey是Channel注册到EvemntLoop后返回的选择键；
+由于Channel会面临多业务线程的并发，为了让SelectionKey改变具有可见性，所以用volatile修饰；
+*/
+volatile SelectionKey selectionKey;
+
+private volatile boolean inputShutdown;
+private volatile boolean readPending;
+
+/**
+*代表连接操作结果
+*/
+private ChannelPromise connectPromise;
+
+/**
+*代表连接超时定时器ScheduledFuture
+*/
+private ScheduledFuture<?> connectTimeoutFuture;
+
+/**
+*代表对方通信的地址信息
+*/
+private SocketAddress requestedRemoteAddress;
+~~~~
+
+（2）核心API源码分析
+
+Channle的注册：
+
+设置网路操作位位处理读操作之前
+
+
 
 
 
@@ -892,7 +979,7 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
 
 
-  		
+
   		
   		
   		
