@@ -1101,11 +1101,104 @@ protected int doReadMessages(List<Object> buf) throws Exception {
 
 #### Unsafe功能说明
 
+是Channel接口分辅助类接口。实际的网络I/O读写操作都是由Unsafe功能类负责实现的。
 
+Unsafe API功能如下：
 
+~~~java
+public interface Unsafe {
+    SocketAddress localAddress();
 
+    SocketAddress remoteAddress();
+
+    void register(EventLoop var1, ChannelPromise var2);
+
+    void bind(SocketAddress var1, ChannelPromise var2);
+
+    void connect(SocketAddress var1, SocketAddress var2, ChannelPromise var3);
+
+    void disconnect(ChannelPromise var1);
+
+    void close(ChannelPromise var1);
+
+    void closeForcibly();
+
+    void deregister(ChannelPromise var1);
+
+    void beginRead();
+
+    void write(Object var1, ChannelPromise var2);
+
+    void flush();
+
+    ChannelPromise voidPromise();
+
+    ChannelOutboundBuffer outboundBuffer();
+}
+~~~
 
 #### Unsafe源码分析
+
+##### 1）继承关系图
+
+![.\pictures\Unsafe继承实现关系图.png](.\pictures\Unsafe继承实现关系图.png)
+
+##### 2）AbstractUnsafe源码分析
+
+（1）register方法
+
+register方法主要用于把当前Unsafe对应的Channel注册到EventLoop的多路复用器上，然后调用DefaultChannelPipeline的fireChannelRegistered()，如果Channel被激活，则调用DefaultChannelPipeline的fireChannelActive()。
+
+值得注意的是，注册的时候首先判断当前所在的线程是否是当前Channel对应的NioEventloop线程，如果是同一线程，则不存在多线程并发的情况，直接注册；如果是由用户线程或其他线程发起的注册操作，则将注册操作封装成Runnable,放到当前Channel对应的NioEventloop任务队列中执行。
+
+注意：**如果直接执行register0()，会存在多线程并发操作Channel的问题**。所以，如果不是同一线程，则需要让其放在该Channel对的NioEventloop线程中去执行。
+
+~~~~java
+public final void register(EventLoop eventLoop, final ChannelPromise promise) {
+    //一系列判断
+    if (eventLoop == null) {
+        throw new NullPointerException("eventLoop");
+    } else if (AbstractChannel.this.isRegistered()) {
+        promise.setFailure(new IllegalStateException("registered to an event loop already"));
+    } else if (!AbstractChannel.this.isCompatible(eventLoop)) {
+        promise.setFailure(new IllegalStateException("incompatible event loop type: " + eventLoop.getClass().getName()));
+    } else {
+        /**
+        *注册开始
+        */
+        
+        AbstractChannel.this.eventLoop = eventLoop;
+        //判断当前线程是否属于当前Channel对应的NioEventLoop线程
+        if (eventLoop.inEventLoop()) {
+            this.register0(promise);
+        } else {
+            try {
+                eventLoop.execute(new OneTimeTask() {
+                    public void run() {
+                        AbstractUnsafe.this.register0(promise);
+                    }
+                });
+            } catch (Throwable var4) {
+                AbstractChannel.logger.warn("Force-closing a channel whose registration task was not accepted by an event loop: {}", AbstractChannel.this, var4);
+                this.closeForcibly();
+                AbstractChannel.this.closeFuture.setClosed();
+                this.safeSetFailure(promise, var4);
+            }
+        }
+
+    }
+}
+~~~~
+
+
+
+##### 3）AbstractNioUnsafe源码分析
+
+
+
+##### 4）NioByteUnsafe源码分析
+
+
 
 
 
