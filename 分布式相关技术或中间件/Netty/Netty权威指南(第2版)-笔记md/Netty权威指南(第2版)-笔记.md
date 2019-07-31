@@ -870,7 +870,7 @@ channelReadAndComplete()放行方法：ctx.fireChannelReadComplete();
 
 Channel的子类非常多，继承关系复杂。所以此处以NioSocketChannel和NioServerSocketChannel作为重点来展开。
 
-##### 1）继承关系
+**1）继承关系**
 
 NioSocketChannel继承实现关系图：
 
@@ -880,7 +880,7 @@ NioServerSocketChannel继承实现关系图：
 
 ![.\pictures\NioServerSocketChannel继承实现关系图.png](.\pictures\NioServerSocketChannel继承实现关系图.png)
 
-##### 2）AbstractChannel源码分析
+**2）AbstractChannel源码分析**
 
 （1）成员变量分析
 
@@ -900,7 +900,7 @@ Netty是基于事件驱动的，I/O操作时驱动事件会在ChannelPipeline中
 
 这种类似于AOP的自定义切面，性能更高，但是功能却基本等价。
 
-##### 3）AbstractNioChannel源码分析
+**3）AbstractNioChannel源码分析**
 
 （1）成员变量分析
 
@@ -1004,7 +1004,7 @@ protected void doBeginRead() throws Exception {
 |  一个为真就为真  1 | 0 = 1；0 | 1 = 1；1 | 1 = 1；0 | 0 = 0；
 ~~~
 
-##### 4）AbstractNioByteChannel源码分析
+**4）AbstractNioByteChannel源码分析**
 
 主要成员变量Runnable flushTask;用来继续写半包消息。
 
@@ -1012,13 +1012,13 @@ protected void doBeginRead() throws Exception {
 
 发送对象为：ByteBuf或FileRegion。
 
-##### 5）AbstractNioMessageChannel源码分析
+**5）AbstractNioMessageChannel源码分析**
 
 无成员变量，主要方法 doWrite(ChannelOutboundBuffer in) ；用于在循环体数组发送消息、清除半包标识等。
 
 发送对象为：Pojo;
 
-##### 6）NioServerSocketChannel源码分析
+**6）NioServerSocketChannel源码分析**
 
 （1）成员变量
 
@@ -1091,7 +1091,7 @@ protected int doReadMessages(List<Object> buf) throws Exception {
 }
 ~~~
 
-##### 7）NioSocketChannel源码分析
+**7）NioSocketChannel源码分析**
 
 （1）连接操作
 
@@ -1139,11 +1139,11 @@ public interface Unsafe {
 
 #### Unsafe源码分析
 
-##### 1）继承关系图
+**1）继承关系图**
 
 ![.\pictures\Unsafe继承实现关系图.png](.\pictures\Unsafe继承实现关系图.png)
 
-##### 2）AbstractUnsafe源码分析
+**2）AbstractUnsafe源码分析**
 
 （1）register方法
 
@@ -1171,7 +1171,7 @@ public final void register(EventLoop eventLoop, final ChannelPromise promise) {
         //判断当前线程是否属于当前Channel对应的NioEventLoop线程
         if (eventLoop.inEventLoop()) {
             this.register0(promise);
-        } else {
+        } else {//如果不是则将当前需要执行的操作放到NioEventLoop任务队列中执行。
             try {
                 eventLoop.execute(new OneTimeTask() {
                     public void run() {
@@ -1190,19 +1190,51 @@ public final void register(EventLoop eventLoop, final ChannelPromise promise) {
 }
 ~~~~
 
+（2）bind方法
+
+用于绑定指定的端口，对于服务端，用于绑定监听端口，可以设置backlog参数；对于客户端，可以指定本地地址。
+
+（3）disconnect方法
+
+用于客户端或服务端主动关闭连接。
+
+（4）close方法
+
+在关闭链路之前需要先判断是否处于刷新状态，如果是说明还有消息未发送出去，需要等到所有消息发送完成再关闭链路，因此，将关闭操作封装成Runnable稍后再执行。
+
+（5）write方法
+
+实际上是将消息添加到环形发送数组（就是一个缓存区）中，并不是真正的写Channel。
+
+（6）flush方法
+
+将发送缓存区待发送消息全部写入到Channel中，并发送给通信对方。
+
+**3）AbstractNioUnsafe源码分析**
+
+（1）connect方法
+
+首先获取当前的连接状态进行缓存，然后发起连接操作。
+
+（2）finishConnect方法
+
+客户端接收到服务端的TCP握手应答消息，通过SocketChannel的finishConnect方法对连接结果进行判断。
+
+ **4）NioByteUnsafe源码分析**
+
+（1）read方法
+
+### 17章   ChannlePipleline  和ChannelHandler
 
 
-##### 3）AbstractNioUnsafe源码分析
 
 
 
-##### 4）NioByteUnsafe源码分析
+18章   EventLoop和EventLoopGroup
 
 
 
-
-
-
+19章   Fulture和Promise  
 
 ## 架构和行业应用篇  Netty高级特性
 
