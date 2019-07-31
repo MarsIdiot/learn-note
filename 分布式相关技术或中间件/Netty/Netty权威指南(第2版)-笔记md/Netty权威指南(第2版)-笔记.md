@@ -1226,7 +1226,23 @@ public final void register(EventLoop eventLoop, final ChannelPromise promise) {
 
 ### 17章   ChannlePipleline  和ChannelHandler
 
+Netty定制出 ChannlePipleline和ChannelHandler来完成对事件的拦截和业务逻辑处理，达到类似于AOP的切面式拦截效果。
 
+Channel中的数据管道封装抽象为ChannlePipleline，消息在ChannlePipleline中流动和传递。ChannlePipleline持有I/O操作的拦截器链表，由ChannelHandler来进行具体的I/O操作。
+
+#### ChannlePipleline功能说明
+
+ChannlePipleline是ChannelHandler的容器，负责对ChannelHandler的管理和事件拦截与调度。
+
+#### ChannlePipleline源码分析
+
+
+
+#### ChannelHandler功能说明
+
+
+
+#### ChannelHandler源码分析
 
 
 
