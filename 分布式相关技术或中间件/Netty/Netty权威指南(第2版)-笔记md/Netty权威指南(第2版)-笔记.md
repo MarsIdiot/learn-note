@@ -101,12 +101,14 @@ b. 服务端Handle类编写(继承xxxChannelxxHandler，即：SimpleChannelInbou
 
 补充：关于服务端关闭通信通道的优化建议
 
-      1. 第一种方法(推荐)：写一个空的buf，并刷新写出区域。完成后关闭sock channel连接。
-         ​	?	ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-      2. 第二种方法：在client端关闭channel连接，这样的话，会触发两次channelReadComplete方法。
-         ?	ctx.flush(); 
-      3. 第三种：改成这种写法也可以，但是这中写法，没有第一种方法的好。
-         ctx.flush().close().sync(); 		
+```java
+  1. 第一种方法(推荐)：写一个空的buf，并刷新写出区域。完成后关闭sock channel连接。
+   	ctx.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+  2. 第二种方法：在client端关闭channel连接，这样的话，会触发两次channelReadComplete方法。
+    ctx.flush(); 
+  3. 第三种：改成这种写法也可以，但是这中写法，没有第一种方法的好。
+     ctx.flush().close().sync(); 		
+```
 
 #### 2.客户端开发
 
@@ -770,7 +772,7 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
 - 接口的定义尽量大而全
 
-  为SocketChannel和ServerSocketChannel提供统一的视图，由不同子类实现不同的功能，公共功能抽象在父类中实现，最大程度实现功能和借口的重用。
+  为SocketChannel和ServerSocketChannel提供统一的视图，由不同子类实现不同的功能，公共功能抽象在父类中实现，最大程度实现功能和接口的重用。
 
 - 将相关的功能类聚合在Channel中
 
@@ -782,7 +784,7 @@ io.netty.channel.Channel是Netty网络操作抽象类，它聚合了一组功能
 
 （1)Channel read()
 
-从当前的Channel 读取数据到第一个inbound缓存区中，如果被成功读取，则触发ChannelHandler.channelRead(ChannelHandlerContext  ctx, Object o)事件，读取操作API调用完成后，紧接着会触发ChannelHandler.channelReadAndComplete(ChannelHandlerContext  ctx)事件，这样业务的ChannelHandler可以决定是否继续读取数据。**如果有读操作被挂起，则后续的读操作会被忽略。**
+从当前的Channel 读取数据到第一个inbound缓存区中，如果被成功读取，则触发ChannelHandler.channelRead(ChannelHandlerContext  ctx, Object o)事件，一系列的读取操作API调用完成后，紧接着会触发一系列的ChannelHandler.channelReadAndComplete(ChannelHandlerContext  ctx)事件，这样业务的ChannelHandler可以决定是否继续读取数据。**如果有读操作被挂起，则后续的读操作会被忽略。**
 
 **此处值得注意的是：ChannelHandler的执行顺序。**
 
@@ -824,13 +826,13 @@ channelReadAndComplete()放行方法：ctx.fireChannelReadComplete();
 
 如果因连接超时而失败，ChannelFuture 中的操作结果就会是ConnectTimeoutException;
 
-如果连接被拒绝，操作结果为ConnectExceptio。
+如果连接被拒绝，操作结果为ConnectException。
 
 同样，该方法会级联触发ChannlePipeline中所有的ChannelHander的connect()。
 
 （9)ChannelFuture bind(SocketAddress localAddress)
 
-绑定制定的本地地址。
+绑定指定的本地地址。
 
 （10)ChannelConfig config()
 
@@ -896,7 +898,7 @@ NioServerSocketChannel继承实现关系图：
 
 Netty是基于事件驱动的，I/O操作时驱动事件会在ChannelPipeline中传播，由ChannelPipeline对应的ChannelHander对事件进行来拦截和处理，不关心的事件可以忽略。
 
-这中类似于AOP的自定义切面，性能更高，但是功能却基本等价。
+这种类似于AOP的自定义切面，性能更高，但是功能却基本等价。
 
 ##### 3）AbstractNioChannel源码分析
 
@@ -914,7 +916,7 @@ private final SelectableChannel ch;
 protected final int readInterestOp;
 
 /**
-*该SelectionKey是Channel注册到EvemntLoop后返回的选择键；
+*该SelectionKey是Channel注册到EventLoop后返回的选择键；
 由于Channel会面临多业务线程的并发，为了让SelectionKey改变具有可见性，所以用volatile修饰；
 */
 volatile SelectionKey selectionKey;
@@ -986,7 +988,7 @@ protected void doBeginRead() throws Exception {
             int interestOps = selectionKey.interestOps();
             /*
             将当前位操作与读操作进行按位与操作，如果等于0，表示当前没有设置读操作位。
-            此处只有当interestOps不为0，才会设置位操作。
+            此处只有当interestOps不为读操作，才会设置读位操作。
             */
             if ((interestOps & this.readInterestOp) == 0) {
                 //设置位操作
@@ -1025,7 +1027,9 @@ protected void doBeginRead() throws Exception {
 *包含客户端的NioSocketChannel信息集合；
 */
 private static final ChannelMetadata METADATA = new ChannelMetadata(false);
+
 private static final SelectorProvider DEFAULT_SELECTOR_PROVIDER = SelectorProvider.provider();
+
 /*
 *用于配置ServerSocketChannel的TCP参数；
 */
