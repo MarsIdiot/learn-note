@@ -209,7 +209,7 @@ TCP以流的方式进行数据传输，上层应用协议为了对消息进行�
 客户端还是服务端，都需要添加解码器。这个工具业务需要进行选择。
 
 	对于客户端来说：发送消息不会触发解码器，而在接收服务器端消息是会触发解码器。
-	
+
 	对于服务端来说：接收服务端消息触发到解码器，回复消息时不会触发解码器。   
 
 总之，对于客户端还是服务端而言，只有接收他端的消息才会触发解码器。
@@ -1234,17 +1234,63 @@ Channel中的数据管道封装抽象为ChannlePipleline，消息在ChannlePiple
 
 ChannlePipleline是ChannelHandler的容器，负责对ChannelHandler的管理和事件拦截与调度。
 
+1）ChannlePipleline事件处理
+
+一个消息被ChannlePipleline的ChannelHandler链拦截和处理的全过程，消息的读取和发送处理全流程如下描述：
+
+1.1）将消息(ByteBuf)读取到ChannlePipleline
+
+底层的SocketChannel read()方法读取ByteBuf,触发ChannelRead事件，由I/O线程NioEventLoop调用ChannlePipleline的firChannelRead()将消息传输到ChannlePipleline中。
+
+1.2）消息依次被HeadHandler、ChannelHandler1、ChannelHandler2.....TailHandler拦截和处理
+
+这个过程任何ChannelHandler都可以中断当前的流程，结束消息传递。
+
+1.3）调用ChannelHandlerContext ctx 的write()发送消息，消息从TailHandler开始，顺序与进来相反。最终消息被添加到消息发送缓冲取中等待刷新和发送。
+
+Netty中包含Inbound事件和Outbound事件，前者一般线程主动触发，后者一般由用户触发。
+
+2）自定义拦截器
+
+不同的Handler只需要继承ChannelHandlerAdapter类覆盖自己的关心的方法即可。
+
+3）构建pipeline
+
+事实上，用户不需要自己创建pipeline，因为使用ServerBootstarp活着Bootstarp启动服务端或客户端时，Netty会为每个Channel创建一个独立的pipeline。对于使用者，只需要将自定义的拦截器加入到pipeline即可。
+
+4)特性
+
+支持运行态动态添加或删除Handler。
+
+线程安全，多业务并发
+
 #### ChannlePipleline源码分析
 
+ChannlePipleline的代码相对简单，它实际上就是一个ChannleHandler的容器，内部维护了一个ChannleHandler的链表和迭代器，可以方便地实现对Handler的增删改查。
 
+1）继承关系
+
+2）对Handler的管理
+
+3）inoutbound事件
+
+4）outbound事件
 
 #### ChannelHandler功能说明
 
+1）ChannelHandlerAdapter
 
+为了不让Handler实现所有的父类借口而显得子类臃肿，也方便子类只关心自己需要处理的事件而对其他没有实现的方法默认默认继承使用父类即可。
+
+2）
+
+3）
 
 #### ChannelHandler源码分析
 
+1）继承关系
 
+2）
 
 18章   EventLoop和EventLoopGroup
 
@@ -1272,7 +1318,7 @@ ChannlePipleline是ChannelHandler的容器，负责对ChannelHandler的管理和
 
 
 
-  		
+
   		
   		
   		
