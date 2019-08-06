@@ -209,7 +209,7 @@ TCP以流的方式进行数据传输，上层应用协议为了对消息进行�
 客户端还是服务端，都需要添加解码器。这个工具业务需要进行选择。
 
 	对于客户端来说：发送消息不会触发解码器，而在接收服务器端消息是会触发解码器。
-
+	
 	对于服务端来说：接收服务端消息触发到解码器，回复消息时不会触发解码器。   
 
 总之，对于客户端还是服务端而言，只有接收他端的消息才会触发解码器。
@@ -1230,6 +1230,10 @@ Netty定制出 ChannlePipleline和ChannelHandler来完成对事件的拦截和�
 
 Channel中的数据管道封装抽象为ChannlePipleline，消息在ChannlePipleline中流动和传递。ChannlePipleline持有I/O操作的拦截器链表，由ChannelHandler来进行具体的I/O操作。
 
+Channel-pipeline-context-handler对应关系图：
+
+![.\pictures\Channel-pipeline-context-handler对应关系图](.\pictures\Channel-pipeline-context-handler对应关系图.png)
+
 #### ChannlePipleline功能说明
 
 ChannlePipleline是ChannelHandler的容器，负责对ChannelHandler的管理和事件拦截与调度。
@@ -1270,11 +1274,125 @@ ChannlePipleline的代码相对简单，它实际上就是一个ChannleHandler�
 
 1）继承关系
 
-2）对Handler的管理
+![.\pictures\ChannelPipeline继承关系图.png](.\pictures\ChannelPipeline继承关系图.png)
 
-3）inoutbound事件
+2）DefaultChannelPipeline和AbstractChannelHandlerContext
 
-4）outbound事件
+2.1）DefaultChannelPipeline——变量及构造函数
+
+~~~java
+class DefaultChannelPipeline{
+    private static final WeakHashMap<Class<?>, String>[] nameCaches = new WeakHashMap[Runtime.getRuntime().availableProcessors()];
+    final AbstractChannel channel;//当前channel
+    final AbstractChannelHandlerContext head;//Handler链头，是对Handler的封装，包含prev,next，handler等。
+    final AbstractChannelHandlerContext tail;//Handler链尾
+
+    //所有handler的一个容器，以handler名字命名，可自定义
+    private final Map<String, AbstractChannelHandlerContext> name2ctx = new HashMap(4);
+
+    //每个ChannelHandlerContext都拥有一个EventExecutor对象，在pipeline初始化新的ChannelHandlerContext(即初始化Handler时)，EventExecutor为null,表示pipeline调度对Handler的操作时不需要开始新的线程(内部调度)。
+    final Map<EventExecutorGroup, EventExecutor> childExecutors = new IdentityHashMap();/
+
+        //初始化链表的链头和链尾
+     DefaultChannelPipeline(AbstractChannel channel) {
+        if (channel == null) {
+            throw new NullPointerException("channel");
+        } else {
+            this.channel = channel;
+            this.tail = new DefaultChannelPipeline.TailContext(this);
+            this.head = new DefaultChannelPipeline.HeadContext(this);
+            this.head.next = this.tail;
+            this.tail.prev = this.head;
+        }
+    }
+}
+~~~
+
+2.2）AbstractChannelHandlerContext——变量及构造函数
+
+~~~java
+class AbstractChannelHandlerContext extends DefaultAttributeMap implements ChannelHandlerContext {
+    volatile AbstractChannelHandlerContext next;//该handler在链表位置中的后一个handler
+    volatile AbstractChannelHandlerContext prev;//该handler在链表位置中的前一个handler
+    private final boolean inbound;
+    private final boolean outbound;
+    private final AbstractChannel channel;//对应的channel
+    private final DefaultChannelPipeline pipeline;//属于哪个pipeline
+    private final String name;//名称
+    final EventExecutor executor;//执行器
+    
+   //构造器——指定pipeline,名称等
+    AbstractChannelHandlerContext(DefaultChannelPipeline pipeline, EventExecutorGroup group, String name, boolean inbound, boolean outbound) {
+        if (name == null) {
+            throw new NullPointerException("name");
+        } else {
+            this.channel = pipeline.channel;
+            this.pipeline = pipeline;
+            this.name = name;
+            if (group != null) {//是否设定执行器EventExecutor来执行该handler的操作，pipeline在调度handler执行具体操作时，由于属于内部操作避免并发操作，不会为handler指定EventExecutor。
+                EventExecutor childExecutor = (EventExecutor)pipeline.childExecutors.get(group);
+                if (childExecutor == null) {
+                    childExecutor = group.next();
+                    pipeline.childExecutors.put(group, childExecutor);
+                }
+
+                this.executor = childExecutor;
+            } else {
+                this.executor = null;
+            }
+
+            this.inbound = inbound;
+            this.outbound = outbound;
+        }
+    }
+}
+~~~
+
+3）pipeline对Handler的管理
+
+pipeline与Map等容器的实现非常类似。此处以addBefore为例讲解。
+
+猜想其操作：
+
+​	既然是在某个对象前加入，则必然需要获取该对象的信息，如:prev,next等；
+
+​	修改新handler前后的Handler对应的prev,nex；(链表操作)
+
+​	将该新的handler加入到pipeline中；(需要校验handler的合法性)
+
+源码分析：与猜想大体差不多，多了些校验、线程安全方面的设计。
+
+~~~java
+public ChannelPipeline addBefore(String baseName, String name, ChannelHandler handler) {
+    return this.addBefore((EventExecutorGroup)null, baseName, name, handler);
+}
+
+public ChannelPipeline addBefore(EventExecutorGroup group, String baseName, String name, ChannelHandler handler) {
+    synchronized(this) {//保证线程安全，同一时间只有一个addBefore操作
+        AbstractChannelHandlerContext ctx = this.getContextOrDie(baseName);//获取插入前对象
+        this.checkDuplicateName(name);//检查新handler是否重复
+        AbstractChannelHandlerContext newCtx = new DefaultChannelHandlerContext(this, group, name, handler);//初始化ChannelHandlerContext，指定handler
+        this.addBefore0(name, ctx, newCtx);//链表操作，修改三个handler在链表中的prev，next属性；
+        return this;
+    }
+}
+
+private void addBefore0(String name, AbstractChannelHandlerContext ctx, AbstractChannelHandlerContext newCtx) {
+    checkMultiplicity(newCtx);//检查新handler是否被注册、是否可分享(handler可被指定只被某个pipeline调度，这种情况下其他pipeline不能拥有对该handler的调度权限)
+    newCtx.prev = ctx.prev;
+    newCtx.next = ctx;
+    ctx.prev.next = newCtx;
+    ctx.prev = newCtx;
+    this.name2ctx.put(name, newCtx);//将新handler存到name2ctx中管理
+    this.callHandlerAdded(newCtx);
+}
+~~~
+
+4）inoutbound事件
+
+
+
+5）outbound事件
 
 #### ChannelHandler功能说明
 
@@ -1319,6 +1437,6 @@ ChannlePipleline的代码相对简单，它实际上就是一个ChannleHandler�
 
 
 
-  		
+
   		
   		
