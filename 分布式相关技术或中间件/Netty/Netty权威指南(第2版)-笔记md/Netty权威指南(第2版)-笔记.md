@@ -1224,13 +1224,13 @@ public final void register(EventLoop eventLoop, final ChannelPromise promise) {
 
 （1）read方法
 
-### 17章   ChannlePipleline  和ChannelHandler
+### 17章   ChannelPipleline  和ChannelHandler
 
-Netty定制出 ChannlePipleline和ChannelHandler来完成对事件的拦截和业务逻辑处理，达到类似于AOP的切面式拦截效果。
+Netty定制出 ChannelPipleline和ChannelHandler来完成对事件的拦截和业务逻辑处理，达到类似于AOP的切面式拦截效果。
 
-Channel中的数据管道封装抽象为ChannlePipleline，消息在ChannlePipleline中流动和传递。ChannlePipleline持有I/O操作的拦截器链表，由ChannelHandler来进行具体的I/O操作。
+Channel中的数据管道封装抽象为ChannelPipleline，消息在ChannelPipleline中流动和传递。ChannelPipleline持有I/O操作的拦截器链表，由ChannelHandler来进行具体的I/O操作。
 
-Channel-pipeline-context-handler对应关系图：
+channel-pipeline-context-handler对应关系图：
 
 ![.\pictures\Channel-pipeline-context-handler对应关系图](.\pictures\Channel-pipeline-context-handler对应关系图.png)
 
@@ -1284,13 +1284,13 @@ ChannlePipleline的代码相对简单，它实际上就是一个ChannleHandler�
 class DefaultChannelPipeline{
     private static final WeakHashMap<Class<?>, String>[] nameCaches = new WeakHashMap[Runtime.getRuntime().availableProcessors()];
     final AbstractChannel channel;//当前channel
-    final AbstractChannelHandlerContext head;//Handler链头，是对Handler的封装，包含prev,next，handler等。
+    final AbstractChannelHandlerContext head;//Handler链头，是对Handler的封装，包含prev,next，handler；等。
     final AbstractChannelHandlerContext tail;//Handler链尾
 
-    //所有handler的一个容器，以handler名字命名，可自定义
+    //所有HandlerContext的一个容器，以handler名字命名，可自定义,用于查找handler是否重复和存储；
     private final Map<String, AbstractChannelHandlerContext> name2ctx = new HashMap(4);
 
-    //每个ChannelHandlerContext都拥有一个EventExecutor对象，在pipeline初始化新的ChannelHandlerContext(即初始化Handler时)，EventExecutor为null,表示pipeline调度对Handler的操作时不需要开始新的线程(内部调度)。
+    //每个ChannelHandlerContext都拥有一个EventExecutor对象，在pipeline初始化新的ChannelHandlerContext(即初始化添加Handler时)，EventExecutor默认null,表示pipeline调度对Handler的某些操作时不需要开始新的线程(内部调度)；
     final Map<EventExecutorGroup, EventExecutor> childExecutors = new IdentityHashMap();/
 
         //初始化链表的链头和链尾
@@ -1308,7 +1308,7 @@ class DefaultChannelPipeline{
 }
 ~~~
 
-2.2）AbstractChannelHandlerContext——变量及构造函数
+2.2）AbstractChannelHandlerContext——变量及构造函数（对Handler的进一步封装，是handler链表的基础组成元素）
 
 ~~~java
 class AbstractChannelHandlerContext extends DefaultAttributeMap implements ChannelHandlerContext {
@@ -1329,7 +1329,7 @@ class AbstractChannelHandlerContext extends DefaultAttributeMap implements Chann
             this.channel = pipeline.channel;
             this.pipeline = pipeline;
             this.name = name;
-            if (group != null) {//是否设定执行器EventExecutor来执行该handler的操作，pipeline在调度handler执行具体操作时，由于属于内部操作避免并发操作，不会为handler指定EventExecutor。
+            if (group != null) {//是否设定执行器EventExecutor来执行该handler的某些操作，pipeline在调度handler执行具体操作时，由于属于内部操作避免并发操作，不会为handler指定EventExecutor，而默认其为null。
                 EventExecutor childExecutor = (EventExecutor)pipeline.childExecutors.get(group);
                 if (childExecutor == null) {
                     childExecutor = group.next();
@@ -1358,9 +1358,9 @@ pipeline与Map等容器的实现非常类似。此处以addBefore为例讲解。
 
 ​	修改新handler前后的Handler对应的prev,nex；(链表操作)
 
-​	将该新的handler加入到pipeline中；(需要校验handler的合法性)
+​	将该新的handlerContext加入到pipeline中；(需要校验handler的合法性)
 
-源码分析：与猜想大体差不多，多了些校验、线程安全方面的设计。
+源码分析：与猜想大体差不多，多了些校验、线程安全方面的设计。具体分析如下：
 
 ~~~java
 public ChannelPipeline addBefore(String baseName, String name, ChannelHandler handler) {
@@ -1368,9 +1368,9 @@ public ChannelPipeline addBefore(String baseName, String name, ChannelHandler ha
 }
 
 public ChannelPipeline addBefore(EventExecutorGroup group, String baseName, String name, ChannelHandler handler) {
-    synchronized(this) {//保证线程安全，同一时间只有一个addBefore操作
+    synchronized(this) {//保证线程安全，同一时间只有一个addBefore操作，即只能加入一个handler；
         AbstractChannelHandlerContext ctx = this.getContextOrDie(baseName);//获取插入前对象
-        this.checkDuplicateName(name);//检查新handler是否重复
+        this.checkDuplicateName(name);//检查新handler是否重复(对name2ctx的检查)
         AbstractChannelHandlerContext newCtx = new DefaultChannelHandlerContext(this, group, name, handler);//初始化ChannelHandlerContext，指定handler
         this.addBefore0(name, ctx, newCtx);//链表操作，修改三个handler在链表中的prev，next属性；
         return this;
@@ -1388,11 +1388,31 @@ private void addBefore0(String name, AbstractChannelHandlerContext ctx, Abstract
 }
 ~~~
 
-4）inoutbound事件
+4）inoutbound事件(流入，由外到内事件)
+
+含义：当发生某个I/O事件的时候，例如链路建立、链路关闭、读取操作完成等，都会产生一个事件，事件在pipeline中得到传播和处理，它是事件处理的总入口。
+
+pipeline中以fireXXX命名的方法都是从I/O线程流向用户业务Handler的inbound事件，它们的实现因功能而异，但处理步骤类似。首先，调用HeadHandler对应的fireXXX方法；然后，执行事件相关的逻辑操作。
+
+以fireChannelActive为例分析如下：
+
+~~~java
+public ChannelPipeline fireChannelActive() {
+    this.head.fireChannelActive();
+    if (this.channel.config().isAutoRead()) {//判断当前Channel配置是否自动读取
+        this.channel.read();//调用
+    }
+    return this;
+}
+~~~
+
+5）outbound事件（流出，由内到外事件）
+
+含义：由用户线程或代码发起的I/O操作的事件。
 
 
 
-5）outbound事件
+事实上，inbound和outbound是Netty自身根据事件在pipeline中的流向抽象出来的术语，在其他NIO框架并没有这个概念。
 
 #### ChannelHandler功能说明
 
