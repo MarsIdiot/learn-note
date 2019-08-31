@@ -14,7 +14,7 @@
 
 ### 云原生
 
-my1.0:提供一些列基础服务，配置，协调开发、部署、测试、运营、迭代。
+my1.0:提供一系列基础服务，配置，协调开发、部署、测试、运营、迭代。
 
 my2.0（2019-8-17）:云原生更像一种让应用变得更加轻量的思想。将非业务需求从笨重的胖应用中剥离出来，然后上云并下沉为基础设施。目的在于构建和运行可弹性扩展的应用。
 
@@ -70,7 +70,7 @@ The Cloud Native Computing Foundation seeks to drive adoption of this paradigm b
 
 **cloud native 和 service mesh 的主要区别**
 
-cloud native是道, service mesh是术。 前面ppt里有, cloudnative, 具体的实现可能就包括: 微服务, 容器, service mesh等.。service mesh是为了实现云原生, 所提供的一种服务发现和治理的方式。
+cloud native是道, service mesh是术。 具体说来, cloudnative, 具体的实现可能就包括: 微服务, 容器, service mesh等。service mesh是为了实现云原生, 所提供的一种服务发现和治理的方式。
 
 **云和应用如何衔接**
 
