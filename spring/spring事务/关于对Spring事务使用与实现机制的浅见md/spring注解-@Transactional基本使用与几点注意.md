@@ -42,7 +42,7 @@
 
 4. 使用了@Transactional的方法，同一个类里面的方法调用， @Transactional无效。比如有一个类Test，它的一个方法A，A再调用Test本类的方法B（不管B是否public还是private），但A没有声明注解事务，而B有。则外部调用A之后，B的事务是不会起作用的。（经常在这里出错）
 
-   总之，直接调用加了@Transactional方法，可以回滚；间接调用，不会回滚。
+   *总之，直接调用加了@Transactional方法，可以回滚；间接调用，不会回滚。*
 
    ```java
    class Test(){
@@ -54,6 +54,12 @@
    	}
    }
    ```
+
+   默认情况下，只有来自外部的方法调用才会被AOP代理捕获，也就是，类内部方法调用本类内部的其他方法并不会引起事务行为，即使被调用方法使用@Transactional注解进行修饰。详细如图说是：
+
+   ![](.\pictures\事务调用流程.png)
+
+   
 
 5. 在action中加上@Transactional，不会回滚。切记不要在action中加上事务。
 
@@ -107,7 +113,7 @@
 
 ​	checked异常（检查型异常）：其他，编译器要检查这类异常，编写代码时会有提示。
 
-![](D:\ztl\笔记\spring\spring事务\spring注解-@Transactional基本使用与几点注意md\pictures\20171010184746692.jpg)
+![](.\pictures\20171010184746692.jpg)
 
 通常，我们一般都使用默认。
 

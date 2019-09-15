@@ -39,7 +39,7 @@ private static class DynamicAdvisedInterceptor implements MethodInterceptor, Ser
 	   	可以知道ReflectiveMethodInvocation实现动态代理接口
         3、继续往上走，可以知道上面的类或接口都基于public interface Joinpoint,
         	而Joinpoint是Spring aop的连接点。
-        4、于是我们知道了, CglibMethodInvocation类在此处的作用是：根据动态代理，去反射被注解了@Transactional的方法对。
+        4、于是我们知道了, CglibMethodInvocation类在此处的作用是：根据动态代理，去反射被注解了@Transactional的方法。
          综上所述：
          于是，我们大胆猜测，CglibMethodInvocation类的proceed()方法的作用：
             以AOP切面的方式去控制一组事务。即在执行目标方法前开启事务，执行完后提交或回滚事务。           
@@ -59,8 +59,8 @@ public Object proceed() throws Throwable {
     //首先，获取传过来的拦截器对象TransactionInterceptor。
 	Object interceptorOrInterceptionAdvice =
 		    this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
-    currentInterceptorIndex初始值被定义为-1;
-    当配置了多个事务管理器时，如果不指定名称，按配置的顺序有先。
+    //currentInterceptorIndex初始值被定义为-1;
+    //当配置了多个事务管理器时，如果不指定名称，按配置的顺序有先。
     ...
      //然后，执行拦截器
      return ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(this);
