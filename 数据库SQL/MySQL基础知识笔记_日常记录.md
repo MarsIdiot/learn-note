@@ -27,7 +27,40 @@ UTF-8：一个汉字 = 3个字节，英文是一个字节
 GBK： 一个汉字 = 2个字节，英文是一个字节
 ~~~
 
+#### SQL语句执行顺序
 
+​		Select  distinct   count(*)  from  join  on  where  group by  having   order by desc  limmit
+
+1. From     join on
+
+   知道哪个表
+
+2. where 
+
+   过滤条件 
+
+3. group by  （**开始使用select中的别名，后面的语句中都可以使用**）
+
+   将表处理为需要的结构(列结构)
+
+4. coun,tavg,sum.... 
+
+   分组统计
+
+5. having
+
+   对分组得数据进行过滤 配合group by
+
+6. select 
+
+7. distinct  唯一
+
+8. 排序
+   order by
+   desc  
+
+9. 数量
+   limmit
 
 
 
