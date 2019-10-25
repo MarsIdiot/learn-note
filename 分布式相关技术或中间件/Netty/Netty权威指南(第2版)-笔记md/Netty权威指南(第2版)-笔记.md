@@ -64,7 +64,7 @@ Block阻塞IO
   	1) 开启服务监听通道 绑定监听地址
   	2) 开启多路复用器Selector线程
   	3) 将服务监听通道注册到Selector的监听Accept事件(即：客户端接入)
-  	4) Selector内无线循环轮询准备就绪的Key(如果没有客户端接入，则Selector每隔1s被唤醒一次)
+  	4) Selector内无限循环轮询准备就绪的Key(如果没有客户端接入，则Selector每隔1s被唤醒一次)
 
 处理请求：
   	1) 客户端发起接入请求

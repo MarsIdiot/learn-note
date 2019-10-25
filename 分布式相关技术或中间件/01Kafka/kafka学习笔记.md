@@ -8,7 +8,6 @@
 ```
 
 ​		
-​		
 
 ```
 	topic、Partition、segement的关系？
